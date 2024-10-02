@@ -1,189 +1,461 @@
 CREATE DATABASE university_management;
+
 -- Connect to the university_management database
 USE university_management;
+
 SET SQL_SAFE_UPDATES = 0;
--- Create Faculty table
-CREATE TABLE Faculty (
-    Faculty_ID VARCHAR(50) PRIMARY KEY,
-    Faculty_Name VARCHAR(100)
+
+-- Create the Department table
+CREATE TABLE department (
+    department_id VARCHAR(50) PRIMARY KEY,
+    department_name VARCHAR(100)
 );
--- Create Lecturer table
-CREATE TABLE Lecturer (
-    Lecturer_ID VARCHAR(50) PRIMARY KEY,
-    Username VARCHAR(100),
-    Password VARCHAR(100),
-    Email VARCHAR(100),
-    Address VARCHAR(150),
-    Full_Name VARCHAR(100),
-    Phone_Number VARCHAR(15),
-    Profile_Picture VARCHAR(255),
-    Expertise VARCHAR(100),
-    Faculty_ID VARCHAR(50)
+
+-- Create the Lecturer table
+CREATE TABLE lecturer (
+    lecturer_id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(100),
+    password VARCHAR(100),
+    email VARCHAR(100),
+    address VARCHAR(150),
+    full_name VARCHAR(100),
+    phone_number VARCHAR(15),
+    image VARCHAR(255),
+    specialization VARCHAR(100),
+    department_id VARCHAR(50)
 );
--- Create Student table
-CREATE TABLE Student (
-    Student_ID VARCHAR(50) PRIMARY KEY,
-    Username VARCHAR(100),
-    Password VARCHAR(100),
-    Email VARCHAR(100),
-    Full_Name VARCHAR(100),
-    Phone_Number VARCHAR(15),
-    Profile_Picture VARCHAR(255),
-    Address VARCHAR(150)
+
+-- Create the Student table
+CREATE TABLE student (
+    student_id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(100),
+    password VARCHAR(100),
+    email VARCHAR(100),
+    full_name VARCHAR(100),
+    phone_number VARCHAR(15),
+    image VARCHAR(255),
+    address VARCHAR(159)
 );
--- Create Admin table
-CREATE TABLE Admin (
-    Admin_ID VARCHAR(50) PRIMARY KEY,
-    Username VARCHAR(100),
-    Password VARCHAR(100),
-    Email VARCHAR(100),
-    Address VARCHAR(150),
-    Full_Name VARCHAR(100),
-    Phone_Number VARCHAR(15),
-    Profile_Picture VARCHAR(255)
+
+-- Create the Administrator table
+CREATE TABLE administrator (
+    admin_id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(100),
+    password VARCHAR(100),
+    email VARCHAR(100),
+    address VARCHAR(150),
+    full_name VARCHAR(100),
+    phone_number VARCHAR(15),
+    image VARCHAR(255)
 );
--- Create Action_History table
-CREATE TABLE Action_History (
-    Admin_ID VARCHAR(50),
-    Action_ID VARCHAR(50),
-    Action_Time DATETIME,
-    Action VARCHAR(255),
-    PRIMARY KEY (Admin_ID, Action_ID)
+
+-- Create the Action_History table
+CREATE TABLE action_history (
+    admin_id VARCHAR(50),
+    action_id VARCHAR(50),
+    action_time DATETIME,
+    action_description VARCHAR(255),
+    PRIMARY KEY (admin_id, action_id)
 );
--- Create Subject table
-CREATE TABLE Subject (
-    Subject_ID VARCHAR(50) PRIMARY KEY,
-    Subject_Name VARCHAR(100),
-    Credits INT,
-    Prerequisite VARCHAR(255),
-    Learning_Outcomes VARCHAR(255),
-    Faculty_ID VARCHAR(50)
+
+-- Create the Subject table
+CREATE TABLE subject (
+    subject_id VARCHAR(50) PRIMARY KEY,
+    subject_name VARCHAR(100),
+    credits INT,
+    prerequisites VARCHAR(255),
+    learning_outcomes VARCHAR(255),
+    department_id VARCHAR(50)
 );
--- Create Class table
-CREATE TABLE Class (
-    Class_ID VARCHAR(50) PRIMARY KEY,
-    Start_Date DATE,
-    End_Date DATE,
-    Class_Schedule VARCHAR(255),
-    Subject_ID VARCHAR(50),
-    Lecturer_ID VARCHAR(50)
+
+-- Create the Class table
+CREATE TABLE class (
+    class_id VARCHAR(50) PRIMARY KEY,
+    start_date DATE,
+    end_date DATE,
+    schedule VARCHAR(255),
+    subject_id VARCHAR(50),
+    lecturer_id VARCHAR(50)
 );
--- Create Tuition table
-CREATE TABLE Tuition (
-    Tuition_ID VARCHAR(50) PRIMARY KEY,
-    Status VARCHAR(50),
-    Amount DECIMAL(15, 2),
-    Student_ID VARCHAR(50)
+
+-- Create the Tuition_Fee table
+CREATE TABLE tuition_fee (
+    fee_id VARCHAR(50) PRIMARY KEY,
+    status VARCHAR(50),
+    amount DECIMAL(15, 2),
+    student_id VARCHAR(50)
 );
--- Create Enrollment table
-CREATE TABLE Enrollment (
-    Subject_ID VARCHAR(50),
-    Student_ID VARCHAR(50),
-    Result VARCHAR(50),
-    PRIMARY KEY (Subject_ID, Student_ID)
+
+-- Create the Enrollment table
+CREATE TABLE enrollment (
+    subject_id VARCHAR(50),
+    student_id VARCHAR(50),
+    result VARCHAR(50),
+    PRIMARY KEY (subject_id, student_id)
 );
--- Create Participation table
-CREATE TABLE Participation (
-    Class_ID VARCHAR(50),
-    Student_ID VARCHAR(50),
-    PRIMARY KEY (Class_ID, Student_ID)
+
+-- Create the Participation table
+CREATE TABLE participation (
+    class_id VARCHAR(50),
+    student_id VARCHAR(50),
+    PRIMARY KEY (class_id, student_id)
 );
--- Create Certificate table
-CREATE TABLE Certificate (
-    Certificate_ID VARCHAR(50),
-    Lecturer_ID VARCHAR(50),
-    PRIMARY KEY (Certificate_ID)
+
+-- Create the Certificate table
+CREATE TABLE certificate (
+    certificate_id VARCHAR(50),
+    lecturer_id VARCHAR(50),
+    PRIMARY KEY (certificate_id)
 );
--- Create Exam table
-CREATE TABLE Exam (
-    Exam_ID VARCHAR(50) PRIMARY KEY,
-    Exam_Name VARCHAR(255)
+
+-- Create the Exam table
+CREATE TABLE exam (
+    exam_id VARCHAR(50) PRIMARY KEY,
+    exam_name VARCHAR(255)
 );
--- Create Question table
-CREATE TABLE Question (
-    Question_ID VARCHAR(50),
-    Exam_ID VARCHAR(50),
-    Question_Content VARCHAR(255),
-    Student_Answer VARCHAR(255),
-    Correct_Answer VARCHAR(255),
-    PRIMARY KEY (Question_ID, Exam_ID)
+
+-- Create the Question table
+CREATE TABLE question (
+    question_id VARCHAR(50),
+    exam_id VARCHAR(50),
+    question_content VARCHAR(255),
+    student_answer VARCHAR(255),
+    correct_answer VARCHAR(255),
+    PRIMARY KEY (question_id, exam_id)
 );
--- Create Multiple_Choice_Option table
-CREATE TABLE Multiple_Choice_Option (
-    Question_ID VARCHAR(50),
-    Exam_ID VARCHAR(50),
-    Option_ID VARCHAR(50),
-    Option_A VARCHAR(255),
-    Option_B VARCHAR(255),
-    Option_C VARCHAR(255),
-    Option_D VARCHAR(255),
-    PRIMARY KEY (Question_ID, Exam_ID, Option_ID)
+
+-- Create the Multiple_Choice_Option table
+CREATE TABLE multiple_choice_option (
+    question_id VARCHAR(50),
+    exam_id VARCHAR(50),
+    option_id VARCHAR(50),
+    option_a VARCHAR(255),
+    option_b VARCHAR(255),
+    option_c VARCHAR(255),
+    option_d VARCHAR(255),
+    PRIMARY KEY (question_id, exam_id, option_id)
 );
--- Create Exam_Taken table
-CREATE TABLE Exam_Taken (
-    Student_ID VARCHAR(50),
-    Exam_ID VARCHAR(50),
-    Score DECIMAL(5, 2),
-    Exam_Date DATE,
-    PRIMARY KEY (Student_ID, Exam_ID)
+
+-- Create the Test_Performance table
+CREATE TABLE test_performance (
+    student_id VARCHAR(50),
+    exam_id VARCHAR(50),
+    score DECIMAL(5, 2),
+    test_date DATE,
+    PRIMARY KEY (student_id, exam_id)
 );
--- Create Document table
-CREATE TABLE Document (
-    Document_ID VARCHAR(50) PRIMARY KEY,
-    Class_ID VARCHAR(50),
-    Document_Name VARCHAR(255)
+
+-- Create the Material table
+CREATE TABLE material (
+    material_id VARCHAR(50) PRIMARY KEY,
+    class_id VARCHAR(50),
+    material_name VARCHAR(255)
 );
--- Create Chapter table
-CREATE TABLE Chapter (
-    Chapter_Number INT PRIMARY KEY,
-    Document_ID VARCHAR(50),
-    Class_ID VARCHAR(50),
-    Title VARCHAR(255),
-    Text_Content TEXT,
-    Video_Content TEXT,
-    Image_Content TEXT
+
+-- Create the Chapter table
+CREATE TABLE chapter (
+    chapter_order INT PRIMARY KEY,
+    material_id VARCHAR(50),
+    class_id VARCHAR(50),
+    title VARCHAR(255),
+    text_content TEXT,
+    video_content TEXT,
+    image_content TEXT
 );
--- Create Application_Exercise table
-CREATE TABLE Application_Exercise (
-    Chapter_Number INT,
-    Document_ID VARCHAR(50),
-    Class_ID VARCHAR(50),
-    Exercise_ID VARCHAR(50),
-    Exercise_Content TEXT,
-    PRIMARY KEY (
-        Chapter_Number,
-        Document_ID,
-        Class_ID,
-        Exercise_ID
-    )
+
+-- Create the Practical_Exercise table
+CREATE TABLE practical_exercise (
+    chapter_order INT,
+    material_id VARCHAR(50),
+    class_id VARCHAR(50),
+    practical_exercise_id VARCHAR(50),
+    exercise_content TEXT,
+    PRIMARY KEY (chapter_order, material_id, class_id, practical_exercise_id)
 );
+
 -- Add foreign key to Lecturer table
-ALTER TABLE Lecturer
-ADD CONSTRAINT FK_Lecturer_Faculty FOREIGN KEY (Faculty_ID) REFERENCES Faculty(Faculty_ID);
--- Add foreign key to Class table
-ALTER TABLE Class
-ADD CONSTRAINT FK_Class_Subject FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID);
-ALTER TABLE Class
-ADD CONSTRAINT FK_Class_Lecturer FOREIGN KEY (Lecturer_ID) REFERENCES Lecturer(Lecturer_ID);
--- Add foreign key to Tuition table
-ALTER TABLE Tuition
-ADD CONSTRAINT FK_Tuition_Student FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
--- Add foreign key to Enrollment table
-ALTER TABLE Enrollment
-ADD CONSTRAINT FK_Enrollment_Subject FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID);
-ALTER TABLE Enrollment
-ADD CONSTRAINT FK_Enrollment_Student FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
--- Add foreign key to Participation table
-ALTER TABLE Participation
-ADD CONSTRAINT FK_Participation_Class FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID);
-ALTER TABLE Participation
-ADD CONSTRAINT FK_Participation_Student FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
+ALTER TABLE Lecturer 
+ADD CONSTRAINT FK_Lecturer_Department
+FOREIGN KEY (Department_ID) REFERENCES Department(Department_ID);
+
+-- Add foreign keys to Class table
+ALTER TABLE Class 
+ADD CONSTRAINT FK_Class_Subject
+FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID);
+
+ALTER TABLE Class 
+ADD CONSTRAINT FK_Class_Lecturer
+FOREIGN KEY (Lecturer_ID) REFERENCES Lecturer(Lecturer_ID);
+
+-- Add foreign key to Tuition_Fee table
+ALTER TABLE Tuition_Fee 
+ADD CONSTRAINT FK_Tuition_Fee_Student
+FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
+
+-- Add foreign keys to Enrollment table
+ALTER TABLE Enrollment 
+ADD CONSTRAINT FK_Enrollment_Subject
+FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID);
+
+ALTER TABLE Enrollment 
+ADD CONSTRAINT FK_Enrollment_Student
+FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
+
+-- Add foreign keys to Participation table
+ALTER TABLE Participation 
+ADD CONSTRAINT FK_Participation_Class
+FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID);
+
+ALTER TABLE Participation 
+ADD CONSTRAINT FK_Participation_Student
+FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
+
 -- Add foreign key to Certificate table
-ALTER TABLE Certificate
-ADD CONSTRAINT FK_Certificate_Lecturer FOREIGN KEY (Lecturer_ID) REFERENCES Lecturer(Lecturer_ID);
+ALTER TABLE Certificate 
+ADD CONSTRAINT FK_Certificate_Lecturer
+FOREIGN KEY (Lecturer_ID) REFERENCES Lecturer(Lecturer_ID);
+
 -- Add foreign key to Question table
-ALTER TABLE Question
-ADD CONSTRAINT FK_Question_Exam FOREIGN KEY (Exam_ID) REFERENCES Exam(Exam_ID);
+ALTER TABLE Question 
+ADD CONSTRAINT FK_Question_Exam
+FOREIGN KEY (Exam_ID) REFERENCES Exam(Exam_ID);
+
 -- Add foreign key to Multiple_Choice_Option table
-ALTER TABLE Multiple_Choice_Option
-ADD CONSTRAINT FK_Multiple_Choice_Option_Question FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID);
+ALTER TABLE Multiple_Choice_Option 
+ADD CONSTRAINT FK_Option_Question
+FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID);
+
+-- --------------------------------------------------------------------------
+
+INSERT INTO Department (Department_ID, Department_Name) VALUES
+('K01', 'Công nghệ thông tin'),
+('K02', 'Kinh tế'),
+('K03', 'Luật'),
+('K04', 'Ngôn ngữ Anh'),
+('K05', 'Y học'),
+('K06', 'Khoa học máy tính'),
+('K07', 'Quản trị kinh doanh'),
+('K08', 'Tài chính ngân hàng'),
+('K09', 'Giáo dục'),
+('K10', 'Kỹ thuật cơ khí');
+
+
+INSERT INTO Lecturer (Lecturer_ID, username, Password, Email, Address, Full_Name, Phone_Number, Image, Specialization, Department_ID) VALUES
+('GV001', 'nguyenvanA', 'password1', 'nva@gmail.com', 'Hà Nội', 'Nguyễn Văn A', '0988000001', 'nva.jpg', 'Kỹ thuật phần mềm', 'K01'),
+('GV002', 'lethib', 'password2', 'ltb@gmail.com', 'Hồ Chí Minh', 'Lê Thị B', '0988000002', 'ltb.jpg', 'Mạng máy tính', 'K01'),
+('GV003', 'tranvanC', 'password3', 'tvc@gmail.com', 'Đà Nẵng', 'Trần Văn C', '0988000003', 'tvc.jpg', 'Tài chính', 'K02'),
+('GV004', 'phamthid', 'password4', 'ptd@gmail.com', 'Hải Phòng', 'Phạm Thị D', '0988000004', 'ptd.jpg', 'Kinh tế', 'K02'),
+('GV005', 'buituane', 'password5', 'bte@gmail.com', 'Cần Thơ', 'Bùi Tuấn E', '0988000005', 'bte.jpg', 'Ngữ pháp', 'K04'),
+('GV006', 'dinhngocf', 'password6', 'dnf@gmail.com', 'Huế', 'Đinh Ngọc F', '0988000006', 'dnf.jpg', 'Ngữ âm học', 'K04'),
+('GV007', 'vudinhg', 'password7', 'vdg@gmail.com', 'Nha Trang', 'Vũ Đình G', '0988000007', 'vdg.jpg', 'Kỹ thuật cơ khí', 'K10'),
+('GV008', 'lethiha', 'password8', 'lth@gmail.com', 'Quảng Ninh', 'Lê Thị H', '0988000008', 'lth.jpg', 'Khoa học máy tính', 'K06'),
+('GV009', 'phamvani', 'password9', 'pvi@gmail.com', 'Thanh Hóa', 'Phạm Văn I', '0988000009', 'pvi.jpg', 'Y học', 'K05'),
+('GV010', 'nguyenthuyj', 'password10', 'ntj@gmail.com', 'Bắc Ninh', 'Nguyễn Thúy J', '0988000010', 'ntj.jpg', 'Luật quốc tế', 'K03');
+
+
+INSERT INTO Student (Student_ID, username, Password, Email, Full_Name, Phone_Number, Image, Address) VALUES
+('SV001', 'sv001', 'password1', 'sv001@gmail.com', 'Nguyễn Văn X', '0981000001', 'sv001.jpg', 'TP Hồ Chí Minh'),
+('SV002', 'sv002', 'password2', 'sv002@gmail.com', 'Lê Thị Y', '0981000002', 'sv002.jpg', 'TP Hồ Chí Minh'),
+('SV003', 'sv003', 'password3', 'sv003@gmail.com', 'Trần Văn Z', '0981000003', 'sv003.jpg', 'TP Hồ Chí Minh'),
+('SV004', 'sv004', 'password4', 'sv004@gmail.com', 'Phạm Văn M', '0981000004', 'sv004.jpg', 'TP Hồ Chí Minh'),
+('SV005', 'sv005', 'password5', 'sv005@gmail.com', 'Bùi Thị N', '0981000005', 'sv005.jpg', 'TP Hồ Chí Minh'),
+('SV006', 'sv006', 'password6', 'sv006@gmail.com', 'Đinh Tuấn O', '0981000006', 'sv006.jpg', 'TP Hồ Chí Minh'),
+('SV007', 'sv007', 'password7', 'sv007@gmail.com', 'Vũ Ngọc P', '0981000007', 'sv007.jpg', 'TP Hồ Chí Minh'),
+('SV008', 'sv008', 'password8', 'sv008@gmail.com', 'Phạm Tuấn Q', '0981000008', 'sv008.jpg', 'TP Hồ Chí Minh'),
+('SV009', 'sv009', 'password9', 'sv009@gmail.com', 'Nguyễn Văn R', '0981000009', 'sv009.jpg', 'TP Hồ Chí Minh'),
+('SV010', 'sv010', 'password10', 'sv010@gmail.com', 'Lê Văn S', '0981000010', 'sv010.jpg', 'TP Hồ Chí Minh');
+
+
+INSERT INTO Administrator (Admin_ID, username, Password, Email, Address, Full_Name, Phone_Number, Image) VALUES
+('QT001', 'qt001', 'password1', 'qt001@gmail.com', 'Hà Nội', 'Nguyễn Văn A', '0982000001', 'qt001.jpg'),
+('QT002', 'qt002', 'password2', 'qt002@gmail.com', 'Hồ Chí Minh', 'Trần Văn B', '0982000002', 'qt002.jpg'),
+('QT003', 'qt003', 'password3', 'qt003@gmail.com', 'Đà Nẵng', 'Lê Thị C', '0982000003', 'qt003.jpg'),
+('QT004', 'qt004', 'password4', 'qt004@gmail.com', 'Hải Phòng', 'Bùi Văn D', '0982000004', 'qt004.jpg'),
+('QT005', 'qt005', 'password5', 'qt005@gmail.com', 'Huế', 'Phạm Văn E', '0982000005', 'qt005.jpg'),
+('QT006', 'qt006', 'password6', 'qt006@gmail.com', 'Nha Trang', 'Đinh Thị F', '0982000006', 'qt006.jpg'),
+('QT007', 'qt007', 'password7', 'qt007@gmail.com', 'Cần Thơ', 'Vũ Văn G', '0982000007', 'qt007.jpg'),
+('QT008', 'qt008', 'password8', 'qt008@gmail.com', 'Quảng Ninh', 'Nguyễn Văn H', '0982000008', 'qt008.jpg'),
+('QT009', 'qt009', 'password9', 'qt009@gmail.com', 'Thanh Hóa', 'Lê Thị I', '0982000009', 'qt009.jpg'),
+('QT010', 'qt010', 'password10', 'qt010@gmail.com', 'Bắc Ninh', 'Trần Văn J', '0982000010', 'qt010.jpg');
+
+
+INSERT INTO Action_History (Admin_ID, Action_ID, Action_Time, Action_Description) VALUES 
+('QT001', 'TT001', '2023-01-01 08:00:00', 'Thao tác 1'),
+('QT002', 'TT002', '2023-01-02 08:00:00', 'Thao tác 2'),
+('QT003', 'TT003', '2023-01-03 08:00:00', 'Thao tác 3'),
+('QT004', 'TT004', '2023-01-04 08:00:00', 'Thao tác 4'),
+('QT005', 'TT005', '2023-01-05 08:00:00', 'Thao tác 5'),
+('QT006', 'TT006', '2023-01-06 08:00:00', 'Thao tác 6'),
+('QT007', 'TT007', '2023-01-07 08:00:00', 'Thao tác 7'),
+('QT008', 'TT008', '2023-01-08 08:00:00', 'Thao tác 8'),
+('QT009', 'TT009', '2023-01-09 08:00:00', 'Thao tác 9'),
+('QT010', 'TT010', '2023-01-10 08:00:00', 'Thao tác 10');
+
+
+INSERT INTO Subject (Subject_ID, Subject_Name, Credits, Prerequisites, Learning_Outcomes, Department_ID) VALUES 
+('MH001', 'Lập trình C', 3, 'Không', 'Biết lập trình cơ bản', 'K01'),
+('MH002', 'Toán cao cấp', 4, 'Không', 'Nắm vững kiến thức toán học', 'K01'),
+('MH003', 'Kinh tế vĩ mô', 3, 'Không', 'Hiểu về kinh tế', 'K02'),
+('MH004', 'Luật hình sự', 2, 'Không', 'Hiểu rõ pháp luật', 'K03'),
+('MH005', 'Ngữ pháp tiếng Anh', 3, 'Không', 'Nắm vững ngữ pháp', 'K04'),
+('MH006', 'Y tế cộng đồng', 3, 'Không', 'Hiểu về y tế', 'K05'),
+('MH007', 'Thiết kế cơ khí', 4, 'Không', 'Hiểu cơ bản về thiết kế', 'K10'),
+('MH008', 'Phân tích tài chính', 3, 'Không', 'Phân tích các chỉ số tài chính', 'K02'),
+('MH009', 'Ngôn ngữ lập trình', 3, 'Không', 'Biết lập trình cơ bản', 'K06'),
+('MH010', 'Quản trị dự án', 3, 'Không', 'Hiểu về quản trị', 'K07');
+
+
+INSERT INTO Class (Class_ID, Start_Date, End_Date, Schedule, Subject_ID, Lecturer_ID) VALUES
+('L01', '2023-02-01', '2023-05-01', 'Thứ 2, Thứ 4', 'MH001', 'GV001'),
+('L02', '2023-02-01', '2023-05-01', 'Thứ 3, Thứ 5', 'MH002', 'GV002'),
+('L03', '2023-03-01', '2023-06-01', 'Thứ 2, Thứ 4', 'MH003', 'GV003'),
+('L04', '2023-03-01', '2023-06-01', 'Thứ 3, Thứ 5', 'MH004', 'GV004'),
+('L05', '2023-04-01', '2023-07-01', 'Thứ 2, Thứ 4', 'MH005', 'GV005'),
+('L06', '2023-04-01', '2023-07-01', 'Thứ 3, Thứ 5', 'MH006', 'GV006'),
+('L07', '2023-05-01', '2023-08-01', 'Thứ 2, Thứ 4', 'MH007', 'GV007'),
+('L08', '2023-05-01', '2023-08-01', 'Thứ 3, Thứ 5', 'MH008', 'GV008'),
+('L09', '2023-06-01', '2023-09-01', 'Thứ 2, Thứ 4', 'MH009', 'GV009'),
+('L10', '2023-06-01', '2023-09-01', 'Thứ 3, Thứ 5', 'MH010', 'GV010');
+
+
+INSERT INTO Tuition_Fee (Fee_ID, Status, Amount, Student_ID) VALUES
+('HP001', 'Đã thanh toán', 1000000, 'SV001'),
+('HP002', 'Chưa thanh toán', 1500000, 'SV002'),
+('HP003', 'Đã thanh toán', 1200000, 'SV003'),
+('HP004', 'Chưa thanh toán', 1300000, 'SV004'),
+('HP005', 'Đã thanh toán', 1400000, 'SV005'),
+('HP006', 'Đã thanh toán', 1100000, 'SV006'),
+('HP007', 'Chưa thanh toán', 1000000, 'SV007'),
+('HP008', 'Đã thanh toán', 1500000, 'SV008'),
+('HP009', 'Chưa thanh toán', 1200000, 'SV009'),
+('HP010', 'Đã thanh toán', 1300000, 'SV010');
+
+
+INSERT INTO Enrollment (Subject_ID, Student_ID, Result) VALUES
+('MH001', 'SV001', 'Đạt'),
+('MH002', 'SV002', 'Không đạt'),
+('MH003', 'SV003', 'Đạt'),
+('MH004', 'SV004', 'Không đạt'),
+('MH005', 'SV005', 'Đạt'),
+('MH006', 'SV006', 'Đạt'),
+('MH007', 'SV007', 'Không đạt'),
+('MH008', 'SV008', 'Đạt'),
+('MH009', 'SV009', 'Không đạt'),
+('MH010', 'SV010', 'Đạt');
+
+
+INSERT INTO Participation (Class_ID, Student_ID) VALUES
+('L01', 'SV001'),
+('L02', 'SV002'),
+('L03', 'SV003'),
+('L04', 'SV004'),
+('L05', 'SV005'),
+('L06', 'SV006'),
+('L07', 'SV007'),
+('L08', 'SV008'),
+('L09', 'SV009'),
+('L10', 'SV010');
+
+
+INSERT INTO Exam (Exam_ID, Exam_Name) VALUES
+('BKT001', 'Bài kiểm tra 1'),
+('BKT002', 'Bài kiểm tra 2'),
+('BKT003', 'Bài kiểm tra 3'),
+('BKT004', 'Bài kiểm tra 4'),
+('BKT005', 'Bài kiểm tra 5'),
+('BKT006', 'Bài kiểm tra 6'),
+('BKT007', 'Bài kiểm tra 7'),
+('BKT008', 'Bài kiểm tra 8'),
+('BKT009', 'Bài kiểm tra 9'),
+('BKT010', 'Bài kiểm tra 10');
+
+
+INSERT INTO Question (Question_ID, Exam_ID, Question_Content, Student_Answer, Correct_Answer) VALUES
+('CH001', 'BKT001', 'Thủ đô của Việt Nam là gì?', 'Hà Nội', 'A'),
+('CH002', 'BKT001', 'Python là gì?', 'Một ngôn ngữ lập trình', 'A'),
+('CH003', 'BKT001', 'Kết quả của 3 + 5 là bao nhiêu?', '8', 'D'),
+('CH004', 'BKT001', 'Cấu trúc nào sau đây là của vòng lặp trong Python?', 'for', 'B'),
+('CH005', 'BKT001', 'Ai là người phát minh ra thuyết tương đối?', 'Albert Einstein', 'A'),
+('CH006', 'BKT001', 'Quốc gia nào lớn nhất thế giới theo diện tích?', 'Nga', 'A'),
+('CH007', 'BKT001', 'HTML là gì?', 'Ngôn ngữ đánh dấu siêu văn bản', 'B'),
+('CH008', 'BKT001', 'Mã quốc gia của Việt Nam là gì?', 'VN', 'C'),
+('CH009', 'BKT001', 'Ngôn ngữ chính thức của Brazil là gì?', 'Tiếng Bồ Đào Nha', 'D'),
+('CH010', 'BKT001', 'Cấu trúc dữ liệu nào là một ngăn xếp?', 'Stack', 'C');
+
+
+INSERT INTO Multiple_Choice_Option (Question_ID, Exam_ID, Option_ID, Option_A, Option_B, Option_C, Option_D) VALUES
+('CH001', 'BKT001', 'LC001', 'Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Huế'),
+('CH002', 'BKT001', 'LC001', 'Một ngôn ngữ lập trình', 'Một hệ điều hành', 'Một phần mềm', 'Một thiết bị phần cứng'),
+('CH003', 'BKT001', 'LC001', '6', '7', '9', '8'),
+('CH004', 'BKT001', 'LC001', 'if', 'for', 'while', 'def'),
+('CH005', 'BKT001', 'LC001', 'Albert Einstein', 'Isaac Newton', 'Marie Curie', 'Galileo Galilei'),
+('CH006', 'BKT001', 'LC001', 'Nga', 'Trung Quốc', 'Mỹ', 'Canada'),
+('CH007', 'BKT001', 'LC001', 'Ngôn ngữ lập trình', 'Ngôn ngữ đánh dấu siêu văn bản', 'Ngôn ngữ cơ sở dữ liệu', 'Ngôn ngữ xử lý đồ họa'),
+('CH008', 'BKT001', 'LC001', 'US', 'JP', 'VN', 'KR'),
+('CH009', 'BKT001', 'LC001', 'Tiếng Tây Ban Nha', 'Tiếng Anh', 'Tiếng Pháp', 'Tiếng Bồ Đào Nha'),
+('CH010', 'BKT001', 'LC001', 'Queue', 'Array', 'Stack', 'LinkedList');
+
+
+INSERT INTO test_performance (student_id, exam_id, score, test_date) VALUES 
+('SV001', 'BKT001', 8, '2023-06-01'),
+('SV002', 'BKT002', 7, '2023-06-02'),
+('SV003', 'BKT003', 9, '2023-06-03'),
+('SV004', 'BKT004', 6, '2023-06-04'),
+('SV005', 'BKT005', 10, '2023-06-05'),
+('SV006', 'BKT006', 8, '2023-06-06'),
+('SV007', 'BKT007', 7, '2023-06-07'),
+('SV008', 'BKT008', 9, '2023-06-08'),
+('SV009', 'BKT009', 6, '2023-06-09'),
+('SV010', 'BKT010', 10, '2023-06-10');
+
+
+INSERT INTO Certificate (Certificate_ID, Lecturer_ID) VALUES
+('CC001', 'GV001'),
+('CC002', 'GV002'),
+('CC003', 'GV003'),
+('CC004', 'GV004'),
+('CC005', 'GV005'),
+('CC006', 'GV006'),
+('CC007', 'GV007'),
+('CC008', 'GV008'),
+('CC009', 'GV009'),
+('CC010', 'GV010');
+
+
+INSERT INTO Material (Material_ID, Class_ID, Material_Name) VALUES 
+('TL001', 'L01', 'Tài liệu 1'),
+('TL002', 'L02', 'Tài liệu 2'),
+('TL003', 'L03', 'Tài liệu 3'),
+('TL004', 'L04', 'Tài liệu 4'),
+('TL005', 'L05', 'Tài liệu 5'),
+('TL006', 'L06', 'Tài liệu 6'),
+('TL007', 'L07', 'Tài liệu 7'),
+('TL008', 'L08', 'Tài liệu 8'),
+('TL009', 'L09', 'Tài liệu 9'),
+('TL010', 'L10', 'Tài liệu 10');
+
+
+INSERT INTO Chapter (Chapter_Order, Material_ID, Class_ID, Title, Text_Content, Video_Content, Image_Content) VALUES
+('01', 'TL001', 'L01', 'Chương 1', 'Văn bản 1', 'Video 1', 'Hình ảnh 1'),
+('02', 'TL002', 'L02', 'Chương 2', 'Văn bản 2', 'Video 2', 'Hình ảnh 2'),
+('03', 'TL003', 'L03', 'Chương 3', 'Văn bản 3', 'Video 3', 'Hình ảnh 3'),
+('04', 'TL004', 'L04', 'Chương 4', 'Văn bản 4', 'Video 4', 'Hình ảnh 4'),
+('05', 'TL005', 'L05', 'Chương 5', 'Văn bản 5', 'Video 5', 'Hình ảnh 5'),
+('06', 'TL006', 'L06', 'Chương 6', 'Văn bản 6', 'Video 6', 'Hình ảnh 6'),
+('07', 'TL007', 'L07', 'Chương 7', 'Văn bản 7', 'Video 7', 'Hình ảnh 7'),
+('08', 'TL008', 'L08', 'Chương 8', 'Văn bản 8', 'Video 8', 'Hình ảnh 8'),
+('09', 'TL009', 'L09', 'Chương 9', 'Văn bản 9', 'Video 9', 'Hình ảnh 9'),
+('10', 'TL010', 'L10', 'Chương 10', 'Văn bản 10', 'Video 10', 'Hình ảnh 10');
+
+
+INSERT INTO Practical_Exercise (Chapter_Order, Material_ID, Class_ID, Practical_Exercise_ID, Exercise_Content) VALUES
+('01', 'TL001', 'L01', 'BTUD001',''),
+('02', 'TL002', 'L02', 'BTUD002',''),
+('03', 'TL003', 'L03', 'BTUD003',''),
+('04', 'TL004', 'L04', 'BTUD004',''),
+('05', 'TL005', 'L05', 'BTUD005',''),
+('06', 'TL006', 'L06', 'BTUD006',''),
+('07', 'TL007', 'L07', 'BTUD007',''),
+('08', 'TL008', 'L08', 'BTUD008',''),
+('09', 'TL009', 'L09', 'BTUD009',''),
+('10', 'TL010', 'L10', 'BTUD010','');

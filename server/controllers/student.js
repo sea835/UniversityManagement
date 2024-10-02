@@ -1,8 +1,7 @@
-const e = require('express');
 const database = require('../database/database');
 
 exports.getStudents = (req, res, next) => {
-    database.query('SELECT * FROM sinh_vien')
+    database.query('SELECT * FROM student')
         .then(data => {
             res.status(200).json(data[0]);
         })
@@ -16,7 +15,7 @@ exports.getStudents = (req, res, next) => {
 
 exports.getStudentById = (req, res, next) => {
     const id = req.params.id;
-    database.query('SELECT * FROM sinh_vien WHERE ma_so = ?', [id])
+    database.query('SELECT * FROM student WHERE student_id = ?', [id])
         .then(data => {
             res.status(200).json(data[0]);
         })
@@ -29,9 +28,9 @@ exports.getStudentById = (req, res, next) => {
 }
 
 exports.createStudent = (req, res, next) => {
-    const { studentId, username, password, email, phone, image, name } = req.body;
+    const { student_id, username, password, email, full_name, phone_number, image, address } = req.body;
     database
-        .query('INSERT INTO sinh_vien (ma_so, ho_ten, password, username, email, sdt, hinh_anh) VALUES (?, ?, ?, ?, ?, ?, ?)', [studentId, name, password, username, email, phone, image])
+        .query('INSERT INTO Student (Student_ID, username, Password, Email, Full_Name, Phone_Number, Image, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [student_id, username, password, email, full_name, phone_number, image, address])
         .then(data => {
             res.status(201).json({
                 message: 'Student created successfully',
@@ -41,16 +40,16 @@ exports.createStudent = (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                message: 'An error occurred'
+                message: err
             });
         });
 }
 
 exports.updateStudent = (req, res, next) => {
     const id = req.params.id;
-    const { studentId, username, password, email, phone, image, name } = req.body;
+    const { student_id, username, password, email, full_name, phone_number, image, address } = req.body;
     database
-        .query('UPDATE sinh_vien SET ma_so = ?, ho_ten = ?, password = ?, username = ?, email = ?, sdt = ?, hinh_anh = ? WHERE ma_so = ?', [studentId, name, password, username, email, phone, image, id])
+        .query('UPDATE student SET student_id = ?, username = ?, password = ?, email = ?, full_name = ?, phone_number = ?, image = ?, address = ? WHERE student_id = ?', [student_id, username, password, email, full_name, phone_number, image, address, id])
         .then(data => {
             res.status(200).json({
                 message: 'Student updated successfully',
@@ -68,7 +67,7 @@ exports.updateStudent = (req, res, next) => {
 exports.deleteStudent = (req, res, next) => {
     const id = req.params.id;
     database
-        .query('DELETE FROM sinh_vien WHERE ma_so = ?', [id])
+        .query('DELETE FROM student WHERE student_id = ?', [id])
         .then(data => {
             res.status(200).json({
                 message: 'Student deleted successfully',
