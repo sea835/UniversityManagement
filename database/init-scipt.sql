@@ -34,7 +34,8 @@ CREATE TABLE student (
     full_name VARCHAR(100),
     phone_number VARCHAR(15),
     image VARCHAR(255),
-    address VARCHAR(159)
+    address VARCHAR(159),
+    department_id VARCHAR(50)
 );
 
 -- Create the Administrator table
@@ -178,6 +179,10 @@ ALTER TABLE Lecturer
 ADD CONSTRAINT FK_Lecturer_Department
 FOREIGN KEY (Department_ID) REFERENCES Department(Department_ID);
 
+ALTER TABLE Student
+ADD CONSTRAINT FK_Student_Department
+FOREIGN KEY (Department_ID) REFERENCES Department(Department_ID);
+
 -- Add foreign keys to Class table
 ALTER TABLE Class 
 ADD CONSTRAINT FK_Class_Subject
@@ -253,17 +258,17 @@ INSERT INTO Lecturer (Lecturer_ID, username, Password, Email, Address, Full_Name
 ('GV010', 'nguyenthuyj', 'password10', 'ntj@gmail.com', 'Bắc Ninh', 'Nguyễn Thúy J', '0988000010', 'ntj.jpg', 'Luật quốc tế', 'K03');
 
 
-INSERT INTO Student (Student_ID, username, Password, Email, Full_Name, Phone_Number, Image, Address) VALUES
-('SV001', 'sv001', 'password1', 'sv001@gmail.com', 'Nguyễn Văn X', '0981000001', 'sv001.jpg', 'TP Hồ Chí Minh'),
-('SV002', 'sv002', 'password2', 'sv002@gmail.com', 'Lê Thị Y', '0981000002', 'sv002.jpg', 'TP Hồ Chí Minh'),
-('SV003', 'sv003', 'password3', 'sv003@gmail.com', 'Trần Văn Z', '0981000003', 'sv003.jpg', 'TP Hồ Chí Minh'),
-('SV004', 'sv004', 'password4', 'sv004@gmail.com', 'Phạm Văn M', '0981000004', 'sv004.jpg', 'TP Hồ Chí Minh'),
-('SV005', 'sv005', 'password5', 'sv005@gmail.com', 'Bùi Thị N', '0981000005', 'sv005.jpg', 'TP Hồ Chí Minh'),
-('SV006', 'sv006', 'password6', 'sv006@gmail.com', 'Đinh Tuấn O', '0981000006', 'sv006.jpg', 'TP Hồ Chí Minh'),
-('SV007', 'sv007', 'password7', 'sv007@gmail.com', 'Vũ Ngọc P', '0981000007', 'sv007.jpg', 'TP Hồ Chí Minh'),
-('SV008', 'sv008', 'password8', 'sv008@gmail.com', 'Phạm Tuấn Q', '0981000008', 'sv008.jpg', 'TP Hồ Chí Minh'),
-('SV009', 'sv009', 'password9', 'sv009@gmail.com', 'Nguyễn Văn R', '0981000009', 'sv009.jpg', 'TP Hồ Chí Minh'),
-('SV010', 'sv010', 'password10', 'sv010@gmail.com', 'Lê Văn S', '0981000010', 'sv010.jpg', 'TP Hồ Chí Minh');
+INSERT INTO Student (Student_ID, username, Password, Email, Full_Name, Phone_Number, Image, Address, department_id) VALUES
+('SV001', 'sv001', 'password1', 'sv001@gmail.com', 'Nguyễn Văn X', '0981000001', 'sv001.jpg', 'TP Hồ Chí Minh','K01'),
+('SV002', 'sv002', 'password2', 'sv002@gmail.com', 'Lê Thị Y', '0981000002', 'sv002.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV003', 'sv003', 'password3', 'sv003@gmail.com', 'Trần Văn Z', '0981000003', 'sv003.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV004', 'sv004', 'password4', 'sv004@gmail.com', 'Phạm Văn M', '0981000004', 'sv004.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV005', 'sv005', 'password5', 'sv005@gmail.com', 'Bùi Thị N', '0981000005', 'sv005.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV006', 'sv006', 'password6', 'sv006@gmail.com', 'Đinh Tuấn O', '0981000006', 'sv006.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV007', 'sv007', 'password7', 'sv007@gmail.com', 'Vũ Ngọc P', '0981000007', 'sv007.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV008', 'sv008', 'password8', 'sv008@gmail.com', 'Phạm Tuấn Q', '0981000008', 'sv008.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV009', 'sv009', 'password9', 'sv009@gmail.com', 'Nguyễn Văn R', '0981000009', 'sv009.jpg', 'TP Hồ Chí Minh', 'K01'),
+('SV010', 'sv010', 'password10', 'sv010@gmail.com', 'Lê Văn S', '0981000010', 'sv010.jpg', 'TP Hồ Chí Minh', 'K01');
 
 
 INSERT INTO Administrator (Admin_ID, username, Password, Email, Address, Full_Name, Phone_Number, Image) VALUES
