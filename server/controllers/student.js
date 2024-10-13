@@ -28,9 +28,9 @@ exports.getStudentById = (req, res, next) => {
 }
 
 exports.createStudent = (req, res, next) => {
-    const { student_id, username, password, email, full_name, phone_number, image, address } = req.body;
+    const { student_id, username, password, email, full_name, phone_number, image, address, department_id } = req.body;
     database
-        .query('INSERT INTO Student (Student_ID, username, Password, Email, Full_Name, Phone_Number, Image, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [student_id, username, password, email, full_name, phone_number, image, address])
+        .query('INSERT INTO Student (Student_ID, username, Password, Email, Full_Name, Phone_Number, Image, Address, department_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [student_id, username, password, email, full_name, phone_number, image, address, department_id])
         .then(data => {
             res.status(201).json({
                 message: 'Student created successfully',
