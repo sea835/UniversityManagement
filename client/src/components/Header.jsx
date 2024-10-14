@@ -11,7 +11,7 @@ export const Header = () => {
 
           <ul className="flex flex-row">
             <li className="">
-              <Link to="/">Home</Link>
+              <Link to="/home">Home</Link>
             </li>
             <li className="pl-[50px]">
               <Link to="/about">About</Link>

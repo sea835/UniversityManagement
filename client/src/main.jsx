@@ -7,12 +7,17 @@ import ApiLinksPage from "./ApiLinksPage";
 
 import App from "./App.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/home",
+        element: <HomePage />,
+      },
       {
         path: "/api-links",
         element: <ApiLinksPage />,
