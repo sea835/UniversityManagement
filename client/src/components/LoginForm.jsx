@@ -1,0 +1,58 @@
+import React from "react";
+
+const LoginForm = () => {
+  return (
+    <form className="flex flex-col mt-10 max-w-full w-[250px]">
+      <h2 className="text-2xl text-slate-700">Login</h2>
+      <div className="flex flex-col mt-6 w-full text-sm font-medium">
+        <div className="flex flex-col w-full whitespace-nowrap">
+          <label htmlFor="username" className="text-slate-700">
+            Username
+          </label>
+          <input
+            type="text"
+            id="Username"
+            placeholder="username"
+            className="overflow-hidden gap-2.5 self-stretch px-4 py-2 mt-2 w-full bg-white rounded-md border border-solid border-stone-300 min-h-[32px] text-slate-700"
+          />
+        </div>
+        <div className="flex flex-col mt-4 w-full whitespace-nowrap">
+          <label htmlFor="password" className="text-slate-700">
+            Password
+          </label>
+          <div className="flex overflow-hidden gap-10 justify-between items-center px-4 py-2 mt-2 w-full bg-white rounded-md border border-solid border-stone-300 min-h-[32px] text-slate-700">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              className="self-stretch my-auto border-none bg-transparent outline-none"
+            />
+            <img
+              loading="lazy"
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/768a42f457d27cb4dcedb7843cac5083e3438f44c5e12213c7c64d56712a57f3?placeholderIfAbsent=true&apiKey=6691d1e2e6994f86a4ee60b22c84bff6"
+              className="object-contain shrink-0 self-stretch my-auto w-3 rounded-3xl aspect-square"
+              alt=""
+            />
+          </div>
+        </div>
+        <a href="#forgot-password" className="self-start mt-3 text-slate-700">
+          Forgot Password?
+        </a>
+      </div>
+      <button
+        type="submit"
+        className="overflow-hidden gap-2.5 self-stretch py-2.5 pr-24 pl-24 mt-6 w-full text-base text-white rounded-lg bg-stone-400 min-h-[40px] max-md:px-5"
+      >
+        Sign in
+      </button>
+      <p className="self-start mt-6 text-xs text-center text-slate-700">
+        Don't have an account yet?{" "}
+        <a href="#register" className="text-slate-700">
+          Register now.
+        </a>
+      </p>
+    </form>
+  );
+};
+
+export default LoginForm;

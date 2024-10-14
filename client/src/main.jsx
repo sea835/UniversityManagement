@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ApiLinksPage from "./ApiLinksPage";
 
 import App from "./App.jsx";
-import { LoginPage } from "./pages/LoginPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
 
 const router = createBrowserRouter([
   {
