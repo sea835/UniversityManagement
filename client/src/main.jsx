@@ -7,12 +7,18 @@ import ApiLinksPage from "./ApiLinksPage";
 
 import App from "./App.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import SideBar from "./components/Sidebar/Sidebar.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/home",
+        element: <HomePage />,
+      },
       {
         path: "/api-links",
         element: <ApiLinksPage />,
@@ -32,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/test",
+        element: <SideBar />,
       },
     ],
   },
