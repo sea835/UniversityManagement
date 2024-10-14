@@ -1,31 +1,21 @@
-export const LoginPage = () => {
-  return (
-    <div className="flex justify-center items-center w-full bg-[url('/images/bg-login.png')] h-[800px]">
-      <div className="flex justify-center w-[520px] h-[540px] backdrop-blur-[17px] bg-[#F2EBE1] items-center rounded-[30px] text-[13px] text-[#2C3E50] opacity-20 relative"></div>
-      <div className="flex flex-col items-center w-[250px]">
-        <p className="text-[24px]">Login</p>
-        <form action="" className="flex flex-col">
-          <label htmlFor="username" className="pb-2">
-            Username
-          </label>
-          <input
-            type="text"
-            placeholder="username"
-            id="username"
-            className="w-[250px] rounded-[5px] h-[30px] border-[1px] border-[#BCBEC0] mb-[20px]"
-          />
+import React from "react";
+import LoginForm from "../components/LoginForm";
 
-          <label htmlFor="password" className="pb-2">
-            Password
-          </label>
-          <input
-            type="password"
-            placeholder="password"
-            id="password"
-            className="w-[250px] rounded-[5px] h-[30px] border-[1px] border-[#BCBEC0] mb-[20px]"
-          />
-        </form>
-      </div>
+const LoginPage = () => {
+  return (
+    <div className="flex relative flex-col justify-center items-center px-20 py-32 w-full min-h-[801px] max-md:px-5 max-md:py-24 max-md:max-w-full">
+      <img
+        loading="lazy"
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/040ac4abd25d4c19a668b96f2e4dc2567ff6eefc32d6b0003911050413e36da1?placeholderIfAbsent=true&apiKey=6691d1e2e6994f86a4ee60b22c84bff6"
+        className="object-cover absolute inset-0 size-full"
+        alt="Background"
+      />
+      <section className="flex overflow-hidden relative flex-col items-center px-20 pt-10 pb-32 mb-0 max-w-full rounded-3xl bg-stone-200 bg-opacity-80 min-h-[539px] w-[527px] max-md:px-5 max-md:pb-24 max-md:mb-2.5">
+        <div className="text-2xl text-slate-700">Your logo</div>
+        <LoginForm />
+      </section>
     </div>
   );
 };
+
+export default LoginPage;
