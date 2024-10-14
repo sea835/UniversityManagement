@@ -8,6 +8,7 @@ import ApiLinksPage from "./ApiLinksPage";
 import App from "./App.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import SideBar from "./components/Sidebar/Sidebar.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/test",
+        element: <SideBar />,
       },
     ],
   },
