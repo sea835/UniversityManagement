@@ -10,6 +10,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SideBar from "./components/Sidebar/Sidebar.jsx";
 import CourseGrid from "./components/Course/CourseGrid.jsx";
+import ClassesTable from "./components/Table/ClassesTable.jsx";
+import DynamicTable from "./components/Table/DynamicTable.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/test",
-        element: <SideBar />,
+        element: <DynamicTable />,
       },
     ],
   },
