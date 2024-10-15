@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function CourseCard({ title, teacher }) {
+function CourseCard({ id, title, teacher }) {
   return (
-    <div className="flex overflow-hidden flex-col grow rounded-xl min-h-[240px]">
+    <Link
+      to={`/courses/${id}`}
+      className="flex overflow-hidden flex-col grow rounded-xl min-h-[240px] hover:shadow-lg transition-shadow duration-300"
+    >
       <div className="flex flex-col items-start w-full bg-white">
         <div className="flex pr-16 max-w-full w-[360px] max-md:pr-5">
           <div className="flex shrink-0 bg-neutral-200 h-[120px] w-[120px]" />
@@ -19,7 +23,7 @@ function CourseCard({ title, teacher }) {
         <h3 className="text-base font-medium text-black">{title}</h3>
         <p className="mt-1 text-sm text-zinc-700">{teacher}</p>
       </div>
-    </div>
+    </Link>
   );
 }
 

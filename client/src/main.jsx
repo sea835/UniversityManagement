@@ -4,14 +4,17 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ApiLinksPage from "./ApiLinksPage";
+import { useState } from "react";
 
 import App from "./App.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
-import SideBar from "./components/Sidebar/Sidebar.jsx";
 import CourseGrid from "./components/Course/CourseGrid.jsx";
-import DynamicTable from "./components/Table/DynamicTable.jsx";
 import TestPage from "./pages/TestPage.jsx";
+import StudentPage from "./pages/StudentPage.jsx";
+import CourseContent from "./components/Course/CourseContent.jsx";
+import DynamicTable from "./components/Table/DynamicTable.jsx";
+import StudentClasses from "./services/StudentClasses.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +48,36 @@ const router = createBrowserRouter([
       {
         path: "/test",
         element: <TestPage />,
+      },
+      {
+        path: "/dashboard",
+        element: <StudentPage />,
+        children: [
+          {
+            path: "/dashboard/account",
+            element: <div>Account Setting</div>,
+          },
+          {
+            path: "/dashboard/courses",
+            element: <CourseGrid />,
+          },
+          {
+            path: "/dashboard/classes",
+            element: <div>Classes</div>,
+          },
+          {
+            path: "/dashboard/schedule",
+            element: (
+              <>
+                <StudentClasses />
+              </>
+            ),
+          },
+          {
+            path: "/dashboard/tuition",
+            element: <div>Tuition fee</div>,
+          },
+        ],
       },
     ],
   },
