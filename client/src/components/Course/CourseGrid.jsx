@@ -12,8 +12,13 @@ function CourseGrid() {
   ];
 
   return (
-    <div className="flex flex-col px-5 py-12 mt-7 w-full rounded-xl bg-zinc-100 ">
-      <div className="grid grid-cols-3 gap-5 max-md:grid-cols-1">
+    <div className="flex flex-col px-5 py-12 w-full rounded-[30px] bg-white ">
+      <div>
+        <h2 className="self-start pb-10 text-3xl font-semibold tracking-wide text-black max-md:max-w-full">
+          My Courses
+        </h2>
+      </div>
+      <div className="grid grid-cols-3 gap-5 max-md:grid-cols-1 bg-[#F3F3F3] p-10 rounded-[20px]">
         {courses.map((course) => (
           <CourseCard key={course.id} {...course} />
         ))}
