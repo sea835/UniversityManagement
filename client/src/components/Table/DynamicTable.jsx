@@ -2,88 +2,26 @@ import React, { useState } from "react";
 import Search from "./Search";
 import Sort from "./Sort";
 
-function DynamicTable() {
-  // Define multiple datasets with headers
-  const tableTypes = {
-    courses: {
-      headers: [
-        "Course ID",
-        "Course Name",
-        "Credits",
-        "Class ID",
-        "Day of Week",
-        "Lesson",
-        "Campus",
-        "Learning Weeks",
-      ],
-      data: [
-        {
-          courseId: "SP1035",
-          courseName: "Scientific Socialism",
-          credits: "2",
-          classId: "L01",
-          dayOfWeek: "2",
-          lesson: "2 3",
-          campus: "1",
-          learningWeeks: "1-2-3-4-6-7",
-        },
-        {
-          courseId: "CO3093",
-          courseName: "Computer Networks",
-          credits: "3",
-          classId: "L01",
-          dayOfWeek: "3",
-          lesson: "2 3 4",
-          campus: "2",
-          learningWeeks: "1-2-3-4-6-7",
-        },
-      ],
-    },
-    teachers: {
-      headers: [
-        "Student ID",
-        "Student Name",
-        "Username",
-        "Phone Number",
-        "Email",
-        "Actions",
-      ],
-      data: [
-        {
-          studentId: "220B88",
-          studentName: "Jane Cooper",
-          username: "Microsoft",
-          phoneNumber: "(225) 555-0118",
-          email: "jane@microsoft.com",
-        },
-        {
-          studentId: "220B89",
-          studentName: "John Doe",
-          username: "Google",
-          phoneNumber: "(225) 555-0119",
-          email: "john@google.com",
-        },
-        // Add more teacher data as needed
-      ],
-    },
-  };
-
+function DynamicTable({ dataset }) {
   // State for the selected table type
-  const [selectedTable, setSelectedTable] = useState("teachers");
+  const [selectedTable, setSelectedTable] = useState(Object.keys(dataset)[0]);
 
   // Handler to change table type
   const handleTableChange = (event) => {
     setSelectedTable(event.target.value);
   };
 
-  // Get current table data and headers
-  const { headers, data } = tableTypes[selectedTable];
+  // Get current table data
+  const tableData = dataset[selectedTable].data;
+
+  // Auto-generate headers from the keys of the first object in the data array
+  const headers = tableData.length > 0 ? Object.keys(tableData[0]) : [];
 
   return (
-    <div className="flex flex-col px-8 w-full max-w-full">
+    <div className="flex flex-col px-8 w-full max-w-full pb-20 pt-10">
       <div className="flex flex-wrap gap-5 justify-between w-full">
         <h2 className="self-start text-2xl font-semibold text-black">
-          {selectedTable === "teachers" ? "Teacher Accounts" : "Classes"}
+          {selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}
         </h2>
         <div className="flex gap-4">
           <Search />
@@ -92,7 +30,7 @@ function DynamicTable() {
       </div>
 
       {/* Dropdown to switch between tables */}
-      <div className="mt-5">
+      {/* <div className="mt-5">
         <label htmlFor="table-selector" className="font-medium text-gray-700">
           Select Table Type:
         </label>
@@ -102,10 +40,13 @@ function DynamicTable() {
           onChange={handleTableChange}
           className="ml-3 p-2 border rounded-md bg-gray-100"
         >
-          <option value="courses">Courses</option>
-          <option value="teachers">Teachers</option>
+          {Object.keys(dataset).map((key) => (
+            <option key={key} value={key}>
+              {key.charAt(0).toUpperCase() + key.slice(1)}
+            </option>
+          ))}
         </select>
-      </div>
+      </div> */}
 
       {/* Table Structure */}
       <div className="mt-8 overflow-auto border border-gray-300 rounded-md shadow-sm">
@@ -118,30 +59,26 @@ function DynamicTable() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  {header}
+                  {header.charAt(0).toUpperCase() +
+                    header.slice(1).replace(/([A-Z])/g, " $1")}
                 </th>
               ))}
+              {dataset[selectedTable].action === true && (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => (
+            {tableData.map((item, index) => (
               <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.studentId || item.courseId}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.studentName || item.courseName}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.username || item.credits}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.phoneNumber || item.classId}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.email || item.dayOfWeek}
-                </td>
-                {selectedTable === "teachers" && (
+                {headers.map((header, idx) => (
+                  <td key={idx} className="px-6 py-4 whitespace-nowrap">
+                    {item[header]}
+                  </td>
+                ))}
+                {dataset[selectedTable].action === true && (
                   <td className="px-6 py-4 whitespace-nowrap flex space-x-3">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
                       Edit
