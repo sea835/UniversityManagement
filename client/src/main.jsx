@@ -9,6 +9,7 @@ import App from "./App.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SideBar from "./components/Sidebar/Sidebar.jsx";
+import CourseGrid from "./components/Course/CourseGrid.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/course",
-        element: <div>Course</div>,
+        element: <CourseGrid />,
       },
       {
         path: "/contact",
