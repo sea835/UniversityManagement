@@ -62,6 +62,10 @@ const router = createBrowserRouter([
             element: <CourseGrid />,
           },
           {
+            path: "/dashboard/courses/:id",
+            element: <CourseContent />,
+          },
+          {
             path: "/dashboard/classes",
             element: <div>Classes</div>,
           },

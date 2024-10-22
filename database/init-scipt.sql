@@ -69,30 +69,28 @@ CREATE TABLE subject (
     department_id VARCHAR(50)
 );
 
--- Create the Class table
-CREATE TABLE class (
-    class_id VARCHAR(50) PRIMARY KEY,
-    start_date DATE,
-    end_date DATE,
-    schedule VARCHAR(255),
-    subject_id VARCHAR(50),
-    lecturer_id VARCHAR(50)
+-- Create the Semester table
+CREATE TABLE semester (
+    semester_id VARCHAR(50) PRIMARY KEY
 );
 
--- Create the Tuition_Fee table
-CREATE TABLE tuition_fee (
-    fee_id VARCHAR(50) PRIMARY KEY,
-    status VARCHAR(50),
-    amount DECIMAL(15, 2),
-    student_id VARCHAR(50)
+-- Create the Class table
+CREATE TABLE class (
+    class_id VARCHAR(50),
+    semester_id varchar(50),
+    schedule VARCHAR(255),
+    subject_id VARCHAR(50),
+    lecturer_id VARCHAR(50),
+    PRIMARY KEY (class_id, semester_id)
 );
 
 -- Create the Enrollment table
 CREATE TABLE enrollment (
     subject_id VARCHAR(50),
     student_id VARCHAR(50),
+    semester_id varchar(50),
     result VARCHAR(50),
-    PRIMARY KEY (subject_id, student_id)
+    PRIMARY KEY (subject_id, student_id, semester_id)
 );
 
 -- Create the Participation table
@@ -111,8 +109,12 @@ CREATE TABLE certificate (
 
 -- Create the Exam table
 CREATE TABLE exam (
-    exam_id VARCHAR(50) PRIMARY KEY,
-    exam_name VARCHAR(255)
+    exam_id VARCHAR(50),
+    chapter_order INT,
+    material_id VARCHAR(50),
+    class_id VARCHAR(50),
+    exam_name VARCHAR(255),
+    primary key (exam_id, chapter_order, material_id, class_id)
 );
 
 -- Create the Question table
@@ -164,15 +166,29 @@ CREATE TABLE chapter (
     image_content TEXT
 );
 
--- Create the Practical_Exercise table
-CREATE TABLE practical_exercise (
-    chapter_order INT,
-    material_id VARCHAR(50),
-    class_id VARCHAR(50),
-    practical_exercise_id VARCHAR(50),
-    exercise_content TEXT,
-    PRIMARY KEY (chapter_order, material_id, class_id, practical_exercise_id)
-);
+ALTER TABLE Material
+ADD CONSTRAINT FK_Material_Class
+FOREIGN KEY (class_ID) REFERENCES Class(Class_ID);
+
+ALTER TABLE Chapter 
+ADD CONSTRAINT FK_Chapter_Material
+FOREIGN KEY (material_ID) REFERENCES material(material_ID);
+
+ALTER TABLE Chapter 
+ADD CONSTRAINT FK_Chapter_Class
+FOREIGN KEY (class_ID) REFERENCES class(class_ID);
+
+ALTER TABLE Exam 
+ADD CONSTRAINT FK_Exam_Class
+FOREIGN KEY (class_ID) REFERENCES class(class_id);
+
+ALTER TABLE Exam 
+ADD CONSTRAINT FK_Exam_Material
+FOREIGN KEY (material_ID) REFERENCES material(material_ID);
+
+ALTER TABLE Exam 
+ADD CONSTRAINT FK_Exam_Chapter
+FOREIGN KEY (Chapter_order) REFERENCES Chapter(Chapter_order);
 
 -- Add foreign key to Lecturer table
 ALTER TABLE Lecturer 
@@ -192,10 +208,9 @@ ALTER TABLE Class
 ADD CONSTRAINT FK_Class_Lecturer
 FOREIGN KEY (Lecturer_ID) REFERENCES Lecturer(Lecturer_ID);
 
--- Add foreign key to Tuition_Fee table
-ALTER TABLE Tuition_Fee 
-ADD CONSTRAINT FK_Tuition_Fee_Student
-FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
+ALTER TABLE Class 
+ADD CONSTRAINT FK_Class_Semester
+FOREIGN KEY (semester_id) REFERENCES Semester(semester_id);
 
 -- Add foreign keys to Enrollment table
 ALTER TABLE Enrollment 
@@ -205,6 +220,10 @@ FOREIGN KEY (Subject_ID) REFERENCES Subject(Subject_ID);
 ALTER TABLE Enrollment 
 ADD CONSTRAINT FK_Enrollment_Student
 FOREIGN KEY (Student_ID) REFERENCES Student(Student_ID);
+
+ALTER TABLE Enrollment 
+ADD CONSTRAINT FK_Enrollment_Semester
+FOREIGN KEY (semester_id) REFERENCES Semester(semester_id);
 
 -- Add foreign keys to Participation table
 ALTER TABLE Participation 
@@ -231,6 +250,21 @@ ADD CONSTRAINT FK_Option_Question
 FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID);
 
 -- --------------------------------------------------------------------------
+
+INSERT INTO semester (semester_id) VALUES
+('HK241'),  -- Học kỳ 1 năm 2024
+('HK242'),  -- Học kỳ 2 năm 2024
+('HK243'),  -- Học kỳ 3 năm 2024
+('HK231'),  -- Học kỳ 1 năm 2023
+('HK232'),  -- Học kỳ 2 năm 2023
+('HK233'),  -- Học kỳ 3 năm 2023
+('HK221'),  -- Học kỳ 1 năm 2022
+('HK222'),  -- Học kỳ 2 năm 2022
+('HK223'),  -- Học kỳ 3 năm 2022
+('HK211'),  -- Học kỳ 1 năm 2021
+('HK212'),  -- Học kỳ 2 năm 2021
+('HK213');  -- Học kỳ 3 năm 2021
+
 
 INSERT INTO Department (Department_ID, Department_Name) VALUES
 ('K01', 'Công nghệ thông tin'),
@@ -310,43 +344,30 @@ INSERT INTO Subject (Subject_ID, Subject_Name, Credits, Prerequisites, Learning_
 ('MH010', 'Quản trị dự án', 3, 'Không', 'Hiểu về quản trị', 'K07');
 
 
-INSERT INTO Class (Class_ID, Start_Date, End_Date, Schedule, Subject_ID, Lecturer_ID) VALUES
-('L01', '2023-02-01', '2023-05-01', 'Thứ 2, Thứ 4', 'MH001', 'GV001'),
-('L02', '2023-02-01', '2023-05-01', 'Thứ 3, Thứ 5', 'MH002', 'GV002'),
-('L03', '2023-03-01', '2023-06-01', 'Thứ 2, Thứ 4', 'MH003', 'GV003'),
-('L04', '2023-03-01', '2023-06-01', 'Thứ 3, Thứ 5', 'MH004', 'GV004'),
-('L05', '2023-04-01', '2023-07-01', 'Thứ 2, Thứ 4', 'MH005', 'GV005'),
-('L06', '2023-04-01', '2023-07-01', 'Thứ 3, Thứ 5', 'MH006', 'GV006'),
-('L07', '2023-05-01', '2023-08-01', 'Thứ 2, Thứ 4', 'MH007', 'GV007'),
-('L08', '2023-05-01', '2023-08-01', 'Thứ 3, Thứ 5', 'MH008', 'GV008'),
-('L09', '2023-06-01', '2023-09-01', 'Thứ 2, Thứ 4', 'MH009', 'GV009'),
-('L10', '2023-06-01', '2023-09-01', 'Thứ 3, Thứ 5', 'MH010', 'GV010');
+INSERT INTO class (class_id, semester_id, schedule, subject_id, lecturer_id) VALUES
+('L01', 'HK241', 'Thứ 2, Thứ 4', 'MH001', 'GV001'),
+('L02', 'HK241', 'Thứ 3, Thứ 5', 'MH002', 'GV002'),
+('L03', 'HK242', 'Thứ 2, Thứ 4', 'MH003', 'GV003'),
+('L04', 'HK242', 'Thứ 3, Thứ 5', 'MH004', 'GV004'),
+('L05', 'HK243', 'Thứ 2, Thứ 4', 'MH005', 'GV005'),
+('L06', 'HK243', 'Thứ 3, Thứ 5', 'MH006', 'GV006'),
+('L07', 'HK231', 'Thứ 2, Thứ 4', 'MH007', 'GV007'),
+('L08', 'HK231', 'Thứ 3, Thứ 5', 'MH008', 'GV008'),
+('L09', 'HK232', 'Thứ 2, Thứ 4', 'MH009', 'GV009'),
+('L10', 'HK232', 'Thứ 3, Thứ 5', 'MH010', 'GV010');
 
 
-INSERT INTO Tuition_Fee (Fee_ID, Status, Amount, Student_ID) VALUES
-('HP001', 'Đã thanh toán', 1000000, 'SV001'),
-('HP002', 'Chưa thanh toán', 1500000, 'SV002'),
-('HP003', 'Đã thanh toán', 1200000, 'SV003'),
-('HP004', 'Chưa thanh toán', 1300000, 'SV004'),
-('HP005', 'Đã thanh toán', 1400000, 'SV005'),
-('HP006', 'Đã thanh toán', 1100000, 'SV006'),
-('HP007', 'Chưa thanh toán', 1000000, 'SV007'),
-('HP008', 'Đã thanh toán', 1500000, 'SV008'),
-('HP009', 'Chưa thanh toán', 1200000, 'SV009'),
-('HP010', 'Đã thanh toán', 1300000, 'SV010');
-
-
-INSERT INTO Enrollment (Subject_ID, Student_ID, Result) VALUES
-('MH001', 'SV001', 'Đạt'),
-('MH002', 'SV002', 'Không đạt'),
-('MH003', 'SV003', 'Đạt'),
-('MH004', 'SV004', 'Không đạt'),
-('MH005', 'SV005', 'Đạt'),
-('MH006', 'SV006', 'Đạt'),
-('MH007', 'SV007', 'Không đạt'),
-('MH008', 'SV008', 'Đạt'),
-('MH009', 'SV009', 'Không đạt'),
-('MH010', 'SV010', 'Đạt');
+INSERT INTO enrollment (subject_id, student_id, semester_id, result) VALUES
+('MH001', 'SV001', 'HK241', 'Đạt'),
+('MH002', 'SV002', 'HK241', 'Không đạt'),
+('MH003', 'SV003', 'HK242', 'Đạt'),
+('MH004', 'SV004', 'HK242', 'Không đạt'),
+('MH005', 'SV005', 'HK243', 'Đạt'),
+('MH006', 'SV006', 'HK243', 'Đạt'),
+('MH007', 'SV007', 'HK231', 'Không đạt'),
+('MH008', 'SV008', 'HK231', 'Đạt'),
+('MH009', 'SV009', 'HK232', 'Không đạt'),
+('MH010', 'SV010', 'HK232', 'Đạt');
 
 
 INSERT INTO Participation (Class_ID, Student_ID) VALUES
@@ -361,18 +382,43 @@ INSERT INTO Participation (Class_ID, Student_ID) VALUES
 ('L09', 'SV009'),
 ('L10', 'SV010');
 
+INSERT INTO Material (Material_ID, Class_ID, Material_Name) VALUES 
+('TL001', 'L01', 'Tài liệu 1'),
+('TL002', 'L02', 'Tài liệu 2'),
+('TL003', 'L03', 'Tài liệu 3'),
+('TL004', 'L04', 'Tài liệu 4'),
+('TL005', 'L05', 'Tài liệu 5'),
+('TL006', 'L06', 'Tài liệu 6'),
+('TL007', 'L07', 'Tài liệu 7'),
+('TL008', 'L08', 'Tài liệu 8'),
+('TL009', 'L09', 'Tài liệu 9'),
+('TL010', 'L10', 'Tài liệu 10');
 
-INSERT INTO Exam (Exam_ID, Exam_Name) VALUES
-('BKT001', 'Bài kiểm tra 1'),
-('BKT002', 'Bài kiểm tra 2'),
-('BKT003', 'Bài kiểm tra 3'),
-('BKT004', 'Bài kiểm tra 4'),
-('BKT005', 'Bài kiểm tra 5'),
-('BKT006', 'Bài kiểm tra 6'),
-('BKT007', 'Bài kiểm tra 7'),
-('BKT008', 'Bài kiểm tra 8'),
-('BKT009', 'Bài kiểm tra 9'),
-('BKT010', 'Bài kiểm tra 10');
+
+INSERT INTO Chapter (Chapter_Order, Material_ID, Class_ID, Title, Text_Content, Video_Content, Image_Content) VALUES
+('01', 'TL001', 'L01', 'Chương 1', 'Văn bản 1', 'Video 1', 'Hình ảnh 1'),
+('02', 'TL002', 'L02', 'Chương 2', 'Văn bản 2', 'Video 2', 'Hình ảnh 2'),
+('03', 'TL003', 'L03', 'Chương 3', 'Văn bản 3', 'Video 3', 'Hình ảnh 3'),
+('04', 'TL004', 'L04', 'Chương 4', 'Văn bản 4', 'Video 4', 'Hình ảnh 4'),
+('05', 'TL005', 'L05', 'Chương 5', 'Văn bản 5', 'Video 5', 'Hình ảnh 5'),
+('06', 'TL006', 'L06', 'Chương 6', 'Văn bản 6', 'Video 6', 'Hình ảnh 6'),
+('07', 'TL007', 'L07', 'Chương 7', 'Văn bản 7', 'Video 7', 'Hình ảnh 7'),
+('08', 'TL008', 'L08', 'Chương 8', 'Văn bản 8', 'Video 8', 'Hình ảnh 8'),
+('09', 'TL009', 'L09', 'Chương 9', 'Văn bản 9', 'Video 9', 'Hình ảnh 9'),
+('10', 'TL010', 'L10', 'Chương 10', 'Văn bản 10', 'Video 10', 'Hình ảnh 10');
+
+
+INSERT INTO exam (exam_id, chapter_order, material_id, class_id, exam_name) VALUES
+('BKT001', 1, 'TL001', 'L01', 'Bài kiểm tra 1'),
+('BKT002', 2, 'TL001', 'L01', 'Bài kiểm tra 2'),
+('BKT003', 1, 'TL002', 'L02', 'Bài kiểm tra 3'),
+('BKT004', 2, 'TL002', 'L02', 'Bài kiểm tra 4'),
+('BKT005', 1, 'TL003', 'L03', 'Bài kiểm tra 5'),
+('BKT006', 2, 'TL003', 'L03', 'Bài kiểm tra 6'),
+('BKT007', 1, 'TL004', 'L04', 'Bài kiểm tra 7'),
+('BKT008', 2, 'TL004', 'L04', 'Bài kiểm tra 8'),
+('BKT009', 1, 'TL005', 'L05', 'Bài kiểm tra 9'),
+('BKT010', 2, 'TL005', 'L05', 'Bài kiểm tra 10');
 
 
 INSERT INTO Question (Question_ID, Exam_ID, Question_Content, Student_Answer, Correct_Answer) VALUES
@@ -427,40 +473,3 @@ INSERT INTO Certificate (Certificate_ID, Lecturer_ID) VALUES
 ('CC010', 'GV010');
 
 
-INSERT INTO Material (Material_ID, Class_ID, Material_Name) VALUES 
-('TL001', 'L01', 'Tài liệu 1'),
-('TL002', 'L02', 'Tài liệu 2'),
-('TL003', 'L03', 'Tài liệu 3'),
-('TL004', 'L04', 'Tài liệu 4'),
-('TL005', 'L05', 'Tài liệu 5'),
-('TL006', 'L06', 'Tài liệu 6'),
-('TL007', 'L07', 'Tài liệu 7'),
-('TL008', 'L08', 'Tài liệu 8'),
-('TL009', 'L09', 'Tài liệu 9'),
-('TL010', 'L10', 'Tài liệu 10');
-
-
-INSERT INTO Chapter (Chapter_Order, Material_ID, Class_ID, Title, Text_Content, Video_Content, Image_Content) VALUES
-('01', 'TL001', 'L01', 'Chương 1', 'Văn bản 1', 'Video 1', 'Hình ảnh 1'),
-('02', 'TL002', 'L02', 'Chương 2', 'Văn bản 2', 'Video 2', 'Hình ảnh 2'),
-('03', 'TL003', 'L03', 'Chương 3', 'Văn bản 3', 'Video 3', 'Hình ảnh 3'),
-('04', 'TL004', 'L04', 'Chương 4', 'Văn bản 4', 'Video 4', 'Hình ảnh 4'),
-('05', 'TL005', 'L05', 'Chương 5', 'Văn bản 5', 'Video 5', 'Hình ảnh 5'),
-('06', 'TL006', 'L06', 'Chương 6', 'Văn bản 6', 'Video 6', 'Hình ảnh 6'),
-('07', 'TL007', 'L07', 'Chương 7', 'Văn bản 7', 'Video 7', 'Hình ảnh 7'),
-('08', 'TL008', 'L08', 'Chương 8', 'Văn bản 8', 'Video 8', 'Hình ảnh 8'),
-('09', 'TL009', 'L09', 'Chương 9', 'Văn bản 9', 'Video 9', 'Hình ảnh 9'),
-('10', 'TL010', 'L10', 'Chương 10', 'Văn bản 10', 'Video 10', 'Hình ảnh 10');
-
-
-INSERT INTO Practical_Exercise (Chapter_Order, Material_ID, Class_ID, Practical_Exercise_ID, Exercise_Content) VALUES
-('01', 'TL001', 'L01', 'BTUD001',''),
-('02', 'TL002', 'L02', 'BTUD002',''),
-('03', 'TL003', 'L03', 'BTUD003',''),
-('04', 'TL004', 'L04', 'BTUD004',''),
-('05', 'TL005', 'L05', 'BTUD005',''),
-('06', 'TL006', 'L06', 'BTUD006',''),
-('07', 'TL007', 'L07', 'BTUD007',''),
-('08', 'TL008', 'L08', 'BTUD008',''),
-('09', 'TL009', 'L09', 'BTUD009',''),
-('10', 'TL010', 'L10', 'BTUD010','');
