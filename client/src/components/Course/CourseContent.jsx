@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function CourseContent() {
+  const { id: courseId } = useParams(); // Extract courseId from the URL
   const [chapters, setChapters] = useState([]);
   const [view, setView] = useState("course"); // State to toggle between Course and Grade
 
   useEffect(() => {
     // Simulate fetching data (replace with your actual API call)
     const fetchChapters = async () => {
+      // Replace with actual API call using courseId
       const fetchedChapters = [
         {
           chapter_order: 1,
@@ -27,11 +30,16 @@ function CourseContent() {
           image_content: "Hình ảnh 2",
         },
       ];
-      setChapters(fetchedChapters);
+
+      // Simulate fetching data specific to courseId
+      const filteredChapters = fetchedChapters.filter(
+        (chapter) => chapter.class_id === courseId // Example filter based on courseId
+      );
+      setChapters(filteredChapters);
     };
 
     fetchChapters();
-  }, []);
+  }, [courseId]); // Add courseId to dependencies
 
   return (
     <section className="flex flex-col grow px-5 py-8 w-full bg-white rounded-3xl max-md:mt-3.5 max-md:max-w-full">
@@ -80,6 +88,8 @@ function CourseContent() {
     </section>
   );
 }
+
+// Remaining components (ExercisesSection, ChapterSection, GradeSection) unchanged
 
 function ExercisesSection() {
   return (
@@ -145,19 +155,6 @@ function GradeSection() {
       <p className="mt-5 text-base text-stone-500">
         Your grades for the course are: 95/100.
       </p>
-    </div>
-  );
-}
-
-function ScrollIndicator() {
-  return (
-    <div className="flex flex-col justify-center self-start p-1.5 min-h-[280px] max-md:hidden">
-      <div className="flex flex-col flex-1 w-full">
-        <div className="flex flex-1 w-full rounded bg-gray-700 bg-opacity-20 min-h-[68px]" />
-        <div className="flex flex-1 w-full min-h-[67px]" />
-        <div className="flex flex-1 w-full min-h-[68px]" />
-        <div className="flex flex-1 w-full min-h-[67px]" />
-      </div>
     </div>
   );
 }
