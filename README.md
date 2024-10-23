@@ -17,18 +17,9 @@ git push
 
 ## Start
 
-Dùng 2 terminal, mở client và server.
-
-### Client
-
 ```bash
+npm install
 npm run dev
 ```
 
-### Server
-
-```bash
-npm start
-```
-
-### Vào localhost:3000/api-links để xem api page
+### Vào localhost:3000/home
