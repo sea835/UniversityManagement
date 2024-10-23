@@ -7,6 +7,6 @@
         "client": "cd client && npm run dev",
         "server": "cd server && npm start",
         "tailwind": "cd client && npm run tailwindcss:build",
-        "dev": "concurrently \"npm run server\" \"npm run client\""
+        "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run tailwind\""
     }
 }
