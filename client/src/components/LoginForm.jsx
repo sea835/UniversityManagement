@@ -1,6 +1,24 @@
 import React from "react";
+import { useState } from "react";
+import { useAuth } from "../components/Auth/AuthProvider";
 
 const LoginForm = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleOnUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleOnPasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const auth = useAuth();
+  const handleOnLogin = () => {
+    auth.login(username, password);
+  };
+
   return (
     <form className="flex flex-col mt-10 max-w-full w-[250px]">
       <h2 className="text-2xl text-slate-700">Login</h2>
@@ -10,6 +28,7 @@ const LoginForm = () => {
             Username
           </label>
           <input
+            onChange={(e) => handleOnUsernameChange(e)}
             type="text"
             id="Username"
             placeholder="username"
@@ -22,6 +41,7 @@ const LoginForm = () => {
           </label>
           <div className="flex overflow-hidden gap-10 justify-between items-center px-4 py-2 mt-2 w-full bg-white rounded-md border border-solid border-stone-300 min-h-[32px] text-slate-700">
             <input
+              onChange={(e) => handleOnPasswordChange(e)}
               type="password"
               id="password"
               placeholder="Password"
@@ -39,15 +59,17 @@ const LoginForm = () => {
           Forgot Password?
         </a>
       </div>
-      <button
-        type="submit"
-        className="overflow-hidden gap-2.5 self-stretch py-2.5 pr-24 pl-24 mt-6 w-full text-base text-white rounded-lg bg-stone-400 min-h-[40px] max-md:px-5"
+      <span
+        onClick={() => handleOnLogin()}
+        // type="submit"
+        className="overflow-hidden gap-2.5 self-stretch py-2.5 pr-24 pl-24 mt-6 w-full text-base text-white rounded-lg bg-stone-400 min-h-[40px] max-md:px-5 hover:bg-stone-500"
       >
-        Sign in
-      </button>
+        Log in
+      </span>
+
       <p className="self-start mt-6 text-xs text-center text-slate-700">
         Don't have an account yet?{" "}
-        <a href="#register" className="text-slate-700">
+        <a href="/register" className="text-slate-700">
           Register now.
         </a>
       </p>

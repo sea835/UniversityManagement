@@ -22,6 +22,9 @@ export const Header = () => {
             <li className="pl-[50px]">
               <Link to="/contact">Contact</Link>
             </li>
+            <li className="pl-[50px]">
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
           </ul>
           <div className="w-[500px]"></div>
           <Link to="/login" className="flex justify-end pr-[43px]">
