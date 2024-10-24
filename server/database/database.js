@@ -5,4 +5,5 @@ const connection = mysql.createConnection({
     password: '123456',
     database: 'university_management'
 });
+
 module.exports = connection.promise();

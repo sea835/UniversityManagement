@@ -1,0 +1,21 @@
+POST  http://localhost:4000/api/login
+Content-Type: application/json
+
+{
+  "username": "sv001",
+    "password": "password1"
+}
+
+###
+GET http://localhost:4000/api/students
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZWN0dXJlcl9pZCI6IkdWMDAxIiwidXNlcm5hbWUiOiJuZ3V5ZW52YW5BIiwicGFzc3dvcmQiOiJwYXNzd29yZDEiLCJlbWFpbCI6Im52YUBnbWFpbC5jb20iLCJhZGRyZXNzIjoiSMOgIE7hu5lpIiwiZnVsbF9uYW1lIjoiTmd1eeG7hW4gVsSDbiBBIiwicGhvbmVfbnVtYmVyIjoiMDk4ODAwMDAwMSIsImltYWdlIjoibnZhLmpwZyIsInNwZWNpYWxpemF0aW9uIjoiS-G7uSB0aHXhuq10IHBo4bqnbiBt4buBbSIsImRlcGFydG1lbnRfaWQiOiJLMDEiLCJyb2xlIjoibGVjdHVyZXIiLCJpYXQiOjE3Mjk2Njg1NTMsImV4cCI6MTcyOTY2ODg1M30.spTx3q_qpwcf6-0HznZxZALQa1ey6SU_oZPut0vmzhM
+
+
+###
+POST http://localhost:4000/api/token
+Content-Type: application/json
+
+{
+    "token" : 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50X2lkIjoiU1YwMDEiLCJ1c2VybmFtZSI6InN2MDAxIiwicGFzc3dvcmQiOiJwYXNzd29yZDEiLCJlbWFpbCI6InN2MDAxQGdtYWlsLmNvbSIsImZ1bGxfbmFtZSI6Ik5ndXnhu4VuIFbEg24gWCIsInBob25lX251bWJlciI6IjA5ODEwMDAwMDEiLCJpbWFnZSI6InN2MDAxLmpwZyIsImFkZHJlc3MiOiJUUCBI4buTIENow60gTWluaCIsImRlcGFydG1lbnRfaWQiOiJLMDEiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTcyOTY2NjkzNH0.5fZgxra31W-06JbBhH9mPd5a_mCZmLzDwTN9BgMQRTk"
+}
