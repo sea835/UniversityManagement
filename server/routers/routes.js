@@ -65,6 +65,7 @@ router.get('/subjects/:id', authController.authToken, subjectController.getSubje
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
 router.delete('/subjects/:id', authController.authToken, subjectController.deleteSubject);
+router.get('/subjects/student/:studentId', subjectController.getSubjectByEnrollments);
 
 router.get('/classes', authController.authToken, classController.getClasses);
 router.get('/classes/:id', authController.authToken, classController.getClassById);

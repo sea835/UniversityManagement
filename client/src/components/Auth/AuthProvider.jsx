@@ -4,7 +4,8 @@ import { redirect, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );
@@ -26,8 +27,7 @@ export const AuthProvider = ({ children }) => {
       setAccessToken(accessToken); // Set the token state
       localStorage.setItem("token", accessToken); // Persist the token in localStorage
       console.log(response);
-
-      return redirect("/dashboard");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       return null;

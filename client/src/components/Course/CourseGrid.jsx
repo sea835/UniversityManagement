@@ -1,15 +1,28 @@
 import React from "react";
 import CourseCard from "./CourseCard";
+import axios from "axios";
+import { useAuth } from "../Auth/AuthProvider";
+import { useEffect, useState } from "react";
 
 function CourseGrid() {
-  const courses = [
-    { id: 1, title: "Computer Networks(CO3093)", teacher: "Teacher name" },
-    { id: 2, title: "Computer Networks(CO3093)", teacher: "Teacher name" },
-    { id: 3, title: "Computer Networks(CO3093)", teacher: "Teacher name" },
-    { id: 4, title: "Computer Networks(CO3093)", teacher: "Teacher name" },
-    { id: 5, title: "Computer Networks(CO3093)", teacher: "Teacher name" },
-    { id: 6, title: "Computer Networks(CO3093)", teacher: "Teacher name" },
-  ];
+  const { user } = useAuth();
+
+  // "subject_id": "MH001",
+  //       "semester_id": "HK241",
+  //       "result": "Đạt",
+  //       "subject_name": "Lập trình C",
+  //       "credits": 3,
+  //       "prerequisites": "Không",
+  //       "learning_outcomes": "Biết lập trình cơ bản",
+  //       "department_id": "K01"
+
+  const [subjects, setSubjects] = useState([]);
+
+  axios
+    .get(`http://localhost:4000/api/subjects/student/${user.student_id}`)
+    .then((res) => {
+      setSubjects(res.data);
+    });
 
   return (
     <div className="flex flex-col px-5 py-12 w-full rounded-[30px] bg-white ">
@@ -19,8 +32,8 @@ function CourseGrid() {
         </h2>
       </div>
       <div className="grid grid-cols-3 gap-5 max-md:grid-cols-1 bg-[#F3F3F3] p-10 rounded-[20px]">
-        {courses.map((course) => (
-          <CourseCard key={course.id} {...course} />
+        {subjects.map((subject) => (
+          <CourseCard key={subject.class_id} {...subject} />
         ))}
       </div>
       <nav

@@ -6,7 +6,7 @@ import CourseContent from "../components/Course/CourseContent";
 import SideBar from "../components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 
-const TestPage = () => {
+const StudentPage = () => {
   return (
     <>
       <div className="flex bg-gradient-to-br from-[#E7E7E7] to-[#E6DAC4] items-start justify-center py-14 gap-4">
@@ -21,4 +21,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default StudentPage;
