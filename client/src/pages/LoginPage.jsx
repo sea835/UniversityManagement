@@ -1,8 +1,8 @@
 import React from "react";
 import LoginForm from "../components/LoginForm";
-import { useAuth } from "../components/Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "../components/Auth/AuthProvider";
 
 const LoginPage = () => {
   const { user, accessToken } = useAuth(); // Using your AuthProvider to get user and accessToken

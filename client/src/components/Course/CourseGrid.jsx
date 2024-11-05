@@ -1,22 +1,12 @@
 import React from "react";
 import CourseCard from "./CourseCard";
 import axios from "axios";
-import { useAuth } from "../Auth/AuthProvider";
 import { useEffect, useState } from "react";
+import { useAuth } from "../Auth/AuthProvider";
 
 function CourseGrid() {
-  const { user } = useAuth();
-
-  // "subject_id": "MH001",
-  //       "semester_id": "HK241",
-  //       "result": "Đạt",
-  //       "subject_name": "Lập trình C",
-  //       "credits": 3,
-  //       "prerequisites": "Không",
-  //       "learning_outcomes": "Biết lập trình cơ bản",
-  //       "department_id": "K01"
-
   const [subjects, setSubjects] = useState([]);
+  const { user } = useAuth();
 
   axios
     .get(`http://localhost:4000/api/subjects/student/${user.student_id}`)

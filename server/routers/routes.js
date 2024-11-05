@@ -72,6 +72,7 @@ router.get('/classes/:id', authController.authToken, classController.getClassByI
 router.post('/classes', authController.authToken, authController.authRole("admin"), classController.createClass);
 router.put('/classes/:id', authController.authToken, authController.authRole("admin"), classController.updateClass);
 router.delete('/classes/:id', authController.authToken, authController.authRole("admin"), classController.deleteClass);
+router.get('/classes/student/:studentId', classController.getClassesByStudentId);
 
 router.get('/enrollments', authController.authToken, authController.authRole("admin"), enrollmentController.getEnrollments);
 router.get('/enrollments/:id', authController.authToken, enrollmentController.getEnrollmentById);
