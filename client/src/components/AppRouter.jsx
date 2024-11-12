@@ -11,11 +11,20 @@ import CourseContent from "../components/Course/CourseContent.jsx";
 import StudentClasses from "../services/StudentClasses.jsx";
 import AccountSettings from "./AccountSetting.jsx";
 
+import AdminPage from "../pages/AdminPage.jsx";
+import TeacherAccounts from "../components/admin/TeacherAccounts.jsx";
+import StudentAccounts from "../components/admin/StudentAccounts.jsx";
+import CoursesManagement from "../components/admin/CoursesManagement.jsx";
+import ClassesManagement from "../components/admin/ClassesManagement.jsx";
+import Help from "./admin/Help.jsx";
+
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<App />}>
+          <Route index element={<AdminPage />} />
+          
           <Route path="home" element={<HomePage />} />
           {/* <Route path="api-links" element={<ApiLinksPage />} /> */}
           <Route path="about" element={<div>About</div>} />
@@ -35,6 +44,14 @@ const AppRouter = () => {
             ></Route>
             <Route path="classes" element={<div>Classes</div>} />
             <Route path="schedule" element={<StudentClasses />} />
+          </Route>
+
+          <Route path="admin" element={<AdminPage />}>
+            <Route path="teachers" element={<TeacherAccounts />}/>
+            <Route path="students" element={<StudentAccounts />}/>
+            <Route path="courses" element={<CoursesManagement />}/>
+            <Route path="classes" element={<ClassesManagement />}/>
+            <Route path="help" element={<Help />}/>
           </Route>
         </Route>
       </Routes>
