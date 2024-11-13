@@ -11,7 +11,7 @@ const StudentPage = () => {
     <>
       <div className="flex bg-gradient-to-br from-[#E7E7E7] to-[#E6DAC4] items-start justify-center py-14 gap-4">
         <div className="w-[300px]">
-          <SideBar type="student" />
+          <SideBar type="Student" />
         </div>
         <div className="w-[1040px]">
           <Outlet />
