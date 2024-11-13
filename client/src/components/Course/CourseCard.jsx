@@ -7,6 +7,8 @@ function CourseCard({
   subject_name,
   full_name,
   class_id,
+  learning_outcomes,
+  credits,
 }) {
   return (
     <Link
@@ -26,9 +28,19 @@ function CourseCard({
         </div>
       </div>
       <div className="flex flex-col p-6 w-full bg-white max-md:px-5">
-        <h3 className="text-base font-medium text-black">{subject_name}</h3>
+        <h3 className="text-base font-medium text-black">
+          {subject_name} {credits ? <>({credits} credits)</> : <></>}
+        </h3>
         <p className="mt-1 text-sm text-zinc-700 pr-2">
-          {semester_id}-{full_name} ({class_id})
+          {semester_id}
+          {full_name ? (
+            <>
+              -{full_name} ({class_id})
+            </>
+          ) : (
+            <></>
+          )}
+          {class_id ? <></> : <>Learning outcomes: {learning_outcomes}</>}
         </p>
       </div>
     </Link>

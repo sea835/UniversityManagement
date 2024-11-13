@@ -27,7 +27,7 @@ const Students = () => {
   const dataset = {
     Schedule: {
       data: data,
-      action: false,
+      action: true,
     },
   };
   return (

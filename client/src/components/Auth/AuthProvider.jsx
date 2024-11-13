@@ -20,14 +20,13 @@ const AuthProvider = ({ children }) => {
         password,
       });
 
-      const { user, accessToken } = response.data;
+      const { user, accessToken, role } = response.data;
 
       setUser(user); // Set the user state
       localStorage.setItem("user", JSON.stringify(user)); // Persist the user in
       setAccessToken(accessToken); // Set the token state
       localStorage.setItem("token", accessToken); // Persist the token in localStorage
-      console.log(response);
-      navigate("/dashboard");
+      navigate("/dashboard/courses");
     } catch (error) {
       console.log(error);
       return null;
@@ -37,7 +36,9 @@ const AuthProvider = ({ children }) => {
   const logOut = () => {
     setUser(null);
     setAccessToken(null);
-    localStorage.removeItem("site");
+    setRole(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 

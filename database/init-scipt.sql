@@ -1,6 +1,4 @@
 CREATE DATABASE university_management_test;
-
--- Connect to the university_management_test database
 USE university_management_test;
 
 SET SQL_SAFE_UPDATES = 0;
@@ -21,6 +19,8 @@ CREATE TABLE lecturer (
     full_name VARCHAR(100),
     phone_number VARCHAR(15),
     image VARCHAR(255),
+    gender VARCHAR(10),  -- Added gender
+    birth_date DATE,      -- Added birth_date
     specialization VARCHAR(100),
     department_id VARCHAR(50)
 );
@@ -34,7 +34,9 @@ CREATE TABLE student (
     full_name VARCHAR(100),
     phone_number VARCHAR(15),
     image VARCHAR(255),
-    address VARCHAR(159),
+    address VARCHAR(150),
+    gender VARCHAR(10),  -- Added gender
+    birth_date DATE,      -- Added birth_date
     department_id VARCHAR(50)
 );
 
@@ -48,15 +50,6 @@ CREATE TABLE administrator (
     full_name VARCHAR(100),
     phone_number VARCHAR(15),
     image VARCHAR(255)
-);
-
--- Create the Action_History table
-CREATE TABLE action_history (
-    admin_id VARCHAR(50),
-    action_id VARCHAR(50),
-    action_time DATETIME,
-    action_description VARCHAR(255),
-    PRIMARY KEY (admin_id, action_id)
 );
 
 -- Create the Subject table
@@ -77,27 +70,30 @@ CREATE TABLE semester (
 -- Create the Class table
 CREATE TABLE class (
     class_id VARCHAR(50),
-    semester_id varchar(50),
-    schedule VARCHAR(255),
+    semester_id VARCHAR(50),
     subject_id VARCHAR(50),
     lecturer_id VARCHAR(50),
-    PRIMARY KEY (class_id, semester_id)
+    period int,
+    day_of_week int,
+    week int,
+    PRIMARY KEY (class_id, semester_id, subject_id)
 );
 
--- Create the Enrollment table
-CREATE TABLE enrollment (
+-- Create the Enrollment table (now Dang_ky)
+CREATE TABLE register (
     subject_id VARCHAR(50),
     student_id VARCHAR(50),
-    semester_id varchar(50),
-    result VARCHAR(50),
+    semester_id VARCHAR(50),
+    status VARCHAR(50),  -- Changed to reflect registration status
     PRIMARY KEY (subject_id, student_id, semester_id)
 );
 
--- Create the Participation table
+-- Create the Participation table (now Tham_gia)
 CREATE TABLE participation (
     class_id VARCHAR(50),
     student_id VARCHAR(50),
     semester_id VARCHAR(50),
+    result int,
     PRIMARY KEY (class_id, student_id, semester_id)
 );
 
@@ -108,58 +104,37 @@ CREATE TABLE certificate (
     PRIMARY KEY (certificate_id)
 );
 
--- Create the Exam table
+-- Create the Exam table (now Bai_kiem_tra)
 CREATE TABLE exam (
     exam_id VARCHAR(50),
-    chapter_order INT,
-    material_id VARCHAR(50),
+    subject_id VARCHAR(50),
     class_id VARCHAR(50),
     semester_id VARCHAR(50),
+    material_id VARCHAR(50),
     exam_name VARCHAR(255),
-    primary key (exam_id, chapter_order, material_id, class_id, semester_id)
+    PRIMARY KEY (exam_id)
 );
 
--- Create the Question table
+-- Create the Question table (now Cau_hoi)
 CREATE TABLE question (
     question_id VARCHAR(50),
     exam_id VARCHAR(50),
-    chapter_order INT,
-    material_id VARCHAR(50),
-    class_id VARCHAR(50),
-    semester_id VARCHAR(50),
     question_content VARCHAR(255),
-    student_answer VARCHAR(255),
+    answer_a VARCHAR(255),
+    answer_b VARCHAR(255),
+    answer_c VARCHAR(255),
+    answer_d VARCHAR(255),
     correct_answer VARCHAR(255),
-    primary key (question_id, exam_id, chapter_order, material_id, class_id, semester_id)
+    PRIMARY KEY (question_id, exam_id)
 );
 
--- Create the Multiple_Choice_Option table
-CREATE TABLE multiple_choice_option (
-    question_id VARCHAR(50),
-    exam_id VARCHAR(50),
-    chapter_order INT,
-    material_id VARCHAR(50),
-    class_id VARCHAR(50),
-    semester_id VARCHAR(50),
-    option_id VARCHAR(50),
-    option_a VARCHAR(255),
-    option_b VARCHAR(255),
-    option_c VARCHAR(255),
-    option_d VARCHAR(255),
-    primary key (question_id, exam_id, chapter_order, material_id, class_id, semester_id, option_id)
-);
-
--- Create the Test_Performance table
+-- Create the Test_Performance table (now Thuc_hien_kiem_tra)
 CREATE TABLE test_performance (
     student_id VARCHAR(50),
     exam_id VARCHAR(50),
-    chapter_order INT,
-    material_id VARCHAR(50),
-    semester_id VARCHAR(50),
-    class_id VARCHAR(50),
-    score DECIMAL(5, 2),
     test_date DATE,
-    primary key (exam_id, chapter_order, material_id, class_id, semester_id)
+    score DECIMAL(5, 2),
+    PRIMARY KEY (student_id, exam_id)
 );
 
 -- Create the Material table
@@ -167,8 +142,9 @@ CREATE TABLE material (
     material_id VARCHAR(50),
     semester_id VARCHAR(50),
     class_id VARCHAR(50),
+    subject_id VARCHAR(50),
     material_name VARCHAR(255),
-    primary key (material_id, semester_id, class_id)
+    PRIMARY KEY (material_id, semester_id, class_id, subject_id)
 );
 
 -- Create the Chapter table
@@ -177,11 +153,12 @@ CREATE TABLE chapter (
     material_id VARCHAR(50),
     semester_id VARCHAR(50),
     class_id VARCHAR(50),
+    subject_id VARCHAR(50),
     title VARCHAR(255),
     text_content TEXT,
     video_content TEXT,
     image_content TEXT,
-    primary key (material_id, semester_id, class_id, chapter_order)
+    PRIMARY KEY (material_id, semester_id, class_id, chapter_order, subject_id)
 );
 
 -- =============================

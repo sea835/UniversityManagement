@@ -26,7 +26,7 @@ export const Header = () => {
               <Link to="/contact">Contact</Link>
             </li>
             <li className="pl-[50px]">
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard/courses">Dashboard</Link>
             </li>
           </ul>
           <div className="w-[500px]"></div>

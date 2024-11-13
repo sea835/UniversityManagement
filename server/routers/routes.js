@@ -60,7 +60,7 @@ router.post('/action_histories', authController.authToken, authController.authRo
 router.put('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.updateActionHistory);
 router.delete('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.deleteActionHistory);
 
-router.get('/subjects', authController.authToken, subjectController.getSubjects);
+router.get('/subjects', subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
