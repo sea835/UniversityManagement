@@ -47,6 +47,7 @@ const AppRouter = () => {
           </Route>
 
           <Route path="admin" element={<AdminPage />}>
+            <Route index element={<TeacherAccounts />} /> 
             <Route path="teachers" element={<TeacherAccounts />}/>
             <Route path="students" element={<StudentAccounts />}/>
             <Route path="courses" element={<CoursesManagement />}/>

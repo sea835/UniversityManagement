@@ -5,7 +5,7 @@ import SideBar from '../components/Sidebar/Sidebar';
 const AdminPage = () => {
   return (
     <>
-      <div className="flex bg-gradient-to-br from-[#E7E7E7] to-[#E6DAC4] items-start justify-center py-8 gap-4">
+      <div className="flex bg-gradient-to-br from-[#E7E7E7] to-[#E6DAC4] items-start justify-center py-8 gap-2">
         <div className="w-[300px]">
           <SideBar type="Administrator" />
         </div>
