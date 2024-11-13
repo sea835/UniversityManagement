@@ -55,9 +55,6 @@ const LoginForm = () => {
             />
           </div>
         </div>
-        <a href="#forgot-password" className="self-start mt-3 text-slate-700">
-          Forgot Password?
-        </a>
       </div>
       <span
         onClick={() => handleOnLogin()}

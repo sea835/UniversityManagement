@@ -36,6 +36,8 @@ exports.refreshToken = (req, res, next) => {
 
 exports.login = async(req, res, next) => {
 
+    console.log(req.session);
+
     const { username, password } = req.body;
 
     let hashedPassword = null;

@@ -60,17 +60,19 @@ router.post('/action_histories', authController.authToken, authController.authRo
 router.put('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.updateActionHistory);
 router.delete('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.deleteActionHistory);
 
-router.get('/subjects', authController.authToken, subjectController.getSubjects);
+router.get('/subjects', subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
 router.delete('/subjects/:id', authController.authToken, subjectController.deleteSubject);
+router.get('/subjects/student/:studentId', subjectController.getSubjectByEnrollments);
 
 router.get('/classes', authController.authToken, classController.getClasses);
 router.get('/classes/:id', authController.authToken, classController.getClassById);
 router.post('/classes', authController.authToken, authController.authRole("admin"), classController.createClass);
 router.put('/classes/:id', authController.authToken, authController.authRole("admin"), classController.updateClass);
 router.delete('/classes/:id', authController.authToken, authController.authRole("admin"), classController.deleteClass);
+router.get('/classes/student/:studentId', classController.getClassesByStudentId);
 
 router.get('/enrollments', authController.authToken, authController.authRole("admin"), enrollmentController.getEnrollments);
 router.get('/enrollments/:id', authController.authToken, enrollmentController.getEnrollmentById);

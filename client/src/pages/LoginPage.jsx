@@ -1,7 +1,20 @@
 import React from "react";
 import LoginForm from "../components/LoginForm";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth } from "../components/Auth/AuthProvider";
 
 const LoginPage = () => {
+  const { user, accessToken } = useAuth(); // Using your AuthProvider to get user and accessToken
+  const navigate = useNavigate(); // Hook for navigating programmatically
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user || accessToken) {
+      navigate("/dashboard"); // If user is logged in, redirect to dashboard
+    }
+  }, [user, accessToken, navigate]);
+
   return (
     <div className="flex relative flex-col justify-center items-center px-20 py-32 w-full min-h-[801px] max-md:px-5 max-md:py-24 max-md:max-w-full">
       <img

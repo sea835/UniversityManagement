@@ -831,6 +831,10 @@ video {
   height: 850px;
 }
 
+.h-\[900px\] {
+  height: 900px;
+}
+
 .h-px {
   height: 1px;
 }
