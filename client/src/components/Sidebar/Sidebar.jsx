@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SidebarItem from "./SidebarItem";
 import { Link } from "react-router-dom";
+import { useAuth } from "../Auth/AuthProvider";
 
 const studentSidebarItems = [
   { icon: "courses", text: "My Courses", path: "/dashboard/courses" },
@@ -37,6 +38,7 @@ function SideBar({ type }) {
 
   // State to track the active item
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
+  const auth = useAuth();
 
   return (
     <nav className="flex flex-col py-11 max-w-full bg-white rounded-3xl shadow-[0px_10px_60px_rgba(226,236,249,0.5)] w-[306px] h-[850px]">
@@ -57,7 +59,12 @@ function SideBar({ type }) {
           ))}
         </div>
       </div>
-      <button className="self-center px-8 pb-2 mt-[250px] max-w-full text-red-600 bg-red-200 rounded border border-red-600 border-solid w-[130px] max-md:px-5 max-md:mt-10">
+      <button
+        onClick={() => {
+          auth.logOut();
+        }}
+        className="self-center px-8 pb-2 mt-[250px] max-w-full text-red-600 bg-red-200 rounded border border-red-600 border-solid w-[130px] max-md:px-5 max-md:mt-10"
+      >
         Log out
       </button>
     </nav>

@@ -1,4 +1,5 @@
 const database = require('../database/database');
+const { get } = require('../routers/routes');
 
 exports.getSubjects = (req, res, next) => {
     database.query('SELECT * FROM subject')
@@ -78,6 +79,37 @@ exports.deleteSubject = (req, res, next) => {
             console.log(err);
             res.status(500).json({
                 message: err
+            });
+        });
+}
+
+exports.getSubjectByEnrollments = (req, res, next) => {
+    const studentId = req.params.studentId;
+    database.query(`
+        SELECT 
+    c.class_id,
+    c.semester_id,
+    schedule,
+    c.subject_id,
+    c.lecturer_id,
+    result,
+    full_name,
+    subject_name
+FROM 
+    class c
+join enrollment e on c.subject_id=e.subject_id
+join lecturer l on l.lecturer_id=c.lecturer_id
+join subject s on s.subject_id=c.subject_id
+where student_id='sv001'
+and result='đạt'
+`, [studentId])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'An error occurred'
             });
         });
 }

@@ -81,3 +81,32 @@ exports.deleteClass = (req, res, next) => {
             });
         });
 }
+
+exports.getClassesByStudentId = (req, res, next) => {
+    const id = req.params.studentId;
+    database.query(`
+select 
+c.class_id,
+c.semester_id,
+schedule,
+c.subject_id,
+subject_name,
+credits
+from 
+participation p
+join student s on s.student_id=p.student_id
+join class c on c.class_id=p.class_id
+join subject sj on sj.subject_id=c.subject_id
+where p.student_id=?
+
+`, [id])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'An error occurred'
+            });
+        });
+}

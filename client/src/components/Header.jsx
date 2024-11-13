@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "./Auth/AuthProvider";
 
 export const Header = () => {
+  const { user } = useAuth();
+  console.log(user);
   return (
     <>
       <header>
@@ -23,13 +26,22 @@ export const Header = () => {
               <Link to="/contact">Contact</Link>
             </li>
             <li className="pl-[50px]">
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard/courses">Dashboard</Link>
             </li>
           </ul>
           <div className="w-[500px]"></div>
-          <Link to="/login" className="flex justify-end pr-[43px]">
-            Login
-          </Link>
+          {user == undefined ? (
+            <Link to="/login" className="flex justify-end pr-[43px]">
+              Login
+            </Link>
+          ) : (
+            <Link
+              to="/dashboard/account"
+              className="flex justify-end pr-[43px]"
+            >
+              {user.full_name}
+            </Link>
+          )}
         </div>
       </header>
     </>

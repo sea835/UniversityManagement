@@ -4,15 +4,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../Auth/AuthProvider";
 
-function CourseGrid() {
+function AllCourses() {
   const [subjects, setSubjects] = useState([]);
-  const { user } = useAuth();
 
-  axios
-    .get(`http://localhost:4000/api/subjects/student/${user.student_id}`)
-    .then((res) => {
-      setSubjects(res.data);
-    });
+  axios.get(`http://localhost:4000/api/subjects`).then((res) => {
+    setSubjects(res.data);
+  });
 
   return (
     <div className="flex flex-col px-5 py-12 w-full rounded-[30px] bg-white ">
@@ -23,7 +20,7 @@ function CourseGrid() {
       </div>
       <div className="grid grid-cols-3 gap-5 max-md:grid-cols-1 bg-[#F3F3F3] p-10 rounded-[20px]">
         {subjects.map((subject) => (
-          <CourseCard key={subject.class_id} {...subject} />
+          <CourseCard key={subject.subject_id} {...subject} />
         ))}
       </div>
       <nav
@@ -62,4 +59,4 @@ function CourseGrid() {
   );
 }
 
-export default CourseGrid;
+export default AllCourses;

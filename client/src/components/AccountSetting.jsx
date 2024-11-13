@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
+import { useAuth } from "./Auth/AuthProvider";
 
 function AccountSettings() {
   const [view, setView] = useState("account");
+  const { user } = useAuth();
   return (
     <section className="flex flex-col w-full">
       <div className="flex flex-col items-start px-6 py-10 mx-auto w-full bg-white rounded-3xl shadow-[0px_0px_30px_rgba(170,170,170,0.16)] font-semibold">
@@ -57,7 +59,7 @@ function AccountSettings() {
                     <input
                       id="fullName"
                       type="text"
-                      value="Ngo Hoang Hai"
+                      value={user.full_name}
                       className="self-stretch px-3.5 py-3 mt-3 text-sm font-normal leading-none text-gray-600 bg-white rounded-lg border border-gray-200 border-solid max-md:pr-5 max-md:max-w-full"
                     />
 
@@ -69,8 +71,8 @@ function AccountSettings() {
                     </label>
                     <input
                       id="birth"
-                      type="text"
-                      value="19/02/2004"
+                      type="date"
+                      value="2004-02-19"
                       className="self-stretch px-3.5 py-3 mt-3 text-sm font-normal leading-none text-gray-600 whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid max-md:pr-5 max-md:max-w-full"
                     />
 
@@ -83,7 +85,7 @@ function AccountSettings() {
                     <input
                       id="username"
                       type="text"
-                      value="ngohai"
+                      value={user.username}
                       className="self-stretch px-3.5 py-3 mt-3 text-sm font-normal leading-none text-gray-600 whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid max-md:pr-5 max-md:max-w-full"
                     />
 
@@ -109,7 +111,7 @@ function AccountSettings() {
                     <input
                       id="email"
                       type="email"
-                      value="ngohai@gmail.com"
+                      value={user.email}
                       className="px-4 py-3 mt-3 text-sm whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid"
                     />
 
@@ -121,8 +123,8 @@ function AccountSettings() {
                     </label>
                     <input
                       id="phone"
-                      type="tel"
-                      value="0768840424"
+                      type="text"
+                      value={user.phone}
                       className="px-4 py-3 mt-3 text-sm whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid"
                     />
 
@@ -135,7 +137,7 @@ function AccountSettings() {
                     <input
                       id="address"
                       type="text"
-                      value="Moon"
+                      value={user.address}
                       className="px-4 py-3 mt-3 text-sm whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid max-md:pr-5 max-md:max-w-full"
                     />
 
@@ -187,7 +189,7 @@ function AccountSettings() {
                     <input
                       id="fullname"
                       type="text"
-                      value="Ngo Hoang Hai"
+                      value={user.full_name}
                       className="px-4 py-3 mt-3 text-sm whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid max-md:pr-5 max-md:max-w-full"
                     />
                   </div>
@@ -215,7 +217,7 @@ function AccountSettings() {
                     <input
                       id="sudentId"
                       type="text"
-                      value="2210888"
+                      value={user.student_id}
                       className="px-4 py-3 mt-3 text-sm whitespace-nowrap bg-white rounded-lg border border-gray-200 border-solid max-md:pr-5 max-md:max-w-full"
                     />
                   </div>
