@@ -18,10 +18,8 @@ import AccountSettings from "./AccountSetting.jsx";
 import AuthProvider from "./Auth/AuthProvider.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AllCourses from "./Course/AllCourses.jsx";
-import { useAuth } from "./Auth/AuthProvider.jsx";
 
 const AppRouter = () => {
-  const { user } = useAuth();
   return (
     <Router>
       <AuthProvider>
@@ -38,13 +36,7 @@ const AppRouter = () => {
               path="dashboard"
               element={
                 <AuthProtect>
-                  {user.role === "student" ? (
-                    <StudentPage />
-                  ) : user.role === "teacher" ? (
-                    <div>Teacher Page</div>
-                  ) : (
-                    <div>Admin Page</div>
-                  )}
+                  <StudentPage />
                 </AuthProtect>
               }
             >
