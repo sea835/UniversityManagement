@@ -19,6 +19,13 @@ import AuthProvider from "./Auth/AuthProvider.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AllCourses from "./Course/AllCourses.jsx";
 
+import AdminPage from "../pages/AdminPage.jsx";
+import TeacherAccounts from "./admin/TeacherAccounts.jsx";
+import StudentAccounts from "./admin/StudentAccounts.jsx";
+import CoursesManagement from "./admin/CoursesManagement.jsx";
+import ClassesManagement from "./admin/ClassesManagement.jsx";
+import Help from "./admin/Help.jsx";
+
 const AppRouter = () => {
   return (
     <Router>
@@ -53,6 +60,15 @@ const AppRouter = () => {
               ></Route>
               <Route path="classes" element={<div>Classes</div>} />
               <Route path="schedule" element={<StudentClasses />} />
+            </Route>
+
+            <Route path="dashboard" element={<AdminPage />}>
+              <Route index element={<TeacherAccounts />} /> 
+              <Route path="teacherAccounts" element={<TeacherAccounts />}/>
+              <Route path="studentAccounts" element={<StudentAccounts />}/>
+              <Route path="coursesManagement" element={<CoursesManagement />}/>
+              <Route path="classesManagement" element={<ClassesManagement />}/>
+              <Route path="helpAdmin" element={<Help />}/>
             </Route>
           </Route>
         </Routes>

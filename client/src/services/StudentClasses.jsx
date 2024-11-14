@@ -33,7 +33,7 @@ const Students = () => {
   return (
     <>
       <div className="bg-white rounded-[30px] h-[900px]">
-        <DynamicTable dataset={dataset} />
+        <DynamicTable dataset={dataset}/>
       </div>
     </>
   );
