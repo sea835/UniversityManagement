@@ -19,11 +19,11 @@ const teacherSidebarItems = [
 ];
 
 const adminSidebarItems = [
-  { icon: "teachers", text: "Teacher's Accounts", path: "/admin/teachers" },
-  { icon: "students", text: "Student's Accounts", path: "/admin/students" },
-  { icon: "courses", text: "Courses", path: "/admin/courses" },
-  { icon: "classes", text: "Classes", path: "/admin/classes" },
-  { icon: "help", text: "Help", path: "/admin/help" },
+  { icon: "teacherAccounts", text: "Teacher's Accounts", path: "/dashboard/teacherAccounts" },
+  { icon: "studentAccounts", text: "Student's Accounts", path: "/dashboard/studentAccounts" },
+  { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
+  { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
+  { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
 ];
 
 function SideBar({ type }) {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Search from "./Search";
 import Sort from "./Sort";
 
-function DynamicTable({ dataset }) {
+function DynamicTable({ dataset, addButton = false }) {
   // State for the selected table type
   const [selectedTable, setSelectedTable] = useState(Object.keys(dataset)[0]);
 
@@ -64,8 +64,9 @@ function DynamicTable({ dataset }) {
                 </th>
               ))}
               {dataset[selectedTable].action === true && (
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                <th className="px-6 py-2 flex flex-row justify-between items-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <span>Action</span>
+                  <button className="bg-green-200 text-green-800 hover:bg-green-400 px-4 py-2 rounded-sm">ADD NEW</button>
                 </th>
               )}
             </tr>
