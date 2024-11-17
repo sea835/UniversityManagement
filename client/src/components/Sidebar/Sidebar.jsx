@@ -19,20 +19,20 @@ const teacherSidebarItems = [
 ];
 
 const adminSidebarItems = [
-  { icon: "account", text: "Teacher's Accounts", path: "/teachers" },
-  { icon: "student", text: "Student's Accounts", path: "/students" },
-  { icon: "courses", text: "Courses", path: "/courses" },
-  { icon: "payment", text: "Payment History", path: "/payment" },
-  { icon: "help", text: "Help", path: "/help" },
+  { icon: "teachers", text: "Teacher's Accounts", path: "/admin/teachers" },
+  { icon: "students", text: "Student's Accounts", path: "/admin/students" },
+  { icon: "courses", text: "Courses", path: "/admin/courses" },
+  { icon: "classes", text: "Classes", path: "/admin/classes" },
+  { icon: "help", text: "Help", path: "/admin/help" },
 ];
 
 function SideBar({ type }) {
   let sidebarItems = [];
-  if (type === "student") {
+  if (type === "Student") {
     sidebarItems = studentSidebarItems;
-  } else if (type === "teacher") {
+  } else if (type === "Teacher") {
     sidebarItems = teacherSidebarItems;
-  } else if (type === "admin") {
+  } else if (type === "Administrator") {
     sidebarItems = adminSidebarItems;
   }
 
@@ -43,7 +43,7 @@ function SideBar({ type }) {
   return (
     <nav className="flex flex-col py-11 max-w-full bg-white rounded-3xl shadow-[0px_10px_60px_rgba(226,236,249,0.5)] w-[306px] h-[850px]">
       <div className="flex flex-col items-end px-7">
-        <div className="flex flex-col self-stretch w-full">
+        <div className="flex flex-col self-stretch w-full ">
           <div className="flex gap-2 self-start text-2xl font-semibold tracking-wide text-black whitespace-nowrap mb-10">
             <h1 className="capitalize">{type}</h1>
           </div>
