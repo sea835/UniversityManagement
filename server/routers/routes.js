@@ -54,14 +54,15 @@ router.get('/subjects/:id', authController.authToken, subjectController.getSubje
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
 router.delete('/subjects/:id', authController.authToken, subjectController.deleteSubject);
-router.get('/subjects/student/:studentId', subjectController.getSubjectByEnrollments);
+router.get('/student/:id/subjects', subjectController.getSubjectByEnrollments);
 
 router.get('/classes', authController.authToken, classController.getClasses);
 router.get('/classes/:id', authController.authToken, classController.getClassById);
 router.post('/classes', authController.authToken, authController.authRole("admin"), classController.createClass);
 router.put('/classes/:id', authController.authToken, authController.authRole("admin"), classController.updateClass);
 router.delete('/classes/:id', authController.authToken, authController.authRole("admin"), classController.deleteClass);
-router.get('/classes/student/:studentId', classController.getClassesByStudentId);
+router.get('/student/:studentId/classes', classController.getClassesByStudentId);
+router.get('/student/:studentId/schedules', classController.getSchedulesByStudentId);
 
 router.get('/chapters', authController.authToken, authController.authRole("teacher"), chapterController.getChapters);
 router.get('/chapters/:id', authController.authToken, authController.authRole("teacher"), chapterController.getChapterById);

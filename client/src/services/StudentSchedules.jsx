@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import DynamicTable from "../components/Table/DynamicTable";
 import { useAuth } from "../components/Auth/AuthProvider";
 
-const StudentClasses = () => {
+const StudentSchedules = () => {
   const { user } = useAuth();
   const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/student/${user.student_id}/classes`, {
+      .get(`http://localhost:4000/api/student/${user.student_id}/schedules`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -31,10 +31,12 @@ const StudentClasses = () => {
     },
   };
   return (
-    <div className="bg-white rounded-[30px] h-[900px]">
-      <DynamicTable dataset={dataset} />
-    </div>
+    <>
+      <div className="bg-white rounded-[30px] h-[900px]">
+        <DynamicTable dataset={dataset} />
+      </div>
+    </>
   );
 };
 
-export default StudentClasses;
+export default StudentSchedules;

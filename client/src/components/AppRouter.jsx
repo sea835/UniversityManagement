@@ -13,11 +13,12 @@ import CourseGrid from "../components/Course/CourseGrid.jsx";
 import TestPage from "../pages/TestPage.jsx";
 import StudentPage from "../pages/StudentPage.jsx";
 import CourseContent from "../components/Course/CourseContent.jsx";
-import StudentClasses from "../services/StudentClasses.jsx";
+import StudentSchedules from "../services/StudentSchedules.jsx";
 import AccountSettings from "./AccountSetting.jsx";
 import AuthProvider from "./Auth/AuthProvider.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AllCourses from "./Course/AllCourses.jsx";
+import StudentClasses from "../services/StudentClasses.jsx";
 
 const AppRouter = () => {
   return (
@@ -51,8 +52,8 @@ const AppRouter = () => {
                 path="courses/:id/exercises"
                 element={<>Exercises</>}
               ></Route>
-              <Route path="classes" element={<div>Classes</div>} />
-              <Route path="schedule" element={<StudentClasses />} />
+              <Route path="classes" element={<StudentClasses />} />
+              <Route path="schedule" element={<StudentSchedules />} />
             </Route>
           </Route>
         </Routes>
