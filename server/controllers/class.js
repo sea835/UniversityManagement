@@ -88,15 +88,14 @@ exports.getClassesByStudentId = (req, res, next) => {
 select 
 c.class_id,
 c.semester_id,
-schedule,
-c.subject_id,
 subject_name,
-credits
-from 
-participation p
-join student s on s.student_id=p.student_id
-join class c on c.class_id=p.class_id
-join subject sj on sj.subject_id=c.subject_id
+period,
+day_of_week,
+week
+from student s
+join participation p on p.student_id = s.student_id
+join class c on c.class_id = p.class_id
+join subject sub on sub.subject_id = c.subject_id
 where p.student_id=?
 
 `, [id])
