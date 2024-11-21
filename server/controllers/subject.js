@@ -84,24 +84,21 @@ exports.deleteSubject = (req, res, next) => {
 }
 
 exports.getSubjectByEnrollments = (req, res, next) => {
-    const studentId = req.params.studentId;
+    const studentId = req.params.id;
     database.query(`
-        SELECT 
-    c.class_id,
-    c.semester_id,
-    schedule,
-    c.subject_id,
-    c.lecturer_id,
-    result,
-    full_name,
-    subject_name
-FROM 
-    class c
-join enrollment e on c.subject_id=e.subject_id
-join lecturer l on l.lecturer_id=c.lecturer_id
-join subject s on s.subject_id=c.subject_id
-where student_id='sv001'
-and result='đạt'
+        select 
+c.class_id,
+c.semester_id,
+c.subject_id,
+c.lecturer_id,
+l.full_name,
+subject_name
+from student s
+join participation p on p.student_id = s.student_id
+join class c on c.class_id = p.class_id
+join subject sub on sub.subject_id = c.subject_id
+join lecturer l on c.lecturer_id = l.lecturer_id
+where s.student_id=?
 `, [studentId])
         .then(data => {
             res.status(200).json(data[0]);
@@ -109,7 +106,7 @@ and result='đạt'
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                message: 'An error occurred'
+                message: `An error occurred: ${err}`
             });
         });
 }

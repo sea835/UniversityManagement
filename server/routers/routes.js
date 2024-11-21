@@ -9,23 +9,18 @@ const lecturerController = require('../controllers/lecturer');
 const administratorController = require('../controllers/administrator');
 const departmentController = require('../controllers/department');
 
-const actionHistoryController = require('../controllers/action_history');
 const subjectController = require('../controllers/subject');
 
 const classController = require('../controllers/class');
-const tuitionFeeController = require('../controllers/tuition_fee');
 
-const enrollmentController = require('../controllers/enrollment');
 const chapterController = require('../controllers/chapter');
 
-const practicalExerciseController = require('../controllers/practical_exercise');
 const examController = require('../controllers/exam');
 
 const materialController = require('../controllers/material');
 const questionController = require('../controllers/question');
 
 const testPerformanceController = require('../controllers/test_performance');
-const multipleChoiceOption = require('../controllers/multiple_choice_option');
 
 const participationController = require('../controllers/participation');
 const certificateController = require('../controllers/certificate');
@@ -54,31 +49,20 @@ router.post('/departments', authController.authToken, authController.authRole("a
 router.put('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.updateDepartment);
 router.delete('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.deleteDepartment);
 
-router.get('/action_histories', authController.authToken, authController.authRole("admin"), actionHistoryController.getActionHistories);
-router.get('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.getActionHistoryById);
-router.post('/action_histories', authController.authToken, authController.authRole("admin"), actionHistoryController.createActionHistory);
-router.put('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.updateActionHistory);
-router.delete('/action_histories/:id', authController.authToken, authController.authRole("admin"), actionHistoryController.deleteActionHistory);
-
 router.get('/subjects', subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
 router.delete('/subjects/:id', authController.authToken, subjectController.deleteSubject);
-router.get('/subjects/student/:studentId', subjectController.getSubjectByEnrollments);
+router.get('/student/:id/subjects', subjectController.getSubjectByEnrollments);
 
 router.get('/classes', authController.authToken, classController.getClasses);
 router.get('/classes/:id', authController.authToken, classController.getClassById);
 router.post('/classes', authController.authToken, authController.authRole("admin"), classController.createClass);
 router.put('/classes/:id', authController.authToken, authController.authRole("admin"), classController.updateClass);
 router.delete('/classes/:id', authController.authToken, authController.authRole("admin"), classController.deleteClass);
-router.get('/classes/student/:studentId', classController.getClassesByStudentId);
-
-router.get('/enrollments', authController.authToken, authController.authRole("admin"), enrollmentController.getEnrollments);
-router.get('/enrollments/:id', authController.authToken, enrollmentController.getEnrollmentById);
-router.post('/enrollments', authController.authToken, enrollmentController.createEnrollment);
-router.put('/enrollments/:id', authController.authToken, enrollmentController.updateEnrollment);
-router.delete('/enrollments/:id', authController.authToken, enrollmentController.deleteEnrollment);
+router.get('/student/:studentId/classes', classController.getClassesByStudentId);
+router.get('/student/:studentId/schedules', classController.getSchedulesByStudentId);
 
 router.get('/chapters', authController.authToken, authController.authRole("teacher"), chapterController.getChapters);
 router.get('/chapters/:id', authController.authToken, authController.authRole("teacher"), chapterController.getChapterById);
@@ -109,12 +93,6 @@ router.get('/test_performances/:id', authController.authToken, testPerformanceCo
 router.post('/test_performances', authController.authToken, testPerformanceController.createTestPerformance);
 router.put('/test_performances/:id', authController.authToken, testPerformanceController.updateTestPerformance);
 router.delete('/test_performances/:id', authController.authToken, testPerformanceController.deleteTestPerformance);
-
-router.get('/multiple_choice_options', authController.authToken, multipleChoiceOption.getMultipleChoiceOptions);
-router.get('/multiple_choice_options/:id', authController.authToken, multipleChoiceOption.getMultipleChoiceOptionById);
-router.post('/multiple_choice_options', authController.authToken, multipleChoiceOption.createMultipleChoiceOption);
-router.put('/multiple_choice_options/:id', authController.authToken, multipleChoiceOption.updateMultipleChoiceOption);
-router.delete('/multiple_choice_options/:id', authController.authToken, multipleChoiceOption.deleteMultipleChoiceOption);
 
 router.get('/participations', authController.authToken, participationController.getParticipations);
 router.get('/participations/:id', authController.authToken, participationController.getParticipationById);

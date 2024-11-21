@@ -9,7 +9,7 @@ function CourseGrid() {
   const { user } = useAuth();
 
   axios
-    .get(`http://localhost:4000/api/subjects/student/${user.student_id}`)
+    .get(`http://localhost:4000/api/student/${user.student_id}/subjects`)
     .then((res) => {
       setSubjects(res.data);
     });
