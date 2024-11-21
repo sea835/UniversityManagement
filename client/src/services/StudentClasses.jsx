@@ -31,9 +31,11 @@ const StudentClasses = () => {
     },
   };
   return (
-    <div className="bg-white rounded-[30px] h-[900px]">
-      <DynamicTable dataset={dataset} />
-    </div>
+    <>
+      <div className="bg-white rounded-[30px] h-[900px]">
+        <DynamicTable dataset={dataset}/>
+      </div>
+    </>
   );
 };
 
