@@ -1,6 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
+// eslint-disable-next-line react/prop-types
 function CourseCard({ id, title, teacher }) {
   return (
     <Link

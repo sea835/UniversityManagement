@@ -1,10 +1,12 @@
-import React from "react";
 import { useState } from "react";
 import { useAuth } from "../components/Auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleOnUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -16,7 +18,7 @@ const LoginForm = () => {
 
   const auth = useAuth();
   const handleOnLogin = () => {
-    auth.login(username, password);
+    auth.login(username, password, navigate);
   };
 
   return (
@@ -68,7 +70,7 @@ const LoginForm = () => {
       </span>
 
       <p className="self-start mt-6 text-xs text-center text-slate-700">
-        Don't have an account yet?{" "}
+        Dont have an account yet?{" "}
         <a href="/register" className="text-slate-700">
           Register now.
         </a>

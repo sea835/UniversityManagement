@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SidebarItem from "./SidebarItem";
-import { Link } from "react-router-dom";
 
 const studentSidebarItems = [
-  { icon: "courses", text: "My Courses", path: "/dashboard/courses" },
   { icon: "account", text: "Account Setting", path: "/dashboard/account" },
   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
-  { icon: "tuition", text: "Tuition fee", path: "/dashboard/tuition" },
+  { icon: "Grades", text: "Grades", path: "/dashboard/Grades" },
+  // { icon: "courses", text: "My Courses", path: "/dashboard/courses" },
+  { icon: "document", text: "Document", path: "/dashboard/document" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
 const teacherSidebarItems = [
   { icon: "account", text: "Account Setting", path: "/account" },
   { icon: "classes", text: "Classes", path: "/classes" },
+  { icon: "document", text: "Document", path: "/document" },
   { icon: "schedule", text: "Schedule", path: "/schedule" },
   { icon: "tuition", text: "Tuition fee", path: "/tuition" },
+  { icon: "help", text: "Grades", path: "/grades" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
@@ -23,6 +25,7 @@ const adminSidebarItems = [
   { icon: "account", text: "Teacher's Accounts", path: "/teachers" },
   { icon: "student", text: "Student's Accounts", path: "/students" },
   { icon: "courses", text: "Courses", path: "/courses" },
+  { icon: "document", text: "Document", path: "/document" },
   { icon: "payment", text: "Payment History", path: "/payment" },
   { icon: "help", text: "Help", path: "/help" },
 ];
@@ -45,7 +48,7 @@ function SideBar({ type }) {
       <div className="flex flex-col items-end px-7">
         <div className="flex flex-col self-stretch w-full">
           <div className="flex gap-2 self-start text-2xl font-semibold tracking-wide text-black whitespace-nowrap mb-10">
-            <h1 className="capitalize">{type}</h1>
+            <h1 className="capitalize">Teacher</h1>
           </div>
           {sidebarItems.map((item, index) => (
             <SidebarItem

@@ -9,11 +9,11 @@ import { Outlet } from "react-router-dom";
 const TestPage = () => {
   return (
     <>
-      <div className="flex bg-gradient-to-br from-[#E7E7E7] to-[#E6DAC4] items-start justify-center py-14 gap-4">
-        <div className="w-[300px]">
+      <div className="flex max-w-[unset] items-start justify-center py-14 gap-4">
+        <div className="w-[250px]">
           <SideBar type="student" />
         </div>
-        <div className="w-[1040px]">
+        <div className="flex-1 w-full">
           <Outlet />
         </div>
       </div>

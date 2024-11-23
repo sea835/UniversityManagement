@@ -1,6 +1,14 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../components/Auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const handleLogOut = () => {
+    auth.logOut(navigate);
+  };
+
   return (
     <>
       <header>
@@ -26,10 +34,17 @@ export const Header = () => {
               <Link to="/dashboard">Dashboard</Link>
             </li>
           </ul>
-          <div className="w-[500px]"></div>
-          <Link to="/login" className="flex justify-end pr-[43px]">
-            Login
-          </Link>
+          <div className="w-[500px] "></div>
+          <div className="flex pr-[50px] ">
+            <div>
+              <Link to="/login" className="flex justify-end pr-[43px]">
+                Login
+              </Link>
+            </div>
+            <div className="pr-[50px] cursor-pointer" onClick={handleLogOut}>
+              <p>Logout</p>
+            </div>
+          </div>
         </div>
       </header>
     </>

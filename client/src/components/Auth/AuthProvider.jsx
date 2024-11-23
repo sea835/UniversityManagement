@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import axios from "axios";
-import { redirect, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
@@ -12,29 +12,26 @@ export const AuthProvider = ({ children }) => {
     localStorage.getItem("token") || null
   ); // Initialize with token from localStorage if available
 
-  const login = async (username, password) => {
+  const login = async (username, password, navigate) => {
     try {
       const response = await axios.post("http://localhost:4000/api/login", {
         username,
         password,
       });
-
       const { user, accessToken } = response.data;
-
       setUser(user); // Set the user state
       localStorage.setItem("user", JSON.stringify(user)); // Persist the user in
       setAccessToken(accessToken); // Set the token state
       localStorage.setItem("token", accessToken); // Persist the token in localStorage
-      console.log(response);
-
-      return redirect("/dashboard");
+      console.log("Login success: ", response.data);
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       return null;
     }
   };
 
-  const logOut = () => {
+  const logOut = (navigate) => {
     setUser(null);
     setAccessToken(null);
     localStorage.removeItem("site");
