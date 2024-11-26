@@ -1,5 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Thư mục lưu file
+  },
+  filename: (req, file, cb) => {
+    // Sử dụng tên file gốc và thêm thời gian để tránh trùng lặp
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
 
 const authController = require("../controllers/auth");
 
@@ -29,6 +43,19 @@ const multipleChoiceOption = require("../controllers/multiple_choice_option");
 
 const participationController = require("../controllers/participation");
 const certificateController = require("../controllers/certificate");
+const path = require("path");
+
+// Endpoint để xem lại hình ảnh
+router.get("/uploads/:filename", (req, res) => {
+  const filePath = path.join(__dirname, "../uploads", `${req.params.filename}`);
+
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error("File not found:", err);
+      res.status(404).send("File not found");
+    }
+  });
+});
 
 // Student
 router.get(
@@ -242,6 +269,7 @@ router.get(
   authController.authToken,
   classController.getClassDetails
 );
+
 router.post(
   "/classes",
   authController.authToken,
@@ -294,17 +322,45 @@ router.get(
   authController.authToken,
   chapterController.getChapters
 );
+
+router.get(
+  "/chapters/list/:subject_id",
+  authController.authToken,
+  chapterController.getChaptersBySubjectId
+);
+
 router.get(
   "/chapters/:id",
   authController.authToken,
   authController.authRole("teacher"),
   chapterController.getChapterById
 );
+
+// router.post(
+//   "/chapters",
+//   authController.authToken,
+//   upload.single("file"),
+//   chapterController.createChapter
+// );
 router.post(
   "/chapters",
-  authController.authToken,
-  authController.authRole("teacher"),
-  chapterController.createChapter
+  authController.authToken, // Kiểm tra token trước khi tiếp tục
+  upload.single("file"), // Multer middleware để upload một file với tên 'file'
+  (req, res, next) => {
+    // Kiểm tra nếu file đã được tải lên
+    if (req.file) {
+      // Đường dẫn của ảnh sẽ được lưu trong req.file.path
+      const imagePath = req.file.filename;
+
+      // Tiếp tục gọi hàm createChapter và truyền đường dẫn ảnh vào
+      req.imagePath = imagePath; // Thêm đường dẫn ảnh vào req để có thể truy cập trong controller
+
+      next(); // Gọi tiếp middleware tiếp theo (chapterController.createChapter)
+    } else {
+      return res.status(400).json({ message: "File upload failed" });
+    }
+  },
+  chapterController.createChapter // Hàm xử lý tạo chapter với đường dẫn ảnh
 );
 router.put(
   "/chapters/:id",
@@ -374,11 +430,13 @@ router.get(
   authController.authToken,
   questionController.getQuestionById
 );
+
 router.post(
   "/questions",
   authController.authToken,
   questionController.createQuestion
 );
+
 router.put(
   "/questions/:id",
   authController.authToken,

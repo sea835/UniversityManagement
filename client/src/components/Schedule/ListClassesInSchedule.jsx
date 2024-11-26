@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import apiService from "../../services/apiservice";
 import { useAuth } from "../Auth/AuthProvider";
-import { Link } from "react-router-dom";
 
-const ListClasses = ({ title }) => {
+const ListClassesInSchedule = () => {
   const { user } = useAuth();
   const [listClass, setListClass] = useState([]);
 
@@ -26,7 +25,7 @@ const ListClasses = ({ title }) => {
       <div className="flex flex-col px-5 py-12 w-full rounded-[30px] bg-white ">
         <div>
           <h2 className="self-start pb-10 text-3xl font-semibold tracking-wide text-black max-md:max-w-full">
-            {title}
+            Schedule
           </h2>
         </div>
         <div className="bg-[#F3F3F3] rounded-[20px]">
@@ -64,18 +63,10 @@ const ListClasses = ({ title }) => {
                 {listClass?.map((item, index) => (
                   <tr key={index} style={{ backgroundColor: "#fff" }}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">
-                      <Link
-                        to={`/dashboard/classes/details/${item.subject_id}`}
-                      >
-                        {item.subject_id}
-                      </Link>
+                      {item.subject_id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">
-                      <Link
-                        to={`/dashboard/classes/details/${item.subject_id}`}
-                      >
-                        {item.subject_name}
-                      </Link>
+                      {item.subject_name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-center">
                       {item.credits}
@@ -138,4 +129,4 @@ const ListClasses = ({ title }) => {
   );
 };
 
-export default ListClasses;
+export default ListClassesInSchedule;

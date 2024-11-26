@@ -2,22 +2,21 @@ import { useState } from "react";
 import SidebarItem from "./SidebarItem";
 
 const studentSidebarItems = [
+  { icon: "courses", text: "My Courses", path: "/dashboard/courses" },
   { icon: "account", text: "Account Setting", path: "/dashboard/account" },
   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
-  { icon: "Grades", text: "Grades", path: "/dashboard/Grades" },
-  // { icon: "courses", text: "My Courses", path: "/dashboard/courses" },
-  { icon: "document", text: "Document", path: "/dashboard/document" },
+  // { icon: "Grades", text: "Grades", path: "/dashboard/Grades" },
+  // { icon: "document", text: "Document", path: "/dashboard/document" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
 const teacherSidebarItems = [
-  { icon: "account", text: "Account Setting", path: "/account" },
-  { icon: "classes", text: "Classes", path: "/classes" },
-  { icon: "document", text: "Document", path: "/document" },
-  { icon: "schedule", text: "Schedule", path: "/schedule" },
-  { icon: "tuition", text: "Tuition fee", path: "/tuition" },
-  { icon: "help", text: "Grades", path: "/grades" },
+  { icon: "account", text: "Account Setting", path: "/dashboard/account" },
+  { icon: "classes", text: "Classes", path: "/dashboard/classes" },
+  { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
+  { icon: "Grades", text: "Grades", path: "/dashboard/grades" },
+  // { icon: "document", text: "Document", path: "/dashboard/document" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
@@ -32,9 +31,11 @@ const adminSidebarItems = [
 
 function SideBar({ type }) {
   let sidebarItems = [];
+  console.log("type :", type);
+
   if (type === "student") {
     sidebarItems = studentSidebarItems;
-  } else if (type === "teacher") {
+  } else if (type === "lecturer") {
     sidebarItems = teacherSidebarItems;
   } else if (type === "admin") {
     sidebarItems = adminSidebarItems;
