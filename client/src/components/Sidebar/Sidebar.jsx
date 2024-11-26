@@ -24,6 +24,7 @@ const adminSidebarItems = [
   { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
   { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
   { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
+  { icon: "departmentManagement", text: "Department Management", path: "/dashboard/departmentManagement" },
 ];
 
 function SideBar({ type }) {
