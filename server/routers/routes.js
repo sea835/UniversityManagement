@@ -25,13 +25,13 @@ const testPerformanceController = require('../controllers/test_performance');
 const participationController = require('../controllers/participation');
 const certificateController = require('../controllers/certificate');
 
-router.get('/students', authController.authToken, authController.authRole("admin"), studentController.getStudents);
+router.get('/students', authController.authToken, studentController.getStudents);
 router.get('/students/:id', authController.authToken, authController.authRole("admin"), studentController.getStudentById);
 router.post('/students', authController.authToken, authController.authRole("admin"), studentController.createStudent);
 router.put('/students/:id', authController.authToken, authController.authRole("admin"), studentController.updateStudent);
 router.delete('/students/:id', authController.authToken, authController.authRole("admin"), studentController.deleteStudent);
 
-router.get('/lecturers', authController.authToken, authController.authRole("admin"), lecturerController.getLecturers);
+router.get('/lecturers', authController.authToken, lecturerController.getLecturers);
 router.get('/lecturers/:id', authController.authToken, authController.authRole("admin"), lecturerController.getLecturerById);
 router.post('/lecturers', authController.authToken, authController.authRole("admin"), lecturerController.createLecturer);
 router.put('/lecturers/:id', authController.authToken, authController.authRole("admin"), lecturerController.updateLecturer);
@@ -49,7 +49,7 @@ router.post('/departments', authController.authToken, authController.authRole("a
 router.put('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.updateDepartment);
 router.delete('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.deleteDepartment);
 
-router.get('/subjects', subjectController.getSubjects);
+router.get('/subjects', authController.authToken, subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
