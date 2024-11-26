@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import DynamicTable from "../Table/DynamicTable";
 import { useAuth } from "../Auth/AuthProvider";
 
-const StudentsManagement = () => {
+const DepartmentsManagement = () => {
   const { user } = useAuth();
   const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/students`, {
+      .get(`http://localhost:4000/api/departments`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -25,7 +25,7 @@ const StudentsManagement = () => {
   }, []);
 
   const dataset = {
-    StudentsManagement: {
+    DepartmentsManagement: {
       data: data,
       action: true,
     },
@@ -39,4 +39,4 @@ const StudentsManagement = () => {
   );
 };
 
-export default StudentsManagement;
+export default DepartmentsManagement;

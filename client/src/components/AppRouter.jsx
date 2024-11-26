@@ -25,6 +25,7 @@ import StudentAccounts from "./admin/StudentAccounts.jsx";
 import CoursesManagement from "./admin/CoursesManagement.jsx";
 import ClassesManagement from "./admin/ClassesManagement.jsx";
 import Help from "./admin/Help.jsx";
+import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 
 const AppRouter = () => {
   return (
@@ -62,12 +63,17 @@ const AppRouter = () => {
               <Route path="schedule" element={<StudentClasses />} />
             </Route>
 
-            <Route path="dashboard" element={<AdminPage />}>
+            <Route path="dashboard" element={
+              <AuthProtect>
+                <AdminPage />
+              </AuthProtect>
+            }>
               <Route index element={<TeacherAccounts />} /> 
               <Route path="teacherAccounts" element={<TeacherAccounts />}/>
               <Route path="studentAccounts" element={<StudentAccounts />}/>
               <Route path="coursesManagement" element={<CoursesManagement />}/>
               <Route path="classesManagement" element={<ClassesManagement />}/>
+              <Route path="departmentManagement" element={<DepartmentManagement />}/>
               <Route path="helpAdmin" element={<Help />}/>
             </Route>
           </Route>
