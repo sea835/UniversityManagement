@@ -8,7 +8,7 @@ const TeacherAccounts = () => {
   const { user } = useAuth();
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  const fetchData = () => {
     axios
       .get(`http://localhost:4000/api/lecturers`, {
         headers: {
@@ -23,17 +23,26 @@ const TeacherAccounts = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const dataset = {
     Teacher: {
       data: data,
       action: true,
+      apiLink: "http://localhost:4000/api/lecturers",
     },
   };
   return (
     <div className="bg-white rounded-[30px] h-[900px]">
-      <DynamicTable dataset={dataset} />
+      <DynamicTable
+        dataset={dataset}
+        addButton={true}
+        onEditComplete={fetchData}
+      />
     </div>
   );
 };

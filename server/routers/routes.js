@@ -26,28 +26,28 @@ const participationController = require('../controllers/participation');
 const certificateController = require('../controllers/certificate');
 
 router.get('/students', authController.authToken, studentController.getStudents);
-router.get('/students/:id', authController.authToken, authController.authRole("admin"), studentController.getStudentById);
-router.post('/students', authController.authToken, authController.authRole("admin"), studentController.createStudent);
-router.put('/students/:id', authController.authToken, authController.authRole("admin"), studentController.updateStudent);
-router.delete('/students/:id', authController.authToken, authController.authRole("admin"), studentController.deleteStudent);
+router.get('/students/:id', authController.authToken, studentController.getStudentById);
+router.post('/students', authController.authToken, studentController.createStudent);
+router.put('/students/:id', authController.authToken, studentController.updateStudent);
+router.delete('/students/:id', authController.authToken, studentController.deleteStudent);
 
 router.get('/lecturers', authController.authToken, lecturerController.getLecturers);
-router.get('/lecturers/:id', authController.authToken, authController.authRole("admin"), lecturerController.getLecturerById);
-router.post('/lecturers', authController.authToken, authController.authRole("admin"), lecturerController.createLecturer);
-router.put('/lecturers/:id', authController.authToken, authController.authRole("admin"), lecturerController.updateLecturer);
-router.delete('/lecturers/:id', authController.authToken, authController.authRole("admin"), lecturerController.deleteLecturer);
+router.get('/lecturers/:id', authController.authToken, lecturerController.getLecturerById);
+router.post('/lecturers', authController.authToken, lecturerController.createLecturer);
+router.put('/lecturers/:id', authController.authToken, lecturerController.updateLecturer);
+router.delete('/lecturers/:id', authController.authToken, lecturerController.deleteLecturer);
 
-router.get('/administrators', authController.authToken, authController.authRole("admin"), administratorController.getAdministrators);
-router.get('/administrators/:id', authController.authToken, authController.authRole("admin"), administratorController.getAdministratorById);
-router.post('/administrators', authController.authToken, authController.authRole("admin"), administratorController.createAdministrator);
-router.put('/administrators/:id', authController.authToken, authController.authRole("admin"), administratorController.updateAdministrator);
-router.delete('/administrators/:id', authController.authToken, authController.authRole("admin"), administratorController.deleteAdministrator);
+router.get('/administrators', authController.authToken, administratorController.getAdministrators);
+router.get('/administrators/:id', authController.authToken, administratorController.getAdministratorById);
+router.post('/administrators', authController.authToken, administratorController.createAdministrator);
+router.put('/administrators/:id', authController.authToken, administratorController.updateAdministrator);
+router.delete('/administrators/:id', authController.authToken, administratorController.deleteAdministrator);
 
-router.get('/departments', authController.authToken, authController.authRole("admin"), departmentController.getDepartments);
-router.get('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.getDepartmentById);
-router.post('/departments', authController.authToken, authController.authRole("admin"), departmentController.createDepartment);
-router.put('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.updateDepartment);
-router.delete('/departments/:id', authController.authToken, authController.authRole("admin"), departmentController.deleteDepartment);
+router.get('/departments', authController.authToken, departmentController.getDepartments);
+router.get('/departments/:id', authController.authToken, departmentController.getDepartmentById);
+router.post('/departments', authController.authToken, departmentController.createDepartment);
+router.put('/departments/:id', authController.authToken, departmentController.updateDepartment);
+router.delete('/departments/:id', authController.authToken, departmentController.deleteDepartment);
 
 router.get('/subjects', authController.authToken, subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
@@ -58,9 +58,9 @@ router.get('/student/:id/subjects', subjectController.getSubjectByEnrollments);
 
 router.get('/classes', authController.authToken, classController.getClasses);
 router.get('/classes/:id', authController.authToken, classController.getClassById);
-router.post('/classes', authController.authToken, authController.authRole("admin"), classController.createClass);
-router.put('/classes/:id', authController.authToken, authController.authRole("admin"), classController.updateClass);
-router.delete('/classes/:id', authController.authToken, authController.authRole("admin"), classController.deleteClass);
+router.post('/classes', authController.authToken, classController.createClass);
+router.put('/classes/:id', authController.authToken, classController.updateClass);
+router.delete('/classes/:id', authController.authToken, classController.deleteClass);
 router.get('/student/:studentId/classes', classController.getClassesByStudentId);
 router.get('/student/:studentId/schedules', classController.getSchedulesByStudentId);
 

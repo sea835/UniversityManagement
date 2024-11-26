@@ -8,7 +8,7 @@ const ClassesManagement = () => {
   const { user } = useAuth();
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  const fetchData = () => {
     axios
       .get(`http://localhost:4000/api/classes`, {
         headers: {
@@ -23,17 +23,26 @@ const ClassesManagement = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const dataset = {
     TeacherAccount: {
       data: data,
       action: true,
+      apiLink: "http://localhost:4000/api/classes",
     },
   };
   return (
     <div className="bg-white rounded-[30px] h-[900px]">
-      <DynamicTable dataset={dataset} />
+      <DynamicTable
+        dataset={dataset}
+        addButton={true}
+        onEditComplete={fetchData}
+      />
     </div>
   );
 };
