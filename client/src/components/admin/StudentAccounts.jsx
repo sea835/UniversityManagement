@@ -1,9 +1,10 @@
+import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import DynamicTable from "../Table/DynamicTable";
 import { useAuth } from "../Auth/AuthProvider";
+import { useEffect, useState } from "react";
 
-const StudentsManagement = () => {
+const StudentAccounts = () => {
   const { user } = useAuth();
   const [data, setData] = useState([]);
 
@@ -25,18 +26,16 @@ const StudentsManagement = () => {
   }, []);
 
   const dataset = {
-    StudentsManagement: {
+    Student: {
       data: data,
       action: true,
     },
   };
   return (
-    <>
-      <div className="bg-white rounded-[30px] h-[900px]">
-        <DynamicTable dataset={dataset} addButton={true}/>
-      </div>
-    </>
+    <div className="bg-white rounded-[30px] h-[900px]">
+      <DynamicTable dataset={dataset} />
+    </div>
   );
 };
 
-export default StudentsManagement;
+export default StudentAccounts;

@@ -1,7 +1,8 @@
+import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import DynamicTable from "../Table/DynamicTable";
 import { useAuth } from "../Auth/AuthProvider";
+import { useEffect, useState } from "react";
 
 const CoursesManagement = () => {
   const { user } = useAuth();
@@ -25,17 +26,15 @@ const CoursesManagement = () => {
   }, []);
 
   const dataset = {
-    CoursesManagement: {
+    Courses: {
       data: data,
       action: true,
     },
   };
   return (
-    <>
-      <div className="bg-white rounded-[30px] h-[900px]">
-        <DynamicTable dataset={dataset} addButton={true}/>
-      </div>
-    </>
+    <div className="bg-white rounded-[30px] h-[900px]">
+      <DynamicTable dataset={dataset} />
+    </div>
   );
 };
 

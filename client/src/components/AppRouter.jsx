@@ -19,6 +19,7 @@ import AuthProvider from "./Auth/AuthProvider.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AllCourses from "./Course/AllCourses.jsx";
 import StudentClasses from "../services/StudentClasses.jsx";
+import { useAuth } from "./Auth/AuthProvider.jsx";
 
 import AdminPage from "../pages/AdminPage.jsx";
 import TeacherAccounts from "./admin/TeacherAccounts.jsx";
@@ -26,7 +27,6 @@ import StudentAccounts from "./admin/StudentAccounts.jsx";
 import CoursesManagement from "./admin/CoursesManagement.jsx";
 import ClassesManagement from "./admin/ClassesManagement.jsx";
 import Help from "./admin/Help.jsx";
-import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 
 const AppRouter = () => {
   return (
@@ -34,6 +34,7 @@ const AppRouter = () => {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<App />}>
+            <Route index element={<HomePage />} />
             <Route path="home" element={<HomePage />} />
             <Route path="about" element={<div>About</div>} />
             <Route path="course" element={<AllCourses />} />
@@ -41,14 +42,9 @@ const AppRouter = () => {
             <Route path="login" element={<LoginPage />} />
             <Route path="test" element={<TestPage />} />
 
-            <Route
-              path="dashboard"
-              element={
-                <AuthProtect>
-                  <StudentPage />
-                </AuthProtect>
-              }
-            >
+            <Route path="dashboard" element={<AuthProtect />}>
+              {/* student pages */}
+              <Route index element={<AccountSettings />} />
               <Route path="account" element={<AccountSettings />} />
               <Route path="courses" element={<CourseGrid />} />
               <Route path="courses/:id" element={<CourseContent />}></Route>
@@ -62,20 +58,15 @@ const AppRouter = () => {
               ></Route>
               <Route path="classes" element={<StudentClasses />} />
               <Route path="schedule" element={<StudentSchedules />} />
-            </Route>
+              <Route path="help" element={<Help />} />
 
-            <Route path="dashboard" element={
-              <AuthProtect>
-                <AdminPage />
-              </AuthProtect>
-            }>
-              <Route index element={<TeacherAccounts />} /> 
-              <Route path="teacherAccounts" element={<TeacherAccounts />}/>
-              <Route path="studentAccounts" element={<StudentAccounts />}/>
-              <Route path="coursesManagement" element={<CoursesManagement />}/>
-              <Route path="classesManagement" element={<ClassesManagement />}/>
-              <Route path="departmentManagement" element={<DepartmentManagement />}/>
-              <Route path="helpAdmin" element={<Help />}/>
+              {/* admin pages */}
+              <Route index element={<TeacherAccounts />} />
+              <Route path="teacherAccounts" element={<TeacherAccounts />} />
+              <Route path="studentAccounts" element={<StudentAccounts />} />
+              <Route path="coursesManagement" element={<CoursesManagement />} />
+              <Route path="classesManagement" element={<ClassesManagement />} />
+              <Route path="helpAdmin" element={<Help />} />
             </Route>
           </Route>
         </Routes>

@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user)); // Persist the user in
       setAccessToken(accessToken); // Set the token state
       localStorage.setItem("token", accessToken); // Persist the token in localStorage
-      navigate("/dashboard/courses");
+      navigate("/dashboard/");
     } catch (error) {
       console.log(error);
       return null;

@@ -16,12 +16,12 @@ function DynamicTable({ dataset, addButton = false }) {
 
   const addCondition = () => {
     if (addButton)
-    return (
-      <button className="bg-green-200 text-green-800 hover:bg-green-400 px-4 py-2 rounded-sm" >
-        ADD NEW
-      </button>
-    )
-  }
+      return (
+        <button className="bg-green-200 text-green-800 hover:bg-green-400 px-4 py-2 rounded-sm">
+          ADD NEW
+        </button>
+      );
+  };
 
   // Auto-generate headers from the keys of the first object in the data array
   const headers = tableData.length > 0 ? Object.keys(tableData[0]) : [];
@@ -37,25 +37,6 @@ function DynamicTable({ dataset, addButton = false }) {
           <Sort />
         </div>
       </div>
-
-      {/* Dropdown to switch between tables */}
-      {/* <div className="mt-5">
-        <label htmlFor="table-selector" className="font-medium text-gray-700">
-          Select Table Type:
-        </label>
-        <select
-          id="table-selector"
-          value={selectedTable}
-          onChange={handleTableChange}
-          className="ml-3 p-2 border rounded-md bg-gray-100"
-        >
-          {Object.keys(dataset).map((key) => (
-            <option key={key} value={key}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div> */}
 
       {/* Table Structure */}
       <div className="mt-8 overflow-auto border border-gray-300 rounded-md shadow-sm">
