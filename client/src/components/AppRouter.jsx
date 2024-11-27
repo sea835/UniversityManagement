@@ -26,6 +26,7 @@ import TeacherAccounts from "./admin/TeacherAccounts.jsx";
 import StudentAccounts from "./admin/StudentAccounts.jsx";
 import CoursesManagement from "./admin/CoursesManagement.jsx";
 import ClassesManagement from "./admin/ClassesManagement.jsx";
+import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 import Help from "./admin/Help.jsx";
 
 const AppRouter = () => {
@@ -66,6 +67,7 @@ const AppRouter = () => {
               <Route path="studentAccounts" element={<StudentAccounts />} />
               <Route path="coursesManagement" element={<CoursesManagement />} />
               <Route path="classesManagement" element={<ClassesManagement />} />
+              <Route path="departmentManagement" element={<DepartmentManagement />} />
               <Route path="helpAdmin" element={<Help />} />
             </Route>
           </Route>

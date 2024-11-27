@@ -28,6 +28,7 @@ const DepartmentsManagement = () => {
     DepartmentsManagement: {
       data: data,
       action: true,
+      apilink: "http://localhost:4000/api/departments",
     },
   };
   return (
