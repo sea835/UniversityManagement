@@ -43,13 +43,13 @@ router.post('/administrators', authController.authToken, administratorController
 router.put('/administrators/:id', authController.authToken, administratorController.updateAdministrator);
 router.delete('/administrators/:id', authController.authToken, administratorController.deleteAdministrator);
 
-router.get('/departments', authController.authToken, departmentController.getDepartments);
+router.get('/departments', departmentController.getDepartments);
 router.get('/departments/:id', authController.authToken, departmentController.getDepartmentById);
 router.post('/departments', authController.authToken, departmentController.createDepartment);
 router.put('/departments/:id', authController.authToken, departmentController.updateDepartment);
 router.delete('/departments/:id', authController.authToken, departmentController.deleteDepartment);
 
-router.get('/subjects', authController.authToken, subjectController.getSubjects);
+router.get('/subjects', subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);

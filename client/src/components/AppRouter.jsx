@@ -29,6 +29,7 @@ import ClassesManagement from "./admin/ClassesManagement.jsx";
 import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 import Help from "./admin/Help.jsx";
 import NotFound from "../pages/NotFound.jsx";
+import RegisterPage from "../pages/RegisterPage.jsx";
 
 const AppRouter = () => {
   return (
@@ -46,6 +47,7 @@ const AppRouter = () => {
               element={<div className="p-4">Contact</div>}
             />
             <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
             <Route path="test" element={<TestPage />} />
 
             <Route path="dashboard" element={<AuthProtect />}>
