@@ -31,8 +31,10 @@ const ClassesDetailsInGrades = () => {
 
   const hanleSearchData = (value) => {
     setSearch(value);
-    const filteredData = listUser.filter((item) =>
-      item.full_name.toLowerCase().includes(value.toLowerCase())
+    const filteredData = listUser.filter(
+      (item) =>
+        item.full_name.toLowerCase().includes(value.toLowerCase()) ||
+        item.student_id.toLowerCase().includes(value.toLowerCase())
     );
     setFillter(filteredData);
   };

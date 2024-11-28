@@ -24,7 +24,11 @@ export const AuthProvider = ({ children }) => {
       setAccessToken(accessToken); // Set the token state
       localStorage.setItem("token", accessToken); // Persist the token in localStorage
       console.log("Login success: ", response.data);
-      navigate("/dashboard");
+      if (response.data.user.role === "administrator") {
+        navigate("/dashboard/listTeacher");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.log(error);
       return null;

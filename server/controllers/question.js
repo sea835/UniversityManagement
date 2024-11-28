@@ -29,6 +29,22 @@ exports.getQuestionById = (req, res, next) => {
     });
 };
 
+exports.getQuestionByExamId = (req, res, next) => {
+  const id = req.params.id;
+
+  database
+    .query("SELECT * FROM question WHERE exam_id = ?", [id])
+    .then((data) => {
+      res.status(200).json(data[0]);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        message: "An error occurred",
+      });
+    });
+};
+
 const handleInsertQuestions = (req, res, questions, exam_id) => {
   // Lặp qua từng câu hỏi trong mảng
   const insertPromises = questions.map((question) => {

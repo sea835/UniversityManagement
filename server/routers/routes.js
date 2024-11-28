@@ -2,12 +2,22 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads/"); // Thư mục lưu file
+//   },
+//   filename: (req, file, cb) => {
+//     // Sử dụng tên file gốc và thêm thời gian để tránh trùng lặp
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + path.extname(file.originalname));
+//   },
+// });
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/"); // Thư mục lưu file
   },
   filename: (req, file, cb) => {
-    // Sử dụng tên file gốc và thêm thời gian để tránh trùng lặp
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
   },
@@ -61,7 +71,7 @@ router.get("/uploads/:filename", (req, res) => {
 router.get(
   "/students",
   authController.authToken,
-  authController.authRole("admin"),
+  // authController.authRole("admin"),
   studentController.getStudents
 );
 router.get(
@@ -98,7 +108,6 @@ router.delete(
 router.get(
   "/lecturers",
   authController.authToken,
-  authController.authRole("admin"),
   lecturerController.getLecturers
 );
 router.get(
@@ -252,7 +261,14 @@ router.get(
   classController.getClassForLecturer
 );
 
+router.get(
+  "/classes/student/:id",
+  authController.authToken,
+  classController.getClassForStudent
+);
+
 router.get("/classes", authController.authToken, classController.getClasses);
+
 router.get(
   "/classesBySubject/:id",
   authController.authToken,
@@ -342,26 +358,67 @@ router.get(
 //   upload.single("file"),
 //   chapterController.createChapter
 // );
+
+// Only Images
+// router.post(
+//   "/chapters",
+//   authController.authToken, // Kiểm tra token trước khi tiếp tục
+//   upload.single("file"), // Multer middleware để upload một file với tên 'file'
+//   (req, res, next) => {
+//     // Kiểm tra nếu file đã được tải lên
+//     if (req.file) {
+//       // Đường dẫn của ảnh sẽ được lưu trong req.file.path
+//       const imagePath = req.file.filename;
+
+//       // Tiếp tục gọi hàm createChapter và truyền đường dẫn ảnh vào
+//       req.imagePath = imagePath; // Thêm đường dẫn ảnh vào req để có thể truy cập trong controller
+
+//       next(); // Gọi tiếp middleware tiếp theo (chapterController.createChapter)
+//     } else {
+//       return res.status(400).json({ message: "File upload failed" });
+//     }
+//   },
+//   chapterController.createChapter // Hàm xử lý tạo chapter với đường dẫn ảnh
+// );
+
 router.post(
   "/chapters",
   authController.authToken, // Kiểm tra token trước khi tiếp tục
-  upload.single("file"), // Multer middleware để upload một file với tên 'file'
+  upload.single("file"), // Multer middleware để upload file từ trường 'file'
   (req, res, next) => {
-    // Kiểm tra nếu file đã được tải lên
-    if (req.file) {
-      // Đường dẫn của ảnh sẽ được lưu trong req.file.path
-      const imagePath = req.file.filename;
-
-      // Tiếp tục gọi hàm createChapter và truyền đường dẫn ảnh vào
-      req.imagePath = imagePath; // Thêm đường dẫn ảnh vào req để có thể truy cập trong controller
-
-      next(); // Gọi tiếp middleware tiếp theo (chapterController.createChapter)
-    } else {
-      return res.status(400).json({ message: "File upload failed" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
     }
+
+    // Kiểm tra loại file tải lên
+    const fileType = req.file.mimetype;
+
+    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    const allowedDocTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (allowedImageTypes.includes(fileType)) {
+      // Nếu là hình ảnh
+      req.fileType = "image";
+    } else if (allowedDocTypes.includes(fileType)) {
+      // Nếu là file tài liệu
+      req.fileType = "document";
+    } else {
+      // File không hợp lệ
+      return res.status(400).json({ message: "Invalid file type" });
+    }
+
+    // Đường dẫn file được lưu trong req.file.filename
+    req.filePath = req.file.filename;
+
+    next(); // Gọi middleware tiếp theo (chapterController.createChapter)
   },
-  chapterController.createChapter // Hàm xử lý tạo chapter với đường dẫn ảnh
+  chapterController.createChapter // Hàm xử lý tạo chapter với đường dẫn file
 );
+
 router.put(
   "/chapters/:id",
   authController.authToken,
@@ -425,10 +482,17 @@ router.get(
   authController.authToken,
   questionController.getQuestions
 );
+
 router.get(
   "/questions/:id",
   authController.authToken,
   questionController.getQuestionById
+);
+
+router.get(
+  "/questions/exxam/:id",
+  authController.authToken,
+  questionController.getQuestionByExamId
 );
 
 router.post(

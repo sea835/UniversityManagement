@@ -31,12 +31,19 @@ const ClassesDetails = () => {
   const { id } = useParams();
 
   const [listChapter, setListChapter] = useState([]);
+  const [listDataQuestion, setListDataQuestion] = useState([]);
   const [classes, setClasses] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
   const [showUploadFile, setShowUploadFile] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [showViewFile, setShowViewFile] = useState({
+    status: false,
+    items: {},
+  });
   const [dataImage, setDataImage] = useState();
   const [dataCreate, setDataCreate] = useState();
+  const [numQuiz, setNumQuiz] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [listQuestion, setListQuestion] = useState([
     {
@@ -118,10 +125,6 @@ const ClassesDetails = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("listQuestion: ", listQuestion);
-  }, [listQuestion]);
-
   const handleGetListChapter = async (id) => {
     try {
       const response = await apiService.get(`/chapters/list/${id}`);
@@ -139,8 +142,24 @@ const ClassesDetails = () => {
   };
 
   const handleUpdateImage = (e) => {
-    console.log(e.target.files[0]);
-    setDataImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type.startsWith("image/")) {
+        const fileUrl = URL.createObjectURL(file);
+        setPreviewUrl(fileUrl);
+      } else {
+        setPreviewUrl(file.name);
+      }
+    }
+    setDataImage(file);
+  };
+
+  const handleCheckFile = (dataImage) => {
+    if (dataImage.type.startsWith("image/")) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleCreateChapter = async (e) => {
@@ -160,6 +179,10 @@ const ClassesDetails = () => {
       const response = await apiService.post(`/chapters`, formData);
       alert("Successfully created");
       console.log(response);
+      setShowUploadFile(false);
+      handleGetListChapter(id);
+      setPreviewUrl("");
+      setDataImage("");
     } catch (error) {
       console.error(error);
       alert("Failed to create");
@@ -220,21 +243,143 @@ const ClassesDetails = () => {
     console.log("listQuestion: ", listQuestion);
     try {
       const response = await apiService.post(`/questions`, listQuestion);
-      console.log(response);
+      alert("Successfully created");
+      setShowUploadFile(false);
+      handleGetListChapter(id);
+      handleGetAllQuestions("BKT001");
+      setShowQuestion(false);
+      setPreviewUrl("");
+      setDataImage("");
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleShowViewChapter = (item) => {
+    // setShowViewFile
+    setShowQuestion(false);
+    setShowUploadFile(false);
+    setShowViewFile((prev) => ({ ...prev, status: true, items: item }));
   };
 
   useEffect(() => {
     console.log(currentQuestion);
   }, [currentQuestion]);
 
+  const handleGetAllQuestions = async (id) => {
+    try {
+      const response = await apiService.get(`/questions/exxam/${id}`);
+      console.log(response.data);
+      setListDataQuestion(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
+    if (currentQuestion > numQuiz) {
+      const cloneQuestion = [...currentQuestion];
+      const newArr = cloneQuestion.slice(0, numQuiz);
+      console.log("newArr: ", newArr);
+    }
+  }, [currentQuestion, numQuiz]);
+
+  const handleChangeNumQuiz = (value) => {
+    if (value >= 1) {
+      setNumQuiz(value);
+    }
+  };
+
+  const handleDeleteQuestion = (index) => {
+    const newArr = listQuestion.filter((_, i) => i !== index - 1); // Loại bỏ phần tử có chỉ mục `index`
+    setCurrentQuestion(currentQuestion - 1);
+    setListQuestion(newArr); // Cập nhật state nếu cần
+  };
+
+  useEffect(() => {
+    handleGetAllQuestions("BKT001");
     handleGetListChapter(id);
   }, []);
+
+  console.log("showViewFile: ", showViewFile);
+
   return (
     <>
+      {showViewFile.status && (
+        <div
+          className="flex items-center justify-center"
+          style={{
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            zIndex: 999,
+          }}
+        >
+          <div
+            className=" rounded-xl px-6 py-8"
+            style={{ width: "500px", backgroundColor: "#fff" }}
+          >
+            <div>
+              <div>
+                <div style={{ marginBottom: 12 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: "bold" }}>
+                    {showViewFile?.items.title}
+                  </h3>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <p> {showViewFile?.items.text_content}</p>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  {showViewFile?.items?.image_content ? (
+                    <img
+                      style={{ width: "100%", height: 250, objectFit: "cover" }}
+                      src={`http://localhost:4000/api/${showViewFile?.items?.image_content}`}
+                    />
+                  ) : (
+                    // <p>{`http://localhost:4000/api/${showViewFile?.items?.fileUrl}`}</p>
+                    <a
+                      href={`http://localhost:4000/api/${showViewFile?.items?.fileUrl}`}
+                      download
+                      style={{ color: "blue" }}
+                    >
+                      Tải file tại đây
+                    </a>
+                  )}
+                </div>
+              </div>
+              <div
+                style={{
+                  paddingTop: 20,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <span
+                  onClick={() =>
+                    setShowViewFile((prev) => ({
+                      ...prev,
+                      status: false,
+                      items: {},
+                    }))
+                  }
+                  className="px-4 py-1 rounded cursor-pointer"
+                  style={{
+                    border: "3px solid #BEB29F",
+                    backgroundColor: "#fff",
+                  }}
+                >
+                  Close
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showModal && (
         <div
           className="flex items-center justify-center"
@@ -421,6 +566,22 @@ const ClassesDetails = () => {
                   </option>
                 ))}
               </select>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={numQuiz}
+                placeholder="Số lượng quiz"
+                onChange={(e) => handleChangeNumQuiz(e.target.value)}
+                style={{
+                  width: 200,
+                  backgroundColor: "#ccc",
+                  padding: "8px 12px",
+                  borderRadius: 4,
+                  outline: "none",
+                  marginLeft: 16,
+                }}
+              />
             </div>
             {listQuestion?.map((item) => (
               <>
@@ -519,31 +680,46 @@ const ClassesDetails = () => {
                   Clear answer
                 </span>
               </div>
-              <div>
-                <span
-                  className="px-4 py-2 rounded-lg flex cursor-pointer"
-                  style={{
-                    fontWeight: "500",
-                    backgroundColor: "#BEB29F",
-                    color: "#fff",
-                  }}
-                  onClick={handleAddQuestion}
-                >
-                  Next question
-                </span>
-              </div>
-              <div>
-                <button
-                  className="px-4 py-2 rounded-lg"
-                  style={{
-                    fontWeight: "500",
-                    backgroundColor: "#BEB29F",
-                    color: "#fff",
-                  }}
-                >
-                  Create
-                </button>
-              </div>
+              {listQuestion.length > 1 && (
+                <div>
+                  <span
+                    className="px-4 py-2 rounded-lg flex cursor-pointer"
+                    style={{ fontWeight: "500" }}
+                    onClick={() => handleDeleteQuestion(currentQuestion)}
+                  >
+                    Xóa Question
+                  </span>
+                </div>
+              )}
+              {currentQuestion < numQuiz && (
+                <div>
+                  <span
+                    className="px-4 py-2 rounded-lg flex cursor-pointer"
+                    style={{
+                      fontWeight: "500",
+                      backgroundColor: "#BEB29F",
+                      color: "#fff",
+                    }}
+                    onClick={handleAddQuestion}
+                  >
+                    Next question
+                  </span>
+                </div>
+              )}
+              {currentQuestion == numQuiz && (
+                <div>
+                  <button
+                    className="px-4 py-2 rounded-lg"
+                    style={{
+                      fontWeight: "500",
+                      backgroundColor: "#BEB29F",
+                      color: "#fff",
+                    }}
+                  >
+                    Create
+                  </button>
+                </div>
+              )}
               <div></div>
             </div>
           </form>
@@ -571,7 +747,13 @@ const ClassesDetails = () => {
                         display: "flex",
                       }}
                     >
-                      <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "40px",
+                        }}
+                      >
                         <label
                           htmlFor="fileCtrl"
                           className="flex items-center gap-8 cursor-pointer"
@@ -610,6 +792,24 @@ const ClassesDetails = () => {
                           hidden
                           type="file"
                         />
+                        <div>
+                          {dataImage && (
+                            <>
+                              {handleCheckFile(dataImage) ? (
+                                <img
+                                  style={{
+                                    width: "160px",
+                                    height: "90px",
+                                    objectFit: "cover",
+                                  }}
+                                  src={previewUrl}
+                                />
+                              ) : (
+                                <span>{previewUrl}</span>
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div
@@ -646,64 +846,160 @@ const ClassesDetails = () => {
                 className="px-6 py-2 rounded-xl"
                 style={{ backgroundColor: "#efefef" }}
               >
-                {listChapter?.map((item, index) => (
-                  <div
-                    className="rounded-xl overflow-hidden"
-                    style={{ margin: "24px 0" }}
-                    key={index}
-                  >
-                    <div className="shadow-sm flex">
-                      <div
-                        className="px-4 py-4 flex flex-col justify-between"
-                        style={{ width: "200px", backgroundColor: "#ccc" }}
-                      >
-                        <div className="flex flex-col">
-                          <span style={{ color: "#999", fontSize: 14 }}>
-                            Chapter {++index}
-                          </span>
-                          <span className=" font-bold" style={{ fontSize: 18 }}>
-                            {item.title}
-                          </span>
-                        </div>
-                        <div>
-                          <span
-                            style={{
-                              color: "#999",
-                              fontSize: 14,
-                              textAlign: "center",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            Something here
-                          </span>
-                        </div>
-                      </div>
-                      <div
-                        className="px-4 py-4"
-                        style={{ flex: 1, backgroundColor: "#fff" }}
-                      >
-                        <div>
-                          <span style={{ fontSize: "18px", fontWeight: "500" }}>
-                            {item.title}
-                          </span>
-                        </div>
-                        <div className="py-4">
-                          <span>{item.text_content}</span>
-                        </div>
-                        <div className="flex justify-end">
-                          <Link
-                            className="flex px-6 py-2 rounded-3xl"
-                            style={{ backgroundColor: "#000", color: "#fff" }}
-                          >
-                            View
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
+                <div style={{ display: "flex", gap: 20 }}>
+                  <div>
+                    <Link
+                      to={""}
+                      style={{
+                        padding: "4px 12px",
+                        display: "flex",
+                        borderBottom: "1px solid #B9977B",
+                      }}
+                    >
+                      Course
+                    </Link>
                   </div>
-                ))}
+                  <div>
+                    <Link
+                      to={`/dashboard/classes/details/${classes.subject_id}/grades`}
+                      style={{
+                        padding: "4px 12px",
+                        display: "flex",
+                      }}
+                    >
+                      Grades
+                    </Link>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <div style={{ paddingTop: 20 }}>
+                      <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                        Question
+                      </span>
+                    </div>
+                    {listDataQuestion?.map((item, index) => (
+                      <div
+                        className="rounded-xl overflow-hidden"
+                        style={{ margin: "24px 0" }}
+                        key={index}
+                      >
+                        <div className="shadow-sm flex">
+                          <div
+                            className="px-4 py-4 flex flex-col justify-between"
+                            style={{ width: "200px", backgroundColor: "#ccc" }}
+                          >
+                            <div className="flex flex-col">
+                              <span style={{ color: "#999", fontSize: 14 }}>
+                                Question {++index}
+                              </span>
+                              <span
+                                className=" font-bold"
+                                style={{ fontSize: 16 }}
+                              >
+                                {item?.question_content}
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            className="px-4 py-4"
+                            style={{ flex: 1, backgroundColor: "#fff" }}
+                          >
+                            <div className="py-1">
+                              <span>Đáp án A: {item?.answer_a}</span>
+                            </div>
+                            <div className="py-1">
+                              <span>Đáp án B: {item?.answer_b}</span>
+                            </div>
+                            <div className="py-1">
+                              <span>Đáp án C: {item?.answer_c}</span>
+                            </div>
+                            <div className="py-1">
+                              <span>Đáp án D: {item?.answer_d}</span>
+                            </div>
+                            <div className="py-1">
+                              <span>Đáp án đúng: {item?.correct_answer}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <div style={{ paddingTop: 20 }}>
+                      <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                        Chapter
+                      </span>
+                    </div>
+                    {listChapter?.map((item, index) => (
+                      <div
+                        className="rounded-xl overflow-hidden"
+                        style={{ margin: "24px 0" }}
+                        key={index}
+                      >
+                        <div className="shadow-sm flex">
+                          <div
+                            className="px-4 py-4 flex flex-col justify-between"
+                            style={{ width: "200px", backgroundColor: "#ccc" }}
+                          >
+                            <div className="flex flex-col">
+                              <span style={{ color: "#999", fontSize: 14 }}>
+                                Chapter {++index}
+                              </span>
+                              <span
+                                className=" font-bold"
+                                style={{ fontSize: 18 }}
+                              >
+                                {item.title}
+                              </span>
+                            </div>
+                            <div>
+                              <span
+                                style={{
+                                  color: "#999",
+                                  fontSize: 14,
+                                  textAlign: "center",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                Something here
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            className="px-4 py-4"
+                            style={{ flex: 1, backgroundColor: "#fff" }}
+                          >
+                            <div>
+                              <span
+                                style={{ fontSize: "18px", fontWeight: "500" }}
+                              >
+                                {item.title}
+                              </span>
+                            </div>
+                            <div className="py-4">
+                              <span>{item.text_content}</span>
+                            </div>
+                            <div className="flex justify-end">
+                              <button
+                                onClick={() => handleShowViewChapter(item)}
+                                className="flex px-6 py-2 rounded-3xl"
+                                style={{
+                                  backgroundColor: "#000",
+                                  color: "#fff",
+                                }}
+                              >
+                                View
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </>

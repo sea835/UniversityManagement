@@ -60,52 +60,115 @@ exports.getChapterById = (req, res, next) => {
 
 exports.createChapter = (req, res, next) => {
   const data = req.body; // Dữ liệu từ dataSend
-  const imagePath = req.imagePath;
-  console.log("data: ", data);
+  // const imagePath = req.imagePath;
 
-  database
-    .query("SELECT class_id FROM class WHERE subject_id = ?", [data.subject_id]) // Truy vấn để tìm class_id
-    .then((result) => {
-      if (result.length === 0) {
-        return res.status(404).json({
-          message: "No class found with the given subject_id",
+  const { fileType, filePath } = req;
+
+  console.log(fileType, filePath);
+
+  if (fileType === "image") {
+    // Xử lý nếu file là hình ảnh
+    database
+      .query("SELECT class_id FROM class WHERE subject_id = ?", [
+        data.subject_id,
+      ]) // Truy vấn để tìm class_id
+      .then((result) => {
+        if (result.length === 0) {
+          return res.status(404).json({
+            message: "No class found with the given subject_id",
+          });
+        }
+        const class_id = result[0][0].class_id;
+        const idChapter = Math.floor(1000 + Math.random() * 9000);
+        const urlImgLink = `uploads/${filePath}`;
+
+        // Sau khi có class_id, thực hiện thêm dữ liệu vào bảng chapter
+        return database.query(
+          "INSERT INTO chapter (chapter_id, material_id, semester_id, class_id, subject_id, title, text_content, video_content, image_content, fileUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            idChapter.toString(),
+            data.material_id,
+            "HK231",
+            class_id,
+            data.subject_id,
+            data.title,
+            data.text_content,
+            data.video_content,
+            urlImgLink,
+            "",
+          ]
+        );
+      })
+      .then((insertResult) => {
+        // Nếu thêm dữ liệu thành công
+        res.status(201).json({
+          message: "Chapter created successfully",
+          data: insertResult,
         });
-      }
-      const class_id = result[0][0].class_id;
-      const idChapter = Math.floor(1000 + Math.random() * 9000);
-      const urlImgLink = `uploads/${imagePath}`;
+      })
+      .catch((err) => {
+        // Xử lý lỗi
+        console.error(err);
+        res.status(500).json({
+          message: "An error occurred",
+          error: err,
+        });
+      });
+    // return res.status(200).json({
+    //   message: "Chapter created with image",
+    //   filePath: filePath,
+    // });
+  } else if (fileType === "document") {
+    database
+      .query("SELECT class_id FROM class WHERE subject_id = ?", [
+        data.subject_id,
+      ]) // Truy vấn để tìm class_id
+      .then((result) => {
+        if (result.length === 0) {
+          return res.status(404).json({
+            message: "No class found with the given subject_id",
+          });
+        }
+        const class_id = result[0][0].class_id;
+        const idChapter = Math.floor(1000 + Math.random() * 9000);
+        const urlFileLink = `uploads/${filePath}`;
 
-      // Sau khi có class_id, thực hiện thêm dữ liệu vào bảng chapter
-      return database.query(
-        "INSERT INTO chapter (chapter_id, material_id, semester_id, class_id, subject_id, title, text_content, video_content, image_content) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [
-          idChapter.toString(),
-          data.material_id,
-          "HK231",
-          class_id,
-          data.subject_id,
-          data.title,
-          data.text_content,
-          data.video_content,
-          urlImgLink,
-        ]
-      );
-    })
-    .then((insertResult) => {
-      // Nếu thêm dữ liệu thành công
-      res.status(201).json({
-        message: "Chapter created successfully",
-        data: insertResult,
+        // Sau khi có class_id, thực hiện thêm dữ liệu vào bảng chapter
+        return database.query(
+          "INSERT INTO chapter (chapter_id, material_id, semester_id, class_id, subject_id, title, text_content, video_content, image_content, fileUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            idChapter.toString(),
+            data.material_id,
+            "HK231",
+            class_id,
+            data.subject_id,
+            data.title,
+            data.text_content,
+            data.video_content,
+            "",
+            urlFileLink,
+          ]
+        );
+      })
+      .then((insertResult) => {
+        // Nếu thêm dữ liệu thành công
+        res.status(201).json({
+          message: "Chapter created successfully",
+          data: insertResult,
+        });
+      })
+      .catch((err) => {
+        // Xử lý lỗi
+        console.error(err);
+        res.status(500).json({
+          message: "An error occurred",
+          error: err,
+        });
       });
-    })
-    .catch((err) => {
-      // Xử lý lỗi
-      console.error(err);
-      res.status(500).json({
-        message: "An error occurred",
-        error: err,
-      });
-    });
+  } else {
+    // Trường hợp không hợp lệ (đã được kiểm tra ở middleware trước)
+    return res.status(400).json({ message: "Invalid file type" });
+  }
 };
 
 exports.updateChapter = (req, res, next) => {

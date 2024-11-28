@@ -19,6 +19,26 @@ exports.getClassForLecturer = (req, res, next) => {
     });
 };
 
+exports.getClassForStudent = (req, res, next) => {
+  database
+    .query(
+      `SELECT *
+        FROM register
+        JOIN class ON register.subject_id = class.subject_id
+        WHERE register.student_id = '${req.params.id}';
+        `
+    )
+    .then((data) => {
+      res.status(200).json(data[0]);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        message: "An error occurred",
+      });
+    });
+};
+
 exports.getClassDetails = (req, res, next) => {
   const query1 = `
     SELECT register.*, student.*

@@ -20,6 +20,12 @@ import UserDetailsInGrades from "./Grades/UserDetailsInGrades.jsx";
 import ListClassesInSchedule from "./Schedule/ListClassesInSchedule.jsx";
 import CreateChapter from "./Classes/CreateQuestion.jsx";
 import CreateQuestion from "./Classes/CreateQuestion.jsx";
+import ListUserinAdmin from "./Admin/ListUserinAdmin.jsx";
+import ListTeacherinAdmin from "./Admin/ListTeacherinAdmin.jsx";
+import ListCourseinAdmin from "./Admin/ListCourseinAdmin.jsx";
+import ListClassinAdmin from "./Admin/ListClassinAdmin.jsx";
+import ListClassinStudent from "./Student/ListClassinStudent.jsx";
+import ListShceduleinStudent from "./Student/ListShceduleinStudent.jsx";
 
 const AppRouter = () => {
   return (
@@ -48,6 +54,10 @@ const AppRouter = () => {
             <Route path="classes" element={<ListClasses title="Classes" />} />
             <Route path="classes/details/:id" element={<ClassesDetails />} />
             <Route
+              path="classes/details/:id/grades"
+              element={<ClassesDetailsInGrades />}
+            />
+            <Route
               path="classes/details/:id/createQuestion"
               element={<CreateQuestion />}
             />
@@ -74,6 +84,17 @@ const AppRouter = () => {
             <Route
               path="grades/details/create/:id"
               element={<CreateExxamInGrades />}
+            />
+            {/* Admin Route */}
+            <Route path="listTeacher" element={<ListTeacherinAdmin />} />
+            <Route path="listStudent" element={<ListUserinAdmin />} />
+            <Route path="listCourse" element={<ListCourseinAdmin />} />
+            <Route path="listClass" element={<ListClassinAdmin />} />
+            {/* Student Route */}
+            <Route path="student/classes" element={<ListClassinStudent />} />
+            <Route
+              path="student/schedule"
+              element={<ListShceduleinStudent />}
             />
           </Route>
         </Route>
