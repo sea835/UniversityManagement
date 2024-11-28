@@ -49,7 +49,7 @@ router.post('/departments', authController.authToken, departmentController.creat
 router.put('/departments/:id', authController.authToken, departmentController.updateDepartment);
 router.delete('/departments/:id', authController.authToken, departmentController.deleteDepartment);
 
-router.get('/subjects', authController.authToken, subjectController.getSubjects);
+router.get('/subjects', subjectController.getSubjects);
 router.get('/subjects/:id', authController.authToken, subjectController.getSubjectById);
 router.post('/subjects', authController.authToken, subjectController.createSubject);
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
