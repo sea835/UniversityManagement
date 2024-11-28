@@ -1,5 +1,5 @@
-CREATE DATABASE university_management_test;
-USE university_management_test;
+CREATE DATABASE university_management;
+USE university_management;
 
 SET SQL_SAFE_UPDATES = 0;
 
@@ -19,8 +19,8 @@ CREATE TABLE lecturer (
     full_name VARCHAR(100),
     phone_number VARCHAR(15),
     image VARCHAR(255),
-    gender VARCHAR(10),  -- Added gender
-    date_of_birth DATE,      -- Added birth_date
+    gender VARCHAR(10),
+    date_of_birth DATE,
     specialization VARCHAR(100),
     department_id VARCHAR(50)
 );
@@ -35,8 +35,8 @@ CREATE TABLE student (
     phone_number VARCHAR(15),
     image VARCHAR(255),
     address VARCHAR(150),
-    gender VARCHAR(10),  -- Added gender
-    date_of_birth DATE,      -- Added birth_date
+    gender VARCHAR(10),
+    date_of_birth DATE,
     department_id VARCHAR(50)
 );
 
@@ -49,8 +49,8 @@ CREATE TABLE administrator (
     address VARCHAR(150),
     full_name VARCHAR(100),
     phone_number VARCHAR(15),
-    gender VARCHAR(10),  -- Added gender
-    date_of_birth DATE,      -- Added birth_date
+    gender VARCHAR(10),
+    date_of_birth DATE,
     image VARCHAR(255)
 );
 
@@ -71,9 +71,9 @@ CREATE TABLE class (
     semester_id VARCHAR(50),
     subject_id VARCHAR(50),
     lecturer_id VARCHAR(50),
-    period int,
-    day_of_week int,
-    week int,
+    period INT,
+    day_of_week INT,
+    week INT,
     PRIMARY KEY (class_id, semester_id, subject_id)
 );
 
@@ -81,7 +81,7 @@ CREATE TABLE class (
 CREATE TABLE register (
     subject_id VARCHAR(50),
     student_id VARCHAR(50),
-    result int,  -- from the participation result
+    result INT,
     PRIMARY KEY (subject_id, student_id)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE participation (
     student_id VARCHAR(50),
     semester_id VARCHAR(50),
     subject_id VARCHAR(50),
-    result int,
+    result INT,
     PRIMARY KEY (class_id, student_id, semester_id, subject_id)
 );
 
@@ -155,112 +155,138 @@ CREATE TABLE exam (
     class_id VARCHAR(50),
     semester_id VARCHAR(50),
     material_id VARCHAR(50),
-	chapter_id VARCHAR(50),
+    chapter_id VARCHAR(50),
     exam_name VARCHAR(255),
-    PRIMARY KEY (exam_id)	
-);	
--- =============================
+    PRIMARY KEY (exam_id)
+);
 
--- Add an index for the foreign key column `material_id`
-CREATE INDEX idx_chapter_material_id ON chapter(material_id);
-
--- Add an index for the foreign key column `semester_id`
-CREATE INDEX idx_chapter_semester_id ON chapter(semester_id);
-
--- Add an index for the foreign key column `class_id`
-CREATE INDEX idx_chapter_class_id ON chapter(class_id);
-
--- Add an index for the foreign key column `subject_id`
-CREATE INDEX idx_chapter_subject_id ON chapter(subject_id);
-
--- Create an index on the chapter_id column in the chapter table
+-- Add indexes
+CREATE INDEX idx_lecturer_department_id ON lecturer(department_id);
+CREATE INDEX idx_student_department_id ON student(department_id);
+CREATE INDEX idx_subject_department_id ON subject(department_id);
+CREATE INDEX idx_class_lecturer_id ON class(lecturer_id);
+CREATE INDEX idx_participation_subject_id ON participation(subject_id);
+CREATE INDEX idx_exam_subject_id ON exam(subject_id);
+CREATE INDEX idx_material_class_id ON material(class_id);
+CREATE INDEX idx_exam_chapter_id ON exam(chapter_id);
 CREATE INDEX idx_chapter_id ON chapter(chapter_id);
 
--- Foreign key constraints
-
--- Add FK constraints for the Lecturer table
+-- Foreign key constraints with cascading actions
 ALTER TABLE lecturer
 ADD CONSTRAINT fk_lecturer_department
-FOREIGN KEY (department_id) REFERENCES department(department_id);
+FOREIGN KEY (department_id) REFERENCES department(department_id)
+ON DELETE SET NULL
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Student table
 ALTER TABLE student
 ADD CONSTRAINT fk_student_department
-FOREIGN KEY (department_id) REFERENCES department(department_id);
+FOREIGN KEY (department_id) REFERENCES department(department_id)
+ON DELETE SET NULL
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Subject table
 ALTER TABLE subject
 ADD CONSTRAINT fk_subject_department
-FOREIGN KEY (department_id) REFERENCES department(department_id);
+FOREIGN KEY (department_id) REFERENCES department(department_id)
+ON DELETE SET NULL
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Class table
 ALTER TABLE class
 ADD CONSTRAINT fk_class_subject
-FOREIGN KEY (subject_id) REFERENCES subject(subject_id),
+FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_class_lecturer
-FOREIGN KEY (lecturer_id) REFERENCES lecturer(lecturer_id);
+FOREIGN KEY (lecturer_id) REFERENCES lecturer(lecturer_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Register (Dang_ky) table
 ALTER TABLE register
 ADD CONSTRAINT fk_register_subject
-FOREIGN KEY (subject_id) REFERENCES subject(subject_id),
+FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_register_student
-FOREIGN KEY (student_id) REFERENCES student(student_id);
+FOREIGN KEY (student_id) REFERENCES student(student_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Participation (Tham_gia) table
 ALTER TABLE participation
 ADD CONSTRAINT fk_participation_class
-FOREIGN KEY (class_id) REFERENCES class(class_id),
+FOREIGN KEY (class_id) REFERENCES class(class_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_participation_student
-FOREIGN KEY (student_id) REFERENCES student(student_id),
+FOREIGN KEY (student_id) REFERENCES student(student_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_participation_subject
-FOREIGN KEY (subject_id) REFERENCES subject(subject_id);
+FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Certificate table
 ALTER TABLE certificate
 ADD CONSTRAINT fk_certificate_lecturer
-FOREIGN KEY (lecturer_id) REFERENCES lecturer(lecturer_id);
+FOREIGN KEY (lecturer_id) REFERENCES lecturer(lecturer_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Chapter table
 ALTER TABLE chapter
 ADD CONSTRAINT fk_chapter_material
-FOREIGN KEY (material_id) REFERENCES material(material_id),
+FOREIGN KEY (material_id) REFERENCES material(material_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_chapter_subject
-FOREIGN KEY (subject_id) REFERENCES subject(subject_id),
+FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_chapter_class
-FOREIGN KEY (class_id) REFERENCES class(class_id);
+FOREIGN KEY (class_id) REFERENCES class(class_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
-
--- Add FK constraints for the Question (Cau_hoi) table
 ALTER TABLE question
 ADD CONSTRAINT fk_question_exam
-FOREIGN KEY (exam_id) REFERENCES exam(exam_id);
+FOREIGN KEY (exam_id) REFERENCES exam(exam_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Test_Performance table
 ALTER TABLE test_performance
 ADD CONSTRAINT fk_test_performance_student
-FOREIGN KEY (student_id) REFERENCES student(student_id),
+FOREIGN KEY (student_id) REFERENCES student(student_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_test_performance_exam
-FOREIGN KEY (exam_id) REFERENCES exam(exam_id);
+FOREIGN KEY (exam_id) REFERENCES exam(exam_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
--- Add FK constraints for the Material table
 ALTER TABLE material
 ADD CONSTRAINT fk_material_class
-FOREIGN KEY (class_id) REFERENCES class(class_id),
+FOREIGN KEY (class_id) REFERENCES class(class_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_material_subject
-FOREIGN KEY (subject_id) REFERENCES subject(subject_id);
+FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
-
--- Add FK constraints for the Exam (Bai_kiem_tra) table
 ALTER TABLE exam
 ADD CONSTRAINT fk_exam_subject
-FOREIGN KEY (subject_id) REFERENCES subject(subject_id),
+FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_exam_class
-FOREIGN KEY (class_id) REFERENCES class(class_id),
+FOREIGN KEY (class_id) REFERENCES class(class_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_exam_material
-FOREIGN KEY (material_id) REFERENCES material(material_id),
+FOREIGN KEY (material_id) REFERENCES material(material_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 ADD CONSTRAINT fk_exam_chapter
-FOREIGN KEY (chapter_id) REFERENCES chapter(chapter_id);
+FOREIGN KEY (chapter_id) REFERENCES chapter(chapter_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
 
 -- --------------------------------------------------------------------------

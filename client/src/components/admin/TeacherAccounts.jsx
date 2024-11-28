@@ -41,7 +41,7 @@ const TeacherAccounts = () => {
       <DynamicTable
         dataset={dataset}
         addButton={true}
-        onEditComplete={fetchData}
+        onChangeData={fetchData} // Renamed to onChangeData
       />
     </div>
   );

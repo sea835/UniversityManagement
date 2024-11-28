@@ -28,6 +28,7 @@ import CoursesManagement from "./admin/CoursesManagement.jsx";
 import ClassesManagement from "./admin/ClassesManagement.jsx";
 import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 import Help from "./admin/Help.jsx";
+import NotFound from "../pages/NotFound.jsx";
 
 const AppRouter = () => {
   return (
@@ -36,10 +37,14 @@ const AppRouter = () => {
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<HomePage />} />
+            <Route path="*" element={<NotFound />} />
             <Route path="home" element={<HomePage />} />
-            <Route path="about" element={<div>About</div>} />
+            <Route path="about" element={<div className="p-4">About</div>} />
             <Route path="course" element={<AllCourses />} />
-            <Route path="contact" element={<div>Contact</div>} />
+            <Route
+              path="contact"
+              element={<div className="p-4">Contact</div>}
+            />
             <Route path="login" element={<LoginPage />} />
             <Route path="test" element={<TestPage />} />
 
@@ -51,11 +56,11 @@ const AppRouter = () => {
               <Route path="courses/:id" element={<CourseContent />}></Route>
               <Route
                 path="courses/:id/chapter/:chapter"
-                element={<>Chapter</>}
+                element={<div className="p-4">Chapter</div>}
               />
               <Route
                 path="courses/:id/exercises"
-                element={<>Exercises</>}
+                element={<div className="p-4">Exercises</div>}
               ></Route>
               <Route path="classes" element={<StudentClasses />} />
               <Route path="schedule" element={<StudentSchedules />} />
@@ -71,6 +76,7 @@ const AppRouter = () => {
               <Route path="helpAdmin" element={<Help />} />
             </Route>
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </Router>
