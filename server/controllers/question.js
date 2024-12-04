@@ -47,6 +47,8 @@ exports.getQuestionByExamId = (req, res, next) => {
 
 const handleInsertQuestions = (req, res, questions, exam_id) => {
   // Lặp qua từng câu hỏi trong mảng
+  const groupID = Math.floor(1000 + Math.random() * 9000);
+
   const insertPromises = questions.map((question) => {
     // const question_id = question.id; // ID của câu hỏi
     const question_content = question.answer; // Nội dung câu hỏi
@@ -62,7 +64,7 @@ const handleInsertQuestions = (req, res, questions, exam_id) => {
     // Chèn câu hỏi vào DB
     return database
       .query(
-        "INSERT INTO question (question_id, exam_id, question_content, answer_a, answer_b, answer_c, answer_d, correct_answer) VALUES (?, ?, ?, ?, ?, ?, ?,?)",
+        "INSERT INTO question (question_id, exam_id, question_content, answer_a, answer_b, answer_c, answer_d, correct_answer, group_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)",
         [
           question_id,
           exam_id,
@@ -72,6 +74,7 @@ const handleInsertQuestions = (req, res, questions, exam_id) => {
           questionC,
           questionD,
           qe,
+          groupID,
         ]
       )
       .then((data) => {

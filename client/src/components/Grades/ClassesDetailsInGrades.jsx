@@ -105,8 +105,8 @@ const ClassesDetailsInGrades = () => {
                 }}
                 onChange={(e) => handleChangeSort(e.target.value)}
               >
-                <option value="asc">Newest</option>
-                <option value="desc">Oldest</option>
+                <option value="asc">Aescending</option>
+                <option value="desc">Descending</option>
               </select>
             </div>
           </div>

@@ -41,9 +41,7 @@ export const Header = () => {
                 Login
               </Link>
             </div>
-            <div className="pr-[50px] cursor-pointer" onClick={handleLogOut}>
-              <p>Logout</p>
-            </div>
+            
           </div>
         </div>
       </header>

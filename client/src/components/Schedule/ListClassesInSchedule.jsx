@@ -43,6 +43,9 @@ const ListClassesInSchedule = () => {
                     Number of creadits
                   </th>
                   <th className="py-3 px-6" style={{ color: "#ccc" }}>
+                    Semester ID
+                  </th>
+                  <th className="py-3 px-6" style={{ color: "#ccc" }}>
                     Class ID
                   </th>
                   <th className="py-3 px-6" style={{ color: "#ccc" }}>
@@ -70,6 +73,9 @@ const ListClassesInSchedule = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-center">
                       {item.credits}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-center">
+                      {item.semester_id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-center">
                       {item.class_id}

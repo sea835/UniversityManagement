@@ -3,35 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import apiService from "../../services/apiservice";
 import { IoCloudUploadOutline } from "react-icons/io5";
 
-// {
-//   id: 1,
-//   title: "What is the capital of France?",
-//   answer: "A",
-//   question: [
-//     {
-//       id: "A",
-//       question: "long established",
-//     },
-//     {
-//       id: "B",
-//       question: "fact that a reader",
-//     },
-//     {
-//       id: "C",
-//       question: "be distracted by",
-//     },
-//     {
-//       id: "D",
-//       question: "publishing packages and web",
-//     },
-//   ],
-// },
-
 const ClassesDetails = () => {
   const { id } = useParams();
 
   const [listChapter, setListChapter] = useState([]);
   const [listDataQuestion, setListDataQuestion] = useState([]);
+  const [listDataQuestion2, setListDataQuestion2] = useState([]);
   const [classes, setClasses] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
@@ -240,20 +217,72 @@ const ClassesDetails = () => {
 
   const handleCreateQuestion = async (e) => {
     e.preventDefault();
-    console.log("listQuestion: ", listQuestion);
-    try {
-      const response = await apiService.post(`/questions`, listQuestion);
-      alert("Successfully created");
-      setShowUploadFile(false);
-      handleGetListChapter(id);
-      handleGetAllQuestions("BKT001");
-      setShowQuestion(false);
-      setPreviewUrl("");
-      setDataImage("");
-    } catch (error) {
-      console.error(error);
+    let flag = true;
+    listQuestion.forEach((item, index) => {
+      const duplicates = item.question.reduce((acc, item, index, array) => {
+        // Kiểm tra xem question đã tồn tại trong các phần tử trước đó chưa
+        const isDuplicate = array
+          .slice(0, index)
+          .some((el) => el.question === item.question);
+        if (isDuplicate && !acc.includes(item.question)) {
+          acc.push(item.question); // Lưu lại câu hỏi bị trùng
+        }
+        return acc;
+      }, []);
+      if (duplicates.length > 0) {
+        alert(`Có câu hỏi trùng lập ở câu ${++index}`);
+        flag = false;
+        return;
+      }
+    });
+    if (flag) {
+      try {
+        const response = await apiService.post(`/questions`, listQuestion);
+        alert("Successfully created");
+        setShowUploadFile(false);
+        handleGetListChapter(id);
+        handleGetAllQuestions("BKT001");
+        setShowQuestion(false);
+        setPreviewUrl("");
+        setDataImage("");
+        setDataImage("");
+        setCurrentQuestion(1);
+        setNumQuiz(1);
+        setListQuestion([
+          {
+            id: 1,
+            title: "",
+            answer: "",
+            correctAnswer: "A",
+            question: [
+              {
+                id: "A",
+                question: "",
+              },
+              {
+                id: "B",
+                question: "",
+              },
+              {
+                id: "C",
+                question: "",
+              },
+              {
+                id: "D",
+                question: "",
+              },
+            ],
+          },
+        ]);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
+
+  useEffect(() => {
+    console.log("listQuestion: ", listQuestion);
+  }, [listQuestion]);
 
   const handleShowViewChapter = (item) => {
     // setShowViewFile
@@ -269,11 +298,30 @@ const ClassesDetails = () => {
   const handleGetAllQuestions = async (id) => {
     try {
       const response = await apiService.get(`/questions/exxam/${id}`);
-      console.log(response.data);
+      console.log("AllQuestions: ", response.data);
       setListDataQuestion(response.data);
+      if (response.data) {
+        handleGruopQuestion(response.data);
+      }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleGruopQuestion = (data) => {
+    const groupedData = Object.values(
+      data.reduce((acc, item) => {
+        // Nếu group_id chưa tồn tại, khởi tạo
+        if (!acc[item.group_id]) {
+          acc[item.group_id] = { group_id: item.group_id, data: [] };
+        }
+        // Thêm item vào mảng data của group_id tương ứng
+        acc[item.group_id].data.push(item);
+        return acc;
+      }, {})
+    );
+    console.log("groupedData: ", groupedData);
+    setListDataQuestion2(groupedData);
   };
 
   useEffect(() => {
@@ -687,7 +735,7 @@ const ClassesDetails = () => {
                     style={{ fontWeight: "500" }}
                     onClick={() => handleDeleteQuestion(currentQuestion)}
                   >
-                    Xóa Question
+                    Delete Question
                   </span>
                 </div>
               )}
@@ -737,13 +785,13 @@ const ClassesDetails = () => {
                   >
                     <div className="py-4">
                       <span style={{ fontSize: "22px", fontWeight: "500" }}>
-                        Chapter I
+                        {dataCreate.title}
                       </span>
                     </div>
                     <div
                       className="mt-4"
                       style={{
-                        paddingBottom: "40px",
+                        paddingBottom: 0,
                         display: "flex",
                       }}
                     >
@@ -812,7 +860,7 @@ const ClassesDetails = () => {
                         </div>
                       </div>
                     </div>
-                    <div
+                    {/* <div
                       className="py-5 "
                       style={{
                         width: "70%",
@@ -829,7 +877,7 @@ const ClassesDetails = () => {
                         survived not only five centuries, but also the leap into
                         electronic typesetting, remaining essentially unchanged.
                       </span>
-                    </div>
+                    </div> */}
                     <div className="py-4 mt-8 flex">
                       <button
                         className="px-3 py-2 rounded"
@@ -873,12 +921,99 @@ const ClassesDetails = () => {
                 </div>
                 <div>
                   <div>
-                    <div style={{ paddingTop: 20 }}>
-                      <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                    <div
+                      style={{
+                        paddingTop: 20,
+                        borderBottom: "1px solid #ccc",
+                        paddingBottom: 12,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "20px",
+                        }}
+                      >
                         Question
                       </span>
                     </div>
-                    {listDataQuestion?.map((item, index) => (
+
+                    <div style={{ paddingTop: 20 }}>
+                      {listDataQuestion2?.map((data, index) => (
+                        <div
+                          key={index}
+                          style={{ paddingTop: `${index > 0 && "20px"}` }}
+                        >
+                          <p style={{ fontWeight: "bold" }}>
+                            Question: {data.group_id}
+                          </p>
+                          <div
+                            style={{
+                              padding: "0 20px",
+                              border: "1px solid #ccc",
+                              marginTop: 20,
+                              borderRadius: "5px",
+                            }}
+                          >
+                            {data?.data?.map((item, k) => (
+                              <div
+                                className="rounded-xl overflow-hidden"
+                                style={{ margin: "24px 0" }}
+                                key={k}
+                              >
+                                <div className="shadow-sm flex">
+                                  <div
+                                    className="px-4 py-4 flex flex-col justify-between"
+                                    style={{
+                                      width: "200px",
+                                      backgroundColor: "#ccc",
+                                    }}
+                                  >
+                                    <div className="flex flex-col">
+                                      <span
+                                        style={{ color: "#999", fontSize: 14 }}
+                                      >
+                                        Question {++index}
+                                      </span>
+                                      <span
+                                        className=" font-bold"
+                                        style={{ fontSize: 16 }}
+                                      >
+                                        {item?.question_content}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="px-4 py-4"
+                                    style={{ flex: 1, backgroundColor: "#fff" }}
+                                  >
+                                    <div className="py-1">
+                                      <span>Đáp án A: {item?.answer_a}</span>
+                                    </div>
+                                    <div className="py-1">
+                                      <span>Đáp án B: {item?.answer_b}</span>
+                                    </div>
+                                    <div className="py-1">
+                                      <span>Đáp án C: {item?.answer_c}</span>
+                                    </div>
+                                    <div className="py-1">
+                                      <span>Đáp án D: {item?.answer_d}</span>
+                                    </div>
+                                    <div className="py-1">
+                                      <span>
+                                        Đáp án đúng: {item?.correct_answer}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* {listDataQuestion?.map((item, index) => (
                       <div
                         className="rounded-xl overflow-hidden"
                         style={{ margin: "24px 0" }}
@@ -923,7 +1058,7 @@ const ClassesDetails = () => {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                   <div>
                     <div style={{ paddingTop: 20 }}>
