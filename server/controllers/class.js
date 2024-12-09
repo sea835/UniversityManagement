@@ -1,12 +1,14 @@
 const database = require("../database/database");
 
 exports.getClassForLecturer = (req, res, next) => {
+  console.log("req.params.id: ", req.params.id);
+
   database
     .query(
       `SELECT class.*, subject.subject_name, subject.credits
-        FROM class
-        JOIN subject ON class.subject_id = subject.subject_id
-        WHERE class.lecturer_id = '${req.params.id}'`
+          FROM class
+          JOIN subject ON class.subject_id = subject.subject_id
+          WHERE class.lecturer_id = '${req.params.id}'`
     )
     .then((data) => {
       res.status(200).json(data[0]);
@@ -23,10 +25,10 @@ exports.getClassForStudent = (req, res, next) => {
   database
     .query(
       `SELECT *
-        FROM register
-        JOIN class ON register.subject_id = class.subject_id
-        WHERE register.student_id = '${req.params.id}';
-        `
+          FROM register
+          JOIN class ON register.subject_id = class.subject_id
+          WHERE register.student_id = '${req.params.id}';
+          `
     )
     .then((data) => {
       res.status(200).json(data[0]);
@@ -41,17 +43,17 @@ exports.getClassForStudent = (req, res, next) => {
 
 exports.getClassDetails = (req, res, next) => {
   const query1 = `
-    SELECT register.*, student.*
-    FROM register
-    JOIN student ON register.student_id = student.student_id
-    WHERE register.subject_id = '${req.params.id}'
-  `;
+      SELECT register.*, student.*
+      FROM register
+      JOIN student ON register.student_id = student.student_id
+      WHERE register.subject_id = '${req.params.id}'
+    `;
 
   const query2 = `
-    SELECT subject.*
-    FROM subject
-    WHERE subject.subject_id = '${req.params.id}'
-  `;
+      SELECT subject.*
+      FROM subject
+      WHERE subject.subject_id = '${req.params.id}'
+    `;
 
   Promise.all([database.query(query1), database.query(query2)])
     .then(([data1, data2]) => {
@@ -71,20 +73,6 @@ exports.getClassDetails = (req, res, next) => {
 exports.getClasses = (req, res, next) => {
   database
     .query("SELECT * FROM class")
-    .then((data) => {
-      res.status(200).json(data[0]);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        message: "An error occurred",
-      });
-    });
-};
-
-exports.getClassesBySubject = (req, res, next) => {
-  database
-    .query(`SELECT * FROM class where subject_id = '${req.params.id}'`)
     .then((data) => {
       res.status(200).json(data[0]);
     })
@@ -169,6 +157,70 @@ exports.deleteClass = (req, res, next) => {
       console.log(err);
       res.status(500).json({
         message: err,
+      });
+    });
+};
+
+exports.getSchedulesByStudentId = (req, res, next) => {
+  const id = req.params.studentId;
+  database
+    .query(
+      `
+select 
+c.class_id,
+c.semester_id,
+subject_name,
+period,
+day_of_week,
+week
+from student s
+join participation p on p.student_id = s.student_id
+join class c on c.class_id = p.class_id
+join subject sub on sub.subject_id = c.subject_id
+where p.student_id=?
+
+`,
+      [id]
+    )
+    .then((data) => {
+      res.status(200).json(data[0]);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        message: "An error occurred",
+      });
+    });
+};
+
+exports.getClassesByStudentId = (req, res, next) => {
+  const id = req.params.studentId;
+  database
+    .query(
+      `
+select 
+c.class_id,
+c.semester_id,
+subject_name,
+l.full_name,
+result
+from student s
+join participation p on p.student_id = s.student_id
+join class c on c.class_id = p.class_id
+join subject sub on sub.subject_id = c.subject_id
+join lecturer l on c.lecturer_id = l.lecturer_id
+where p.student_id=?
+
+`,
+      [id]
+    )
+    .then((data) => {
+      res.status(200).json(data[0]);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        message: "An error occurred",
       });
     });
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 import { useAuth } from "../Auth/AuthProvider";
 import { Link } from "react-router-dom";
 

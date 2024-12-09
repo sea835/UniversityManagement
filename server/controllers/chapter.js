@@ -1,18 +1,5 @@
 const database = require("../database/database");
 
-exports.getChapters = (req, res, next) => {
-  database
-    .query("SELECT * FROM chapter")
-    .then((data) => {
-      res.status(200).json(data[0]);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        message: "An error occurred",
-      });
-    });
-};
 exports.getChaptersBySubjectId = (req, res, next) => {
   const { subject_id } = req.params;
 
@@ -34,6 +21,20 @@ exports.getChaptersBySubjectId = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).json({
+        message: "An error occurred",
+      });
+    });
+};
+
+exports.getChapters = (req, res, next) => {
+  database
+    .query("SELECT * FROM chapter")
+    .then((data) => {
+      res.status(200).json(data[0]);
+    })
+    .catch((err) => {
+      console.log(err);
       res.status(500).json({
         message: "An error occurred",
       });

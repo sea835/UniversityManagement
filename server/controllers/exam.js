@@ -29,6 +29,27 @@ exports.getExamById = (req, res, next) => {
     });
 };
 
+// exports.createExam = (req, res, next) => {
+//   const { exam_id, exam_name } = req.body;
+//   database
+//     .query("INSERT INTO exam (exam_id, exam_name) VALUES (?, ?)", [
+//       exam_id,
+//       exam_name,
+//     ])
+//     .then((data) => {
+//       res.status(201).json({
+//         message: "Exam created successfully",
+//         data: data,
+//       });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({
+//         message: err,
+//       });
+//     });
+// };
+
 exports.createExam = (req, res, next) => {
   const {
     exam_id,

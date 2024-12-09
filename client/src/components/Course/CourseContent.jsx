@@ -1,8 +1,7 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 function CourseContent() {
-  // eslint-disable-next-line no-unused-vars
   const { id } = useParams(); // Extract courseId from the URL
   //console.log(id); // Log courseId to the console
   const [view, setView] = useState("course"); // State to toggle between Course and Grade
@@ -98,7 +97,7 @@ function ExercisesSection() {
             </div>
             <p className="mt-5 text-base text-stone-500 max-md:max-w-full">
               Please add your content here. Keep it short and simple. And smile
-              {":)"}
+              :)
             </p>
           </div>
         </div>
@@ -107,7 +106,6 @@ function ExercisesSection() {
   );
 }
 
-// eslint-disable-next-line react/prop-types
 function ChapterSection({ name, order, content }) {
   return (
     <Link to={`chapter/${order}`} className="w-full">

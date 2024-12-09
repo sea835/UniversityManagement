@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 
 const CreateDocument = () => {
   const [listClass, setListClass] = useState([]);

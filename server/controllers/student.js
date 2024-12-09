@@ -14,42 +14,27 @@ exports.getStudents = (req, res, next) => {
     });
 };
 
-exports.getStudentById = (req, res, next) => {
-  const id = req.params.id;
-  database
-    .query("SELECT * FROM student WHERE student_id = ?", [id])
-    .then((data) => {
-      res.status(200).json(data[0]);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        message: "An error occurred",
-      });
-    });
-};
-
 exports.getStudentDetails = (req, res, next) => {
   const subjectId = req.params.subjectId;
   const studentId = req.params.studentId;
 
   const query1 = `
-   SELECT tp.*, e.subject_id, e.exam_name
-FROM test_performance tp
-JOIN exam e ON tp.exam_id = e.exam_id
-WHERE tp.student_id = '${studentId}' AND e.subject_id = '${subjectId}'`;
+     SELECT tp.*, e.subject_id, e.exam_name
+  FROM test_performance tp
+  JOIN exam e ON tp.exam_id = e.exam_id
+  WHERE tp.student_id = '${studentId}' AND e.subject_id = '${subjectId}'`;
 
   const query2 = `
-    SELECT student.*
-    FROM student
-    WHERE student.student_id = '${studentId}'
-  `;
+      SELECT student.*
+      FROM student
+      WHERE student.student_id = '${studentId}'
+    `;
 
   const query3 = `
-    SELECT subject.*
-    FROM subject
-    WHERE subject.subject_id = '${subjectId}'
-  `;
+      SELECT subject.*
+      FROM subject
+      WHERE subject.subject_id = '${subjectId}'
+    `;
 
   Promise.all([
     database.query(query1),
@@ -62,6 +47,21 @@ WHERE tp.student_id = '${studentId}' AND e.subject_id = '${subjectId}'`;
         dataUser: data2[0], // Kết quả từ truy vấn thứ hai
         dataSubject: data3[0], // Kết quả từ truy vấn thứ hai
       });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        message: "An error occurred",
+      });
+    });
+};
+
+exports.getStudentById = (req, res, next) => {
+  const id = req.params.id;
+  database
+    .query("SELECT * FROM student WHERE student_id = ?", [id])
+    .then((data) => {
+      res.status(200).json(data[0]);
     })
     .catch((err) => {
       console.log(err);

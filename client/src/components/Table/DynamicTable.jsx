@@ -1,20 +1,140 @@
 import React, { useState } from "react";
 import Search from "./Search";
 import Sort from "./Sort";
+import axios from "axios";
+import Modal from "../Modal/Modal";
+import TableHeader from "./TableHeader";
+import TableBody from "./TableBody";
+import ActionButtons from "./ActionButtons";
+import Modals from "./Modals";
 
-function DynamicTable({ dataset }) {
-  // State for the selected table type
+function DynamicTable({ dataset, addButton = false, onChangeData }) {
   const [selectedTable, setSelectedTable] = useState(Object.keys(dataset)[0]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+  const [formData, setFormData] = useState({});
 
-  // Handler to change table type
   const handleTableChange = (event) => {
     setSelectedTable(event.target.value);
   };
 
-  // Get current table data
   const tableData = dataset[selectedTable].data;
+  const apiLink = dataset[selectedTable].apiLink;
 
-  // Auto-generate headers from the keys of the first object in the data array
+  const getIdKey = () => {
+    const sampleItem = dataset[selectedTable].data[0];
+    return Object.keys(sampleItem).find((key) => key.endsWith("_id"));
+  };
+
+  const handleAddNew = () => {
+    setFormData({});
+    setShowAddModal(true);
+  };
+
+  const handleDelete = (item) => {
+    setCurrentItem(item);
+    setShowDeleteModal(true);
+  };
+
+  const handleView = (item) => {
+    setCurrentItem(item);
+    setShowViewModal(true);
+  };
+
+  const handleEdit = (item) => {
+    setCurrentItem(item);
+    setFormData(item);
+    setShowEditModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    const idKey = getIdKey();
+    try {
+      await axios
+        .delete(`${apiLink}/${currentItem[idKey]}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setShowDeleteModal(false);
+      if (onChangeData) onChangeData();
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAddSubmit = async () => {
+    try {
+      const formattedData = { ...formData };
+      if (formData.date_of_birth) {
+        formattedData.date_of_birth = new Date(formData.date_of_birth)
+          .toISOString()
+          .split("T")[0];
+      }
+      await axios
+        .post(apiLink, formattedData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setShowAddModal(false);
+      if (onChangeData) onChangeData();
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
+  };
+
+  const handleEditSubmit = async () => {
+    const idKey = getIdKey();
+    try {
+      const formattedData = { ...formData };
+      if (formData.date_of_birth) {
+        formattedData.date_of_birth = new Date(formData.date_of_birth)
+          .toISOString()
+          .split("T")[0];
+      }
+      await axios
+        .put(`${apiLink}/${currentItem[idKey]}`, formattedData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setShowEditModal(false);
+      if (onChangeData) onChangeData();
+    } catch (error) {
+      console.error("Error updating item:", error);
+    }
+  };
+
   const headers = tableData.length > 0 ? Object.keys(tableData[0]) : [];
 
   return (
@@ -26,76 +146,52 @@ function DynamicTable({ dataset }) {
         <div className="flex gap-4">
           <Search />
           <Sort />
+          {addButton && (
+            <div className="content-center">
+              <button
+                className="bg-green-200 text-green-800 hover:bg-green-400 px-4 py-1 rounded-sm font-medium"
+                onClick={handleAddNew}
+              >
+                ADD NEW
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Dropdown to switch between tables */}
-      {/* <div className="mt-5">
-        <label htmlFor="table-selector" className="font-medium text-gray-700">
-          Select Table Type:
-        </label>
-        <select
-          id="table-selector"
-          value={selectedTable}
-          onChange={handleTableChange}
-          className="ml-3 p-2 border rounded-md bg-gray-100"
-        >
-          {Object.keys(dataset).map((key) => (
-            <option key={key} value={key}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div> */}
-
-      {/* Table Structure */}
       <div className="mt-8 overflow-auto border border-gray-300 rounded-md shadow-sm">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              {headers.map((header, index) => (
-                <th
-                  key={index}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  {header.charAt(0).toUpperCase() +
-                    header.slice(1).replace(/([A-Z])/g, " $1")}
-                </th>
-              ))}
-              {dataset[selectedTable].action === true && (
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {tableData.map((item, index) => (
-              <tr key={index}>
-                {headers.map((header, idx) => (
-                  <td key={idx} className="px-6 py-4 whitespace-nowrap">
-                    {item[header]}
-                  </td>
-                ))}
-                {dataset[selectedTable].action === true && (
-                  <td className="px-6 py-4 whitespace-nowrap flex space-x-3">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
-                      Edit
-                    </button>
-                    <button className="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded-md">
-                      View
-                    </button>
-                    <button className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded-md">
-                      Delete
-                    </button>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
+          <TableHeader
+            headers={headers}
+            action={dataset[selectedTable].action}
+          />
+          <TableBody
+            tableData={tableData}
+            headers={headers}
+            action={dataset[selectedTable].action}
+            handleView={handleView}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
         </table>
       </div>
+
+      <Modals
+        showAddModal={showAddModal}
+        setShowAddModal={setShowAddModal}
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
+        showViewModal={showViewModal}
+        setShowViewModal={setShowViewModal}
+        showEditModal={showEditModal}
+        setShowEditModal={setShowEditModal}
+        headers={headers}
+        currentItem={currentItem}
+        handleInputChange={handleInputChange}
+        handleAddSubmit={handleAddSubmit}
+        handleConfirmDelete={handleConfirmDelete}
+        handleEditSubmit={handleEditSubmit}
+      />
     </div>
   );
 }

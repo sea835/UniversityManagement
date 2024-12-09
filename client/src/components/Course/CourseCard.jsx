@@ -1,10 +1,18 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
-// eslint-disable-next-line react/prop-types
-function CourseCard({ id, title, teacher }) {
+function CourseCard({
+  subject_id,
+  semester_id,
+  subject_name,
+  full_name,
+  class_id,
+  learning_outcomes,
+  credits,
+}) {
   return (
     <Link
-      to={`${id}`}
+      to={`${subject_id}`}
       className="flex overflow-hidden flex-col grow rounded-xl min-h-[240px] hover:shadow-lg transition-shadow duration-300"
     >
       <div className="flex flex-col items-start w-full bg-white">
@@ -20,8 +28,20 @@ function CourseCard({ id, title, teacher }) {
         </div>
       </div>
       <div className="flex flex-col p-6 w-full bg-white max-md:px-5">
-        <h3 className="text-base font-medium text-black">{title}</h3>
-        <p className="mt-1 text-sm text-zinc-700">{teacher}</p>
+        <h3 className="text-base font-medium text-black">
+          {subject_name} {credits ? <>({credits} credits)</> : <></>}
+        </h3>
+        <p className="mt-1 text-sm text-zinc-700 pr-2">
+          {semester_id}
+          {full_name ? (
+            <>
+              -{full_name} ({class_id})
+            </>
+          ) : (
+            <></>
+          )}
+          {class_id ? <></> : <>Learning outcomes: {learning_outcomes}</>}
+        </p>
       </div>
     </Link>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 import { useAuth } from "../Auth/AuthProvider";
 // import apiService from "../../services/apiservice";
 

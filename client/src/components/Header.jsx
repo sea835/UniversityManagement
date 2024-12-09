@@ -1,14 +1,9 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../components/Auth/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "./Auth/AuthProvider";
 
 export const Header = () => {
-  const navigate = useNavigate();
-  const auth = useAuth();
-  const handleLogOut = () => {
-    auth.logOut(navigate);
-  };
-
+  const { user } = useAuth();
+  console.log(user);
   return (
     <>
       <header>
@@ -19,7 +14,7 @@ export const Header = () => {
 
           <ul className="flex flex-row">
             <li className="">
-              <Link to="/home">Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li className="pl-[50px]">
               <Link to="/about">About</Link>
@@ -31,18 +26,22 @@ export const Header = () => {
               <Link to="/contact">Contact</Link>
             </li>
             <li className="pl-[50px]">
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard/courses">Dashboard</Link>
             </li>
           </ul>
-          <div className="w-[500px] "></div>
-          <div className="flex pr-[50px] ">
-            <div>
-              <Link to="/login" className="flex justify-end pr-[43px]">
-                Login
-              </Link>
-            </div>
-            
-          </div>
+          <div className="w-[500px]"></div>
+          {user == undefined ? (
+            <Link to="/login" className="flex justify-end pr-[43px]">
+              Login
+            </Link>
+          ) : (
+            <Link
+              to="/dashboard/account"
+              className="flex justify-end pr-[43px]"
+            >
+              {user.full_name}
+            </Link>
+          )}
         </div>
       </header>
     </>

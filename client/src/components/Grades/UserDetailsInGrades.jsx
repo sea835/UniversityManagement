@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 
 const UserDetailsInGrades = () => {
   const { subject_id, userId } = useParams();

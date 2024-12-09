@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 
 const CreateQuestion = () => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const CreateQuestion = () => {
   const [classes, setClasses] = useState({});
   const [listChapter, setListChapter] = useState([]);
   const [listMaterial, setListMaterial] = useState([]);
-  
+
   const [dataCreate, setDataCreate] = useState({
     exam_id: "",
     subject_id: "",

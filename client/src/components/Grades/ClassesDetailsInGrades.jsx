@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 // import apiService from "../../services/apiservice";
 
 const ClassesDetailsInGrades = () => {

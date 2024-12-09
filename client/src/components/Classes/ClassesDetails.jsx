@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import apiService from "../../services/apiservice";
+import apiService from "../../services/apiService";
 import { IoCloudUploadOutline } from "react-icons/io5";
 
 const ClassesDetails = () => {
@@ -19,6 +19,7 @@ const ClassesDetails = () => {
     items: {},
   });
   const [dataImage, setDataImage] = useState();
+  const [dataShow, setDataShow] = useState(1);
   const [dataCreate, setDataCreate] = useState();
   const [numQuiz, setNumQuiz] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState(1);
@@ -230,7 +231,7 @@ const ClassesDetails = () => {
         return acc;
       }, []);
       if (duplicates.length > 0) {
-        alert(`Có câu hỏi trùng lập ở câu ${++index}`);
+        alert(`Có đáp án trùng lặp ở câu ${++index}`);
         flag = false;
         return;
       }
@@ -335,6 +336,8 @@ const ClassesDetails = () => {
   const handleChangeNumQuiz = (value) => {
     if (value >= 1) {
       setNumQuiz(value);
+      // if (value < currentQuestion) setCurrentQuestion(parseFloat(value));
+      // console.log(value, currentQuestion);
     }
   };
 
@@ -575,12 +578,13 @@ const ClassesDetails = () => {
                     borderRadius: "4px",
                   }}
                 >
-                  Trở lại
+                  Back
                 </span>
               </div>
             )}
           </div>
         </div>
+
         {showQuestion ? (
           <form
             onSubmit={(e) => handleCreateQuestion(e)}
@@ -920,220 +924,223 @@ const ClassesDetails = () => {
                   </div>
                 </div>
                 <div>
-                  <div>
-                    <div
-                      style={{
-                        paddingTop: 20,
-                        borderBottom: "1px solid #ccc",
-                        paddingBottom: 12,
-                      }}
-                    >
-                      <span
+                  {dataShow === 1 ? (
+                    <div>
+                      <div
                         style={{
-                          fontWeight: "bold",
-                          fontSize: "20px",
+                          paddingTop: 20,
+                          borderBottom: "1px solid #ccc",
+                          paddingBottom: 12,
+                          display: "flex",
+                          gap: 40,
                         }}
                       >
-                        Question
-                      </span>
-                    </div>
-
-                    <div style={{ paddingTop: 20 }}>
-                      {listDataQuestion2?.map((data, index) => (
-                        <div
-                          key={index}
-                          style={{ paddingTop: `${index > 0 && "20px"}` }}
+                        <span
+                          onClick={() => setDataShow(1)}
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            color: `${dataShow === 1 ? "#333" : "#ccc"}`,
+                          }}
                         >
-                          <p style={{ fontWeight: "bold" }}>
-                            Question: {data.group_id}
-                          </p>
+                          Question
+                        </span>
+                        <span
+                          onClick={() => setDataShow(2)}
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            color: `${dataShow === 2 ? "#333" : "#ccc"}`,
+                          }}
+                        >
+                          Chapter
+                        </span>
+                      </div>
+
+                      <div style={{ paddingTop: 20 }}>
+                        {listDataQuestion2?.map((data, index) => (
                           <div
-                            style={{
-                              padding: "0 20px",
-                              border: "1px solid #ccc",
-                              marginTop: 20,
-                              borderRadius: "5px",
-                            }}
+                            key={index}
+                            style={{ paddingTop: `${index > 0 && "20px"}` }}
                           >
-                            {data?.data?.map((item, k) => (
-                              <div
-                                className="rounded-xl overflow-hidden"
-                                style={{ margin: "24px 0" }}
-                                key={k}
-                              >
-                                <div className="shadow-sm flex">
-                                  <div
-                                    className="px-4 py-4 flex flex-col justify-between"
-                                    style={{
-                                      width: "200px",
-                                      backgroundColor: "#ccc",
-                                    }}
-                                  >
-                                    <div className="flex flex-col">
-                                      <span
-                                        style={{ color: "#999", fontSize: 14 }}
-                                      >
-                                        Question {++index}
-                                      </span>
-                                      <span
-                                        className=" font-bold"
-                                        style={{ fontSize: 16 }}
-                                      >
-                                        {item?.question_content}
-                                      </span>
+                            <p style={{ fontWeight: "bold" }}>
+                              Question: {data.group_id}
+                            </p>
+                            <div
+                              style={{
+                                padding: "0 20px",
+                                border: "1px solid #ccc",
+                                marginTop: 20,
+                                borderRadius: "5px",
+                              }}
+                            >
+                              {data?.data?.map((item, k) => (
+                                <div
+                                  className="rounded-xl overflow-hidden"
+                                  style={{ margin: "24px 0" }}
+                                  key={k}
+                                >
+                                  <div className="shadow-sm flex">
+                                    <div
+                                      className="px-4 py-4 flex flex-col justify-between"
+                                      style={{
+                                        width: "200px",
+                                        backgroundColor: "#ccc",
+                                      }}
+                                    >
+                                      <div className="flex flex-col">
+                                        <span
+                                          style={{
+                                            color: "#999",
+                                            fontSize: 14,
+                                          }}
+                                        >
+                                          Question {++index}
+                                        </span>
+                                        <span
+                                          className=" font-bold"
+                                          style={{ fontSize: 16 }}
+                                        >
+                                          {item?.question_content}
+                                        </span>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div
-                                    className="px-4 py-4"
-                                    style={{ flex: 1, backgroundColor: "#fff" }}
-                                  >
-                                    <div className="py-1">
-                                      <span>Đáp án A: {item?.answer_a}</span>
-                                    </div>
-                                    <div className="py-1">
-                                      <span>Đáp án B: {item?.answer_b}</span>
-                                    </div>
-                                    <div className="py-1">
-                                      <span>Đáp án C: {item?.answer_c}</span>
-                                    </div>
-                                    <div className="py-1">
-                                      <span>Đáp án D: {item?.answer_d}</span>
-                                    </div>
-                                    <div className="py-1">
-                                      <span>
-                                        Đáp án đúng: {item?.correct_answer}
-                                      </span>
+                                    <div
+                                      className="px-4 py-4"
+                                      style={{
+                                        flex: 1,
+                                        backgroundColor: "#fff",
+                                      }}
+                                    >
+                                      <div className="py-1">
+                                        <span>Đáp án A: {item?.answer_a}</span>
+                                      </div>
+                                      <div className="py-1">
+                                        <span>Đáp án B: {item?.answer_b}</span>
+                                      </div>
+                                      <div className="py-1">
+                                        <span>Đáp án C: {item?.answer_c}</span>
+                                      </div>
+                                      <div className="py-1">
+                                        <span>Đáp án D: {item?.answer_d}</span>
+                                      </div>
+                                      <div className="py-1">
+                                        <span>
+                                          Đáp án đúng: {item?.correct_answer}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div style={{ paddingTop: 20, display: "flex", gap: 40 }}>
+                        <span
+                          onClick={() => setDataShow(1)}
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            color: `${dataShow === 1 ? "#333" : "#ccc"}`,
+                          }}
+                        >
+                          Question
+                        </span>
+                        <span
+                          onClick={() => setDataShow(2)}
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                            color: `${dataShow === 2 ? "#333" : "#ccc"}`,
+                          }}
+                        >
+                          Chapter
+                        </span>
+                      </div>
+                      {listChapter?.map((item, index) => (
+                        <div
+                          className="rounded-xl overflow-hidden"
+                          style={{ margin: "24px 0" }}
+                          key={index}
+                        >
+                          <div className="shadow-sm flex">
+                            <div
+                              className="px-4 py-4 flex flex-col justify-between"
+                              style={{
+                                width: "200px",
+                                backgroundColor: "#ccc",
+                              }}
+                            >
+                              <div className="flex flex-col">
+                                <span style={{ color: "#999", fontSize: 14 }}>
+                                  Chapter {++index}
+                                </span>
+                                <span
+                                  className=" font-bold"
+                                  style={{ fontSize: 18 }}
+                                >
+                                  {item.title}
+                                </span>
                               </div>
-                            ))}
+                              <div>
+                                <span
+                                  style={{
+                                    color: "#999",
+                                    fontSize: 14,
+                                    textAlign: "center",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  Something here
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className="px-4 py-4"
+                              style={{ flex: 1, backgroundColor: "#fff" }}
+                            >
+                              <div>
+                                <span
+                                  style={{
+                                    fontSize: "18px",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {item.title}
+                                </span>
+                              </div>
+                              <div className="py-4">
+                                <span>{item.text_content}</span>
+                              </div>
+                              <div className="flex justify-end">
+                                <button
+                                  onClick={() => handleShowViewChapter(item)}
+                                  className="flex px-6 py-2 rounded-3xl"
+                                  style={{
+                                    backgroundColor: "#000",
+                                    color: "#fff",
+                                  }}
+                                >
+                                  View
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
                     </div>
-
-                    {/* {listDataQuestion?.map((item, index) => (
-                      <div
-                        className="rounded-xl overflow-hidden"
-                        style={{ margin: "24px 0" }}
-                        key={index}
-                      >
-                        <div className="shadow-sm flex">
-                          <div
-                            className="px-4 py-4 flex flex-col justify-between"
-                            style={{ width: "200px", backgroundColor: "#ccc" }}
-                          >
-                            <div className="flex flex-col">
-                              <span style={{ color: "#999", fontSize: 14 }}>
-                                Question {++index}
-                              </span>
-                              <span
-                                className=" font-bold"
-                                style={{ fontSize: 16 }}
-                              >
-                                {item?.question_content}
-                              </span>
-                            </div>
-                          </div>
-                          <div
-                            className="px-4 py-4"
-                            style={{ flex: 1, backgroundColor: "#fff" }}
-                          >
-                            <div className="py-1">
-                              <span>Đáp án A: {item?.answer_a}</span>
-                            </div>
-                            <div className="py-1">
-                              <span>Đáp án B: {item?.answer_b}</span>
-                            </div>
-                            <div className="py-1">
-                              <span>Đáp án C: {item?.answer_c}</span>
-                            </div>
-                            <div className="py-1">
-                              <span>Đáp án D: {item?.answer_d}</span>
-                            </div>
-                            <div className="py-1">
-                              <span>Đáp án đúng: {item?.correct_answer}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))} */}
-                  </div>
-                  <div>
-                    <div style={{ paddingTop: 20 }}>
-                      <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-                        Chapter
-                      </span>
-                    </div>
-                    {listChapter?.map((item, index) => (
-                      <div
-                        className="rounded-xl overflow-hidden"
-                        style={{ margin: "24px 0" }}
-                        key={index}
-                      >
-                        <div className="shadow-sm flex">
-                          <div
-                            className="px-4 py-4 flex flex-col justify-between"
-                            style={{ width: "200px", backgroundColor: "#ccc" }}
-                          >
-                            <div className="flex flex-col">
-                              <span style={{ color: "#999", fontSize: 14 }}>
-                                Chapter {++index}
-                              </span>
-                              <span
-                                className=" font-bold"
-                                style={{ fontSize: 18 }}
-                              >
-                                {item.title}
-                              </span>
-                            </div>
-                            <div>
-                              <span
-                                style={{
-                                  color: "#999",
-                                  fontSize: 14,
-                                  textAlign: "center",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                Something here
-                              </span>
-                            </div>
-                          </div>
-                          <div
-                            className="px-4 py-4"
-                            style={{ flex: 1, backgroundColor: "#fff" }}
-                          >
-                            <div>
-                              <span
-                                style={{ fontSize: "18px", fontWeight: "500" }}
-                              >
-                                {item.title}
-                              </span>
-                            </div>
-                            <div className="py-4">
-                              <span>{item.text_content}</span>
-                            </div>
-                            <div className="flex justify-end">
-                              <button
-                                onClick={() => handleShowViewChapter(item)}
-                                className="flex px-6 py-2 rounded-3xl"
-                                style={{
-                                  backgroundColor: "#000",
-                                  color: "#fff",
-                                }}
-                              >
-                                View
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  )}
                 </div>
               </div>
             )}
