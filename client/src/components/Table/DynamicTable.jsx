@@ -8,7 +8,7 @@ import TableBody from "./TableBody";
 import ActionButtons from "./ActionButtons";
 import Modals from "./Modals";
 
-function DynamicTable({ dataset, addButton = false, onChangeData }) {
+function DynamicTable({ columns, data, addButton = false, onChangeData }) {
   const [selectedTable, setSelectedTable] = useState(Object.keys(dataset)[0]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -135,13 +135,13 @@ function DynamicTable({ dataset, addButton = false, onChangeData }) {
     }
   };
 
-  const headers = tableData.length > 0 ? Object.keys(tableData[0]) : [];
+  const headers = columns.map((column) => column.Header);
 
   return (
     <div className="flex flex-col px-8 w-full max-w-full pb-20 pt-10">
       <div className="flex flex-wrap gap-5 justify-between w-full">
         <h2 className="self-start text-2xl font-semibold text-black">
-          {selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}
+          Dynamic Table
         </h2>
         <div className="flex gap-4">
           <Search />
@@ -161,14 +161,11 @@ function DynamicTable({ dataset, addButton = false, onChangeData }) {
 
       <div className="mt-8 overflow-auto border border-gray-300 rounded-md shadow-sm">
         <table className="min-w-full divide-y divide-gray-200">
-          <TableHeader
-            headers={headers}
-            action={dataset[selectedTable].action}
-          />
+          <TableHeader headers={headers} action={true} />
           <TableBody
-            tableData={tableData}
+            tableData={data}
             headers={headers}
-            action={dataset[selectedTable].action}
+            action={true}
             handleView={handleView}
             handleEdit={handleEdit}
             handleDelete={handleDelete}

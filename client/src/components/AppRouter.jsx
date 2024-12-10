@@ -29,6 +29,8 @@ import ClassesManagement from "./admin/ClassesManagement.jsx";
 import Help from "./admin/Help.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
+import AboutPage from "../pages/AboutPage.jsx";
+import ContactPage from "../pages/ContactPage.jsx";
 
 const AppRouter = () => {
   return (
@@ -39,12 +41,10 @@ const AppRouter = () => {
             <Route index element={<HomePage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="home" element={<HomePage />} />
-            <Route path="about" element={<div className="p-4">About</div>} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="course" element={<AllCourses />} />
-            <Route
-              path="contact"
-              element={<div className="p-4">Contact</div>}
-            />
+
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="test" element={<TestPage />} />
