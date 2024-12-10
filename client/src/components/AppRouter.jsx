@@ -1,4 +1,11 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 // import ApiLinksPage from "./ApiLinksPage";
 import App from "../App.jsx";
 import CourseContent from "../components/Course/CourseContent.jsx";
@@ -6,6 +13,7 @@ import CourseGrid from "../components/Course/CourseGrid.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import TestPage from "../pages/TestPage.jsx";
+// 
 import StudentClasses from "../services/StudentClasses.jsx";
 import StudentSchedules from "../services/StudentSchedules.jsx";
 import AccountSettings from "./AccountSetting.jsx";
@@ -41,6 +49,27 @@ import ListClassinStudent from "./Student/ListClassinStudent.jsx";
 import ListShceduleinStudent from "./Student/ListShceduleinStudent.jsx";
 import UserDetails from "./Classes/UserDetails.jsx";
 import CreateDocument from "./Document/CreateDocument.jsx";
+// 
+import StudentPage from "../pages/StudentPage.jsx";
+import CourseContent from "../components/Course/CourseContent.jsx";
+import StudentSchedules from "../services/StudentSchedules.jsx";
+import AccountSettings from "./AccountSetting.jsx";
+import AuthProvider from "./Auth/AuthProvider.jsx";
+import { AuthProtect } from "./Auth/AuthProtect.jsx";
+import AllCourses from "./Course/AllCourses.jsx";
+import StudentClasses from "../services/StudentClasses.jsx";
+import { useAuth } from "./Auth/AuthProvider.jsx";
+
+import AdminPage from "../pages/AdminPage.jsx";
+import TeacherAccounts from "./admin/TeacherAccounts.jsx";
+import StudentAccounts from "./admin/StudentAccounts.jsx";
+import CoursesManagement from "./admin/CoursesManagement.jsx";
+import ClassesManagement from "./admin/ClassesManagement.jsx";
+import DepartmentManagement from "./admin/DepartmentManagement.jsx";
+import Help from "./admin/Help.jsx";
+import NotFound from "../pages/NotFound.jsx";
+import RegisterPage from "../pages/RegisterPage.jsx";
+
 
 const AppRouter = () => {
   return (
@@ -75,8 +104,10 @@ const AppRouter = () => {
                 path="courses/:id/exercises"
                 element={<div className="p-4">Exercises</div>}
               ></Route>
+
               {/* <Route path="classes" element={<StudentClasses />} /> */}
               {/* <Route path="schedule" element={<StudentSchedules />} /> */}
+
               <Route path="help" element={<Help />} />
 
               {/* admin pages */}
@@ -85,6 +116,7 @@ const AppRouter = () => {
               <Route path="studentAccounts" element={<StudentAccounts />} />
               <Route path="coursesManagement" element={<CoursesManagement />} />
               <Route path="classesManagement" element={<ClassesManagement />} />
+
               <Route
                 path="departmentManagement"
                 element={<DepartmentManagement />}
@@ -138,6 +170,7 @@ const AppRouter = () => {
                 path="student/schedule"
                 element={<ListShceduleinStudent />}
               />
+
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />

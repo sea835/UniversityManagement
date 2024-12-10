@@ -26,6 +26,7 @@ export const AuthProtect = () => {
     return <StudentPage />;
   }
 
+
   // Optionally, handle other roles or default case
   return <></>;
 };
