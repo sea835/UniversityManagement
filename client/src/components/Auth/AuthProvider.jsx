@@ -33,8 +33,10 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("refreshToken", refreshToken); // Persist the refresh token in localStorage
       navigate("/dashboard/");
     } catch (error) {
-      console.log(error);
-      return null;
+      return {
+        login: false,
+        error: error.response.data.message,
+      };
     }
   };
 
