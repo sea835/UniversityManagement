@@ -1,24 +1,58 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SidebarItem from "./SidebarItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/AuthProvider";
 
 const studentSidebarItems = [
   { icon: "courses", text: "My Courses", path: "/dashboard/courses" },
   { icon: "account", text: "Account Setting", path: "/dashboard/account" },
-  { icon: "classes", text: "Classes", path: "/dashboard/classes" },
-  { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
+  { icon: "classes", text: "Classes", path: "/dashboard/student/classes" },
+  { icon: "schedule", text: "Schedule", path: "/dashboard/student/schedule" },
+  // { icon: "Grades", text: "Grades", path: "/dashboard/Grades" },
+  // { icon: "document", text: "Document", path: "/dashboard/document" },
+
+//   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
+//   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
 const teacherSidebarItems = [
-  { icon: "account", text: "Account Setting", path: "/account" },
-  { icon: "classes", text: "Classes", path: "/classes" },
-  { icon: "schedule", text: "Schedule", path: "/schedule" },
+  { icon: "account", text: "Account Setting", path: "/dashboard/account" },
+  { icon: "classes", text: "Classes", path: "/dashboard/classes" },
+  { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
+  // { icon: "Grades", text: "Grades", path: "/dashboard/grades" },
+  // { icon: "document", text: "Document", path: "/dashboard/document" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
 const adminSidebarItems = [
+
+
+//   {
+//     icon: "account",
+//     text: "Teacher's Accounts",
+//     path: "/dashboard/listTeacher",
+//   },
+//   {
+//     icon: "student",
+//     text: "Student's Accounts",
+//     path: "/dashboard/listStudent",
+//   },
+//   { icon: "courses", text: "Courses", path: "/dashboard/listCourse" },
+//   {
+//     icon: "courses",
+//     text: "Classes Management",
+//     path: "/dashboard/listClass",
+//   },
+//   { icon: "help", text: "Help Admin", path: "/dashboard/listTeacher" },
+
+//   { icon: "teacherAccounts", text: "Teacher's Accounts", path: "/dashboard/teacherAccounts" },
+//   { icon: "studentAccounts", text: "Student's Accounts", path: "/dashboard/studentAccounts" },
+//   { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
+//   { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
+//   { icon: "departmentManagement", text: "Departments Management", path: "/dashboard/departmentManagement" },
+//   { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
+
   {
     icon: "teacherAccounts",
     text: "Teacher's Accounts",
@@ -49,17 +83,25 @@ const adminSidebarItems = [
 
 function SideBar({ type }) {
   let sidebarItems = [];
-  if (type === "Student") {
+  console.log("type :", type);
+
+  if (type === "student") {
     sidebarItems = studentSidebarItems;
-  } else if (type === "Teacher") {
+  } else if (type === "lecturer") {
     sidebarItems = teacherSidebarItems;
-  } else if (type === "Administrator") {
+  } else if (type === "administrator") {
     sidebarItems = adminSidebarItems;
   }
 
   // State to track the active item
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
   const auth = useAuth();
+
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const handleLogOut = () => {
+    auth.logOut(navigate);
+  };
 
   return (
     <nav className="flex flex-col py-11 max-w-full bg-white rounded-3xl shadow-[0px_10px_60px_rgba(226,236,249,0.5)] w-[306px] h-[850px]">
@@ -81,9 +123,13 @@ function SideBar({ type }) {
         </div>
       </div>
       <button
-        onClick={() => {
-          auth.logOut();
-        }}
+
+        onClick={handleLogOut}
+
+//         onClick={() => {
+//           auth.logOut();
+//         }}
+
         className="self-center px-8 pb-2 mt-[250px] max-w-full text-red-600 bg-red-200 rounded border border-red-600 border-solid w-[130px] max-md:px-5 max-md:mt-10"
       >
         Log out

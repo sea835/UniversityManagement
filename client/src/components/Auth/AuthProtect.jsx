@@ -22,6 +22,11 @@ export const AuthProtect = () => {
     return <StudentPage />;
   }
 
+  if (user.role === "lecturer") {
+    return <StudentPage />;
+  }
+
+
   // Optionally, handle other roles or default case
   return <></>;
 };
