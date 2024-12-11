@@ -211,6 +211,7 @@ join subject sub on sub.subject_id = c.subject_id
 join lecturer l on c.lecturer_id = l.lecturer_id
 where p.student_id=?
 
+
 `,
       [id]
     )
@@ -224,3 +225,48 @@ where p.student_id=?
       });
     });
 };
+
+
+exports.getClassesBySubjectId = (req, res, next) => {
+    const id = req.params.subjectId;
+    database.query(`
+select
+*
+from class c
+join subject sub on sub.subject_id = c.subject_id
+join lecturer l on c.lecturer_id = l.lecturer_id
+where c.subject_id=?
+
+`, [id])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'An error occurred'
+            });
+        });
+}
+
+exports.getClassesByLecturerId = (req, res, next) => {
+    const id = req.params.lecturerId;
+    database.query(`
+select
+*
+from class c
+join subject sub on sub.subject_id = c.subject_id
+join lecturer l on c.lecturer_id = l.lecturer_id
+where c.lecturer_id=?
+
+`, [id])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'An error occurred'
+            });
+        });
+}

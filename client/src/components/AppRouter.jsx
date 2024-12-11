@@ -65,10 +65,12 @@ import TeacherAccounts from "./admin/TeacherAccounts.jsx";
 import StudentAccounts from "./admin/StudentAccounts.jsx";
 import CoursesManagement from "./admin/CoursesManagement.jsx";
 import ClassesManagement from "./admin/ClassesManagement.jsx";
-import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 import Help from "./admin/Help.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
+import AboutPage from "../pages/AboutPage.jsx";
+import ContactPage from "../pages/ContactPage.jsx";
+import DepartmentsManagement from "./admin/DepartmentManagement.jsx";
 
 
 const AppRouter = () => {
@@ -80,12 +82,10 @@ const AppRouter = () => {
             <Route index element={<HomePage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="home" element={<HomePage />} />
-            <Route path="about" element={<div className="p-4">About</div>} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="course" element={<AllCourses />} />
-            <Route
-              path="contact"
-              element={<div className="p-4">Contact</div>}
-            />
+
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="test" element={<TestPage />} />
@@ -117,9 +117,11 @@ const AppRouter = () => {
               <Route path="coursesManagement" element={<CoursesManagement />} />
               <Route path="classesManagement" element={<ClassesManagement />} />
 
+
               <Route
                 path="departmentManagement"
                 element={<DepartmentManagement />}
+
               />
               <Route path="helpAdmin" element={<Help />} />
 

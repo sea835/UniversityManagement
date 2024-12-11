@@ -21,7 +21,7 @@ const loginAdministrator = async(username, password) => {
 }
 
 const generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5m' });
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '40m' });
 }
 
 exports.refreshToken = (req, res, next) => {

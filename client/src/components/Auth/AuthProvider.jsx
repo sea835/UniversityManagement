@@ -33,8 +33,10 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("refreshToken", refreshToken); // Persist the refresh token in localStorage
       navigate("/dashboard/");
     } catch (error) {
-      console.log(error);
-      return null;
+      return {
+        login: false,
+        error: error.response.data.message,
+      };
     }
   };
 
@@ -61,7 +63,7 @@ const AuthProvider = ({ children }) => {
       if (refreshToken) {
         refreshAccessToken();
       }
-    }, 4 * 60 * 1000); // Refresh token every 4 minutes
+    }, 40 * 60 * 1000); // Refresh token every 4 minutes
 
     return () => clearInterval(interval);
   }, [refreshToken]);

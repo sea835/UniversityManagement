@@ -136,16 +136,49 @@ join class c on c.class_id = p.class_id
 join subject sub on sub.subject_id = c.subject_id
 join lecturer l on c.lecturer_id = l.lecturer_id
 where s.student_id=?
-`,
-      [studentId]
-    )
-    .then((data) => {
-      res.status(200).json(data[0]);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        message: `An error occurred: ${err}`,
-      });
-    });
-};
+
+// `,
+//       [studentId]
+//     )
+//     .then((data) => {
+//       res.status(200).json(data[0]);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({
+//         message: `An error occurred: ${err}`,
+//       });
+//     });
+// };
+
+`, [studentId])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: `An error occurred: ${err}`
+            });
+        });
+}
+
+exports.getSubjectByDepartmentId = (req, res, next) => {
+    const departmentId = req.params.id;
+    database.query(`
+        select
+*
+from subject
+where department_id = ?
+`, [departmentId])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: `An error occurred: ${err}`
+            });
+        });
+}
+
