@@ -95,7 +95,7 @@ function SideBar({ type }) {
 
   // State to track the active item
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
-  const auth = useAuth();
+  // const auth = useAuth();
 
   const navigate = useNavigate();
   const auth = useAuth();
