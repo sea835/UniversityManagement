@@ -14,6 +14,8 @@ const DepartmentsManagement = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [departmentToDelete, setDepartmentToDelete] = useState(null);
   const [departmentToEdit, setDepartmentToEdit] = useState(null);
+  const [expandedDepartmentId, setExpandedDepartmentId] = useState(null);
+  const [subjectsData, setSubjectsData] = useState([]);
   const itemsPerPage = 10;
 
   const fetchData = () => {
@@ -27,6 +29,23 @@ const DepartmentsManagement = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchSubjectsData = (departmentId) => {
+    axios
+      .get(`http://localhost:4000/api/subjects/department/${departmentId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setSubjectsData(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -136,6 +155,16 @@ const DepartmentsManagement = () => {
     }
   };
 
+  const handleDepartmentClick = (department) => {
+    if (expandedDepartmentId === department.department_id) {
+      setExpandedDepartmentId(null);
+      setSubjectsData([]);
+    } else {
+      setExpandedDepartmentId(department.department_id);
+      fetchSubjectsData(department.department_id);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -192,31 +221,92 @@ const DepartmentsManagement = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((department) => (
-              <tr
-                key={department.department_id}
-                className="hover:bg-gray-100 transition duration-300"
-              >
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {department.department_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {department.department_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => handleEdit(department)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 mr-4"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => confirmDelete(department.department_id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              <React.Fragment key={department.department_id}>
+                <tr
+                  className="hover:bg-gray-100 transition duration-300 cursor-pointer"
+                  onClick={() => handleDepartmentClick(department)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {department.department_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {department.department_name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(department);
+                      }}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 mr-4"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirmDelete(department.department_id);
+                      }}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+                {expandedDepartmentId === department.department_id && (
+                  <tr>
+                    <td colSpan="3" className="px-6 py-4">
+                      <div className="overflow-x-auto bg-gray-100 p-4 rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-300">
+                          <thead className="bg-gray-200">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Subject ID
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Subject Name
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Credits
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Prerequisites
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Learning Outcomes
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-300">
+                            {subjectsData.map((subject) => (
+                              <tr
+                                key={subject.subject_id}
+                                className="hover:bg-gray-50 transition duration-300"
+                              >
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {subject.subject_id}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {subject.subject_name}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {subject.credits}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {subject.prerequisites}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {subject.learning_outcomes}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
           <tfoot>

@@ -14,6 +14,8 @@ const ClassesManagement = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [classToDelete, setClassToDelete] = useState(null);
   const [classToEdit, setClassToEdit] = useState(null);
+  const [expandedClassId, setExpandedClassId] = useState(null);
+  const [studentsData, setStudentsData] = useState([]);
   const itemsPerPage = 10;
 
   const fetchData = () => {
@@ -27,6 +29,23 @@ const ClassesManagement = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchStudentsData = (classId) => {
+    axios
+      .get(`http://localhost:4000/api/students/class/${classId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setStudentsData(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -134,6 +153,16 @@ const ClassesManagement = () => {
     }
   };
 
+  const handleClassClick = (classItem) => {
+    if (expandedClassId === classItem.class_id) {
+      setExpandedClassId(null);
+      setStudentsData([]);
+    } else {
+      setExpandedClassId(classItem.class_id);
+      fetchStudentsData(classItem.class_id);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -203,46 +232,107 @@ const ClassesManagement = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((classItem) => (
-              <tr
-                key={classItem.class_id}
-                className="hover:bg-gray-100 transition duration-300"
-              >
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.class_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.semester_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.subject_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.lecturer_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.period}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.day_of_week}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {classItem.week}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => handleEdit(classItem)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 mr-4"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => confirmDelete(classItem.class_id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              <React.Fragment key={classItem.class_id}>
+                <tr
+                  className="hover:bg-gray-100 transition duration-300 cursor-pointer"
+                  onClick={() => handleClassClick(classItem)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.class_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.semester_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.subject_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.lecturer_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.period}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.day_of_week}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {classItem.week}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(classItem);
+                      }}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 mr-4"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirmDelete(classItem.class_id);
+                      }}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+                {expandedClassId === classItem.class_id && (
+                  <tr>
+                    <td colSpan="8" className="px-6 py-4">
+                      <div className="overflow-x-auto bg-gray-100 p-4 rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-300">
+                          <thead className="bg-gray-200">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Student ID
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Full Name
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Email
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Phone Number
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Address
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-300">
+                            {studentsData.map((student) => (
+                              <tr
+                                key={student.student_id}
+                                className="hover:bg-gray-50 transition duration-300"
+                              >
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {student.student_id}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {student.full_name}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {student.email}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {student.phone_number}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {student.address}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
           <tfoot>

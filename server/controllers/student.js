@@ -81,3 +81,25 @@ exports.deleteStudent = (req, res, next) => {
             });
         });
 }
+
+exports.getStudentsByClassId = (req, res, next) => {
+    const id = req.params.id;
+    database.query(`
+        select 
+*
+from
+participation p
+join class c on c.class_id = p.class_id
+join student s on s.student_id = p.student_id
+where c.class_id = ?;
+        `, [id])
+        .then(data => {
+            res.status(200).json(data[0]);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'An error occurred'
+            });
+        });
+}

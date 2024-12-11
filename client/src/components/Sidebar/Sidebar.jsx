@@ -19,12 +19,32 @@ const teacherSidebarItems = [
 ];
 
 const adminSidebarItems = [
-  { icon: "teacherAccounts", text: "Teacher's Accounts", path: "/dashboard/teacherAccounts" },
-  { icon: "studentAccounts", text: "Student's Accounts", path: "/dashboard/studentAccounts" },
-  { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
-  { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
+  {
+    icon: "teacherAccounts",
+    text: "Teacher's Accounts",
+    path: "/dashboard/teacherAccounts",
+  },
+  {
+    icon: "studentAccounts",
+    text: "Student's Accounts",
+    path: "/dashboard/studentAccounts",
+  },
+  {
+    icon: "coursesManagement",
+    text: "Courses Management",
+    path: "/dashboard/coursesManagement",
+  },
+  {
+    icon: "classesManagement",
+    text: "Classes Management",
+    path: "/dashboard/classesManagement",
+  },
+  {
+    icon: "departmentManagement",
+    text: "Department Management",
+    path: "/dashboard/departmentManagement",
+  },
   { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
-  { icon: "departmentManagement", text: "Department Management", path: "/dashboard/departmentManagement" },
 ];
 
 function SideBar({ type }) {

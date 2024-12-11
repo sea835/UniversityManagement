@@ -14,6 +14,8 @@ const TeacherAccounts = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [lecturerToDelete, setLecturerToDelete] = useState(null);
   const [lecturerToEdit, setLecturerToEdit] = useState(null);
+  const [expandedLecturerId, setExpandedLecturerId] = useState(null);
+  const [classesData, setClassesData] = useState([]);
   const itemsPerPage = 10;
 
   const fetchData = () => {
@@ -27,6 +29,23 @@ const TeacherAccounts = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchClassesData = (lecturerId) => {
+    axios
+      .get(`http://localhost:4000/api/classes/lecturer/${lecturerId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setClassesData(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -143,6 +162,16 @@ const TeacherAccounts = () => {
     }
   };
 
+  const handleLecturerClick = (lecturer) => {
+    if (expandedLecturerId === lecturer.lecturer_id) {
+      setExpandedLecturerId(null);
+      setClassesData([]);
+    } else {
+      setExpandedLecturerId(lecturer.lecturer_id);
+      fetchClassesData(lecturer.lecturer_id);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -213,40 +242,107 @@ const TeacherAccounts = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((teacher) => (
-              <tr
-                key={teacher.lecturer_id}
-                className="hover:bg-gray-100 transition duration-300"
-              >
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {teacher.lecturer_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {teacher.full_name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {truncateEmail(teacher.email)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {teacher.phone_number}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {teacher.specialization}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => handleEdit(teacher)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 mr-4"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => confirmDelete(teacher.lecturer_id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              <React.Fragment key={teacher.lecturer_id}>
+                <tr
+                  className="hover:bg-gray-100 transition duration-300 cursor-pointer"
+                  onClick={() => handleLecturerClick(teacher)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {teacher.lecturer_id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {teacher.full_name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {truncateEmail(teacher.email)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {teacher.phone_number}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {teacher.specialization}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(teacher);
+                      }}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300 mr-4"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirmDelete(teacher.lecturer_id);
+                      }}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+                {expandedLecturerId === teacher.lecturer_id && (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-4">
+                      <div className="overflow-x-auto bg-gray-100 p-4 rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-300">
+                          <thead className="bg-gray-200">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Class ID
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Semester ID
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Subject ID
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Period
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Day of Week
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                Week
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-300">
+                            {classesData.map((classItem) => (
+                              <tr
+                                key={classItem.class_id}
+                                className="hover:bg-gray-50 transition duration-300"
+                              >
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {classItem.class_id}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {classItem.semester_id}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {classItem.subject_id}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {classItem.period}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {classItem.day_of_week}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  {classItem.week}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
           <tfoot>
