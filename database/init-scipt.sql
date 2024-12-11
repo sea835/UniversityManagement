@@ -474,8 +474,3 @@ INSERT INTO register (subject_id, student_id, result) VALUES
 ('MH008', 'SV008', 80),
 ('MH009', 'SV009', 60),
 ('MH010', 'SV010', 90);
-
-
-
-
-
