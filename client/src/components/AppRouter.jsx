@@ -31,6 +31,7 @@ import NotFound from "../pages/NotFound.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import AboutPage from "../pages/AboutPage.jsx";
 import ContactPage from "../pages/ContactPage.jsx";
+import DepartmentsManagement from "./admin/DepartmentManagement.jsx";
 
 const AppRouter = () => {
   return (
@@ -73,6 +74,10 @@ const AppRouter = () => {
               <Route path="studentAccounts" element={<StudentAccounts />} />
               <Route path="coursesManagement" element={<CoursesManagement />} />
               <Route path="classesManagement" element={<ClassesManagement />} />
+              <Route
+                path="departmentManagement"
+                element={<DepartmentsManagement />}
+              />
               <Route path="helpAdmin" element={<Help />} />
             </Route>
           </Route>

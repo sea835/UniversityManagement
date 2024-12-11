@@ -115,11 +115,7 @@ const TeacherAccounts = () => {
         )
         .then((res) => {
           console.log(`Updated lecturer with ID: ${lecturer.lecturer_id}`);
-          setData(
-            data.map((teacher) =>
-              teacher.lecturer_id === lecturer.lecturer_id ? res.data : teacher
-            )
-          );
+          fetchData();
           setShowEditModal(false);
           setCurrentPage(1); // Reset to the first page
         })
@@ -149,7 +145,7 @@ const TeacherAccounts = () => {
 
   useEffect(() => {
     fetchData();
-  }, [handleSave, handleDelete, handleAdd]);
+  }, []);
 
   const paginatedData = data
     .filter((teacher) =>
