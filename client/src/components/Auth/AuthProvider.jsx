@@ -61,7 +61,7 @@ const AuthProvider = ({ children }) => {
       if (refreshToken) {
         refreshAccessToken();
       }
-    }, 4 * 60 * 1000); // Refresh token every 4 minutes
+    }, 40 * 60 * 1000); // Refresh token every 4 minutes
 
     return () => clearInterval(interval);
   }, [refreshToken]);

@@ -30,6 +30,7 @@ router.get('/students/:id', authController.authToken, studentController.getStude
 router.post('/students', authController.authToken, studentController.createStudent);
 router.put('/students/:id', authController.authToken, studentController.updateStudent);
 router.delete('/students/:id', authController.authToken, studentController.deleteStudent);
+router.get('/students/class/:id', authController.authToken, studentController.getStudentsByClassId);
 
 router.get('/lecturers', authController.authToken, lecturerController.getLecturers);
 router.get('/lecturers/:id', authController.authToken, lecturerController.getLecturerById);
@@ -55,6 +56,7 @@ router.post('/subjects', authController.authToken, subjectController.createSubje
 router.put('/subjects/:id', authController.authToken, subjectController.updateSubject);
 router.delete('/subjects/:id', authController.authToken, subjectController.deleteSubject);
 router.get('/student/:id/subjects', subjectController.getSubjectByEnrollments);
+router.get('/subjects/department/:id', authController.authToken, subjectController.getSubjectByDepartmentId);
 
 router.get('/classes', authController.authToken, classController.getClasses);
 router.get('/classes/:id', authController.authToken, classController.getClassById);
@@ -63,6 +65,8 @@ router.put('/classes/:id', authController.authToken, classController.updateClass
 router.delete('/classes/:id', authController.authToken, classController.deleteClass);
 router.get('/student/:studentId/classes', classController.getClassesByStudentId);
 router.get('/student/:studentId/schedules', classController.getSchedulesByStudentId);
+router.get('/classes/subject/:subjectId', authController.authToken, classController.getClassesBySubjectId);
+router.get('/classes/lecturer/:lecturerId', classController.getClassesByLecturerId);
 
 router.get('/chapters', authController.authToken, authController.authRole("teacher"), chapterController.getChapters);
 router.get('/chapters/:id', authController.authToken, authController.authRole("teacher"), chapterController.getChapterById);

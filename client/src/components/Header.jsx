@@ -6,7 +6,7 @@ export const Header = () => {
   console.log(user);
   return (
     <>
-      <header>
+      <header className="">
         <div className="flex justify-between w-full bg-secondary h-[60px] items-center text-[16px] text-primary font-inria font-bold">
           <h1 className="pl-[43px] text-[48px] italic font-normal font-italiano">
             HaiShan
