@@ -111,6 +111,7 @@ const ClassesManagement = () => {
 
   const handleSave = (classItem) => {
     if (classToEdit) {
+      // Update existing class
       axios
         .put(
           `http://localhost:4000/api/classes/${classItem.class_id}`,
