@@ -1,267 +1,419 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
 import apiService from "../../services/apiService";
 
-const CreateQuestion = () => {
-  const { id } = useParams();
-  const location = useLocation();
+const CreateQuestion = (props) => {
+  const {
+    setShowQuestion,
+    showQuestion,
+    dataUpdateQuestion,
+    handleGetAllQuestions,
+  } = props;
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [numQuiz, setNumQuiz] = useState(1);
+  const [listQuestion, setListQuestion] = useState([
+    {
+      id: 1,
+      title: "",
+      answer: "",
+      correctAnswer: "A",
+      question: [
+        {
+          id: "A",
+          question: "",
+        },
+        {
+          id: "B",
+          question: "",
+        },
+        {
+          id: "C",
+          question: "",
+        },
+        {
+          id: "D",
+          question: "",
+        },
+      ],
+    },
+  ]);
 
-  // Phân tích query string
-  const queryParams = new URLSearchParams(location.search);
-  const chapterName = queryParams.get("chapterName");
-  const desc = queryParams.get("desc");
-  console.log(chapterName, desc);
+  console.log("dataUpdateQuestion: ", dataUpdateQuestion);
 
-  const [supject, setSubject] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [classes, setClasses] = useState({});
-  const [listChapter, setListChapter] = useState([]);
-  const [listMaterial, setListMaterial] = useState([]);
-
-  const [dataCreate, setDataCreate] = useState({
-    exam_id: "",
-    subject_id: "",
-    class_id: "",
-    semester_id: "HK241",
-    material_id: "",
-    chapter_id: "",
-    exam_name: "",
-  });
-
-  const handleGetAllChapter = async () => {
-    try {
-      const response = await apiService.get(`/chapters`);
-      console.log(response.data);
-      setListChapter(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleUpdateAnswer = (newAnswer, id) => {
+    setListQuestion((prevList) =>
+      prevList.map((item) =>
+        item.id === id ? { ...item, answer: newAnswer } : item
+      )
+    );
   };
 
-  const handleGetMaterial = async () => {
-    try {
-      const response = await apiService.get(`/materials`);
-      console.log(response.data);
-      setListMaterial(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleUpdateCorrectAnswer = (e, newAnswer, id) => {
+    // console.log(e.target.checked);
+    setListQuestion((prevList) =>
+      prevList.map((item) =>
+        item.id === id ? { ...item, correctAnswer: newAnswer } : item
+      )
+    );
   };
 
-  const handleGetClassDetails = async (id) => {
-    try {
-      const responseGetClass = await apiService.get(`/classesBySubject/${id}`);
-      const response = await apiService.get(`/classes/details/${id}`);
-      console.log(responseGetClass.data);
-      setClasses(responseGetClass.data[0]);
-      setSubject(response.data?.subjectDetails[0]);
-      setDataCreate((prev) => ({
-        ...prev,
-        subject_id: response.data?.subjectDetails[0]?.subject_id,
-        class_id: responseGetClass.data[0]?.class_id,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
+  const handleUpdateQuestion = (updatedQuestion, id, idQuestion) => {
+    setListQuestion((prevList) =>
+      prevList.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              question: item.question.map((q) =>
+                q.id === idQuestion ? { ...q, question: updatedQuestion } : q
+              ),
+            }
+          : item
+      )
+    );
   };
 
-  function generateRandomString() {
-    const prefix = "BKT";
-    const randomNumbers = Math.floor(100 + Math.random() * 900); // Tạo số ngẫu nhiên trong khoảng 100-999
-    return `${prefix}${randomNumbers.toString().substring(0, 3)}`; // Lấy 2 chữ số đầu tiên
-  }
+  const handleResetQuestion = (id) => {
+    setListQuestion((prevList) =>
+      prevList.map((item) =>
+        item.id === id
+          ? {
+              id: item.id,
+              title: "",
+              answer: "",
+              correctAnswer: "A",
+              question: [
+                { id: "A", question: "" },
+                { id: "B", question: "" },
+                { id: "C", question: "" },
+                { id: "D", question: "" },
+              ],
+            }
+          : item
+      )
+    );
+  };
 
-  const handleSubmit = async (e) => {
+  const handleAddQuestion = () => {
+    setListQuestion((prevList) => {
+      // Lấy id lớn nhất hiện tại (hoặc đặt id = 1 nếu mảng trống)
+      const newId =
+        prevList.length > 0 ? prevList[prevList.length - 1].id + 1 : 1;
+
+      // Tạo đối tượng câu hỏi mới
+      const newQuestion = {
+        id: newId,
+        title: "",
+        answer: "",
+        correctAnswer: "A",
+        question: [
+          {
+            id: "A",
+            question: "",
+          },
+          {
+            id: "B",
+            question: "",
+          },
+          {
+            id: "C",
+            question: "",
+          },
+          {
+            id: "D",
+            question: "",
+          },
+        ],
+      };
+
+      // Thêm đối tượng mới vào mảng và trả về mảng mới
+      return [...prevList, newQuestion];
+    });
+    setCurrentQuestion(listQuestion.length + 1);
+  };
+
+  const handleCreateQuestion = async (e) => {
     e.preventDefault();
-    const dataSend = { ...dataCreate };
-    dataSend.exam_id = generateRandomString();
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const result = await apiService.post("exams", dataSend);
-      alert("Thêm bài kiểm tra thành công !");
-    } catch (error) {
-      console.error(error);
-      alert(
-        "Thêm bài kiểm tra không thành công, vui lòng kiểm tra lại dữ liệu !"
-      );
+    let flag = true;
+    listQuestion.forEach((item, index) => {
+      const duplicates = item.question.reduce((acc, item, index, array) => {
+        // Kiểm tra xem question đã tồn tại trong các phần tử trước đó chưa
+        const isDuplicate = array
+          .slice(0, index)
+          .some((el) => el.question === item.question);
+        if (isDuplicate && !acc.includes(item.question)) {
+          acc.push(item.question); // Lưu lại câu hỏi bị trùng
+        }
+        return acc;
+      }, []);
+      if (duplicates.length > 0) {
+        alert(`Có đáp án trùng lặp ở câu ${++index}`);
+        flag = false;
+        return;
+      }
+    });
+    if (flag) {
+      try {
+        await apiService.post(`/questions`, {
+          listQuestion,
+          idExam: showQuestion,
+        });
+        if (window.confirm("Successfully created")) {
+          setCurrentQuestion(1);
+          setNumQuiz(1);
+          setListQuestion([
+            {
+              id: 1,
+              title: "",
+              answer: "",
+              correctAnswer: "A",
+              question: [
+                {
+                  id: "A",
+                  question: "",
+                },
+                {
+                  id: "B",
+                  question: "",
+                },
+                {
+                  id: "C",
+                  question: "",
+                },
+                {
+                  id: "D",
+                  question: "",
+                },
+              ],
+            },
+          ]);
+          setShowQuestion(false);
+          handleGetAllQuestions();
+        }
+        // setShowUploadFile(false);
+        // handleGetListChapter(id);
+        // handleGetAllQuestions("BKT001");
+        // setShowQuestion(false);
+        // setPreviewUrl("");
+        // setDataImage("");
+        // setDataImage("");
+      } catch (error) {
+        console.error(error);
+      }
     }
-    console.log("dataSend: ", dataSend);
   };
 
   useEffect(() => {
-    handleGetClassDetails(id);
-    handleGetAllChapter();
-    handleGetMaterial();
-  }, []);
+    if (currentQuestion > numQuiz) {
+      const cloneQuestion = [...currentQuestion];
+      const newArr = cloneQuestion.slice(0, numQuiz);
+      console.log("newArr: ", newArr);
+    }
+  }, [currentQuestion, numQuiz]);
+
+  const handleChangeNumQuiz = (value) => {
+    if (value >= 1) {
+      setNumQuiz(value);
+      // if (value < currentQuestion) setCurrentQuestion(parseFloat(value));
+      // console.log(value, currentQuestion);
+    }
+  };
+
+  const handleDeleteQuestion = (index) => {
+    const newArr = listQuestion.filter((_, i) => i !== index - 1); // Loại bỏ phần tử có chỉ mục `index`
+    setCurrentQuestion(currentQuestion - 1);
+    setListQuestion(newArr); // Cập nhật state nếu cần
+  };
+
+  // useEffect(() => {
+  //   if(dataUpdateQuestion) {
+
+  //   }
+  // }, []);
   return (
     <>
-      <div className="flex flex-col px-5 py-12 w-full rounded-[30px] bg-white ">
-        <div className="flex">
-          <Link
-            to={`/dashboard/classes/details/${supject?.subject_id}`}
-            className="px-3 py-2 mb-4 flex text-white"
-            style={{
-              backgroundColor: "#A8A29E",
-              marginBottom: "12px",
-              borderRadius: "4px",
-            }}
-          >
-            Quay trở lại
-          </Link>
-        </div>
-        <div>
-          <h2 className="self-start pb-10 text-3xl font-semibold tracking-wide text-black max-md:max-w-full">
-            {supject?.subject_name} - {supject?.subject_id}
+      <form
+        onSubmit={(e) => handleCreateQuestion(e)}
+        className="px-6 py-2 rounded-xl"
+        style={{ backgroundColor: "#f5f5f5" }}
+      >
+        <div className="" style={{ paddingTop: "20px", paddingBottom: "12px" }}>
+          <h2 className="" style={{ fontSize: "20px", fontWeight: "500" }}>
+            Quiz 1
           </h2>
         </div>
-        <div className="bg-[#F3F3F3] rounded-[20px]">
-          <div className="shadow-sm border rounded-lg overflow-x-auto py-8">
-            <form onSubmit={(e) => handleSubmit(e)}>
-              <div className="w-1/2 px-6 py-4 mx-auto">
-                <div className="flex flex-col">
+        <div
+          className="flex items-center justify-end"
+          style={{ marginBottom: "16px" }}
+        >
+          <select
+            className=" rounded"
+            style={{ backgroundColor: "#ccc", padding: "8px 12px" }}
+            onChange={(e) => setCurrentQuestion(e.target.value)}
+          >
+            {listQuestion?.map((item, index) => (
+              <option
+                key={index}
+                value={item.id}
+                selected={item.id === currentQuestion}
+              >
+                Question {item.id}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            min={1}
+            max={10}
+            value={numQuiz}
+            placeholder="Số lượng quiz"
+            onChange={(e) => handleChangeNumQuiz(e.target.value)}
+            style={{
+              width: 200,
+              backgroundColor: "#ccc",
+              padding: "8px 12px",
+              borderRadius: 4,
+              outline: "none",
+              marginLeft: 16,
+            }}
+          />
+        </div>
+        {listQuestion?.map((item) => (
+          <>
+            {item.id == currentQuestion && (
+              <div
+                className=" rounded-xl px-10 py-10"
+                style={{ backgroundColor: "#E7E0D4" }}
+              >
+                <div
+                  className="flex items-center justify-center gap-6"
+                  style={{ paddingBottom: "12px" }}
+                >
                   <label
                     className=""
-                    style={{ paddingBottom: "12px", outline: "none" }}
+                    style={{ fontSize: "18px", fontWeight: "500" }}
                   >
-                    Tiêu đề
+                    Question {item.id}:
                   </label>
                   <input
-                    placeholder="Tiêu đề"
-                    name="exam_name"
+                    type="text"
+                    value={item.answer}
+                    name="answerTitle"
                     required
+                    className="py-2 px-4 rounded-xl"
+                    style={{ flex: 1 }}
                     onChange={(e) =>
-                      setDataCreate((prev) => ({
-                        ...prev,
-                        exam_name: e.target.value,
-                      }))
+                      handleUpdateAnswer(e.target.value, item.id)
                     }
-                    style={{ padding: "6px 12px", borderRadius: 4 }}
+                    placeholder="CLICK TO THE START TYPING YOUR QUESTION"
                   />
                 </div>
-                <div className="flex flex-col mt-6">
-                  <label
-                    className=""
-                    style={{ paddingBottom: "12px", outline: "none" }}
+                <div className="pt-8" style={{ paddingTop: 32 }}>
+                  <div
+                    className="flex items-center flex-wrap"
+                    // style={{ gap: 40 }}
                   >
-                    Nội dung
-                  </label>
-                  <textarea
-                    placeholder="Tiêu đề"
-                    name="exam_name"
-                    required
-                    onChange={(e) =>
-                      setDataCreate((prev) => ({
-                        ...prev,
-                        exam_name: e.target.value,
-                      }))
-                    }
-                    style={{ padding: "6px 12px", borderRadius: 4 }}
-                  ></textarea>
-                </div>
-                <div className="flex flex-col mt-6">
-                  <label className="" style={{ paddingBottom: "12px" }}>
-                    Tài liệu bài học
-                  </label>
-                  <select
-                    style={{
-                      padding: "6px 12px",
-                      borderRadius: 4,
-                      outline: "none",
-                    }}
-                    required
-                    name="material_id"
-                    onChange={(e) =>
-                      setDataCreate((prev) => ({
-                        ...prev,
-                        material_id: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">Chọn tài liệu bài học</option>
-                    {listMaterial?.map((item, index) => (
-                      <option value={item.material_id} key={index}>
-                        {item?.material_name}
-                      </option>
+                    {item.question.map((itemQ, key) => (
+                      <div
+                        className={` px-6 relative ${key >= 2 && "mt-6"}`}
+                        style={{ width: "50%" }}
+                        key={key}
+                      >
+                        <input
+                          className="w-full px-3 py-2 rounded-xl"
+                          style={{
+                            width: "100%",
+                            backgroundColor: "transparent",
+                            border: "2px solid #BEB29F",
+                          }}
+                          placeholder={`Option ${itemQ.id}`}
+                          value={itemQ.question}
+                          required
+                          name="question"
+                          onChange={(e) =>
+                            handleUpdateQuestion(
+                              e.target.value,
+                              item.id,
+                              itemQ.id
+                            )
+                          }
+                        />
+                        <input
+                          type="checkbox"
+                          className=" absolute"
+                          style={{
+                            top: "50%",
+                            right: "50px",
+                            transform: "translateY(-50%)",
+                          }}
+                          checked={item.correctAnswer === itemQ.id}
+                          onChange={(e) =>
+                            handleUpdateCorrectAnswer(e, itemQ.id, item.id)
+                          }
+                        />
+                      </div>
                     ))}
-                  </select>
-                </div>
-                <div className="flex flex-col mt-6">
-                  <label className="" style={{ paddingBottom: "12px" }}>
-                    Chương bài học
-                  </label>
-                  <select
-                    style={{
-                      padding: "6px 12px",
-                      borderRadius: 4,
-                      outline: "none",
-                    }}
-                    name="chapter_id"
-                    required
-                    onChange={(e) =>
-                      setDataCreate((prev) => ({
-                        ...prev,
-                        chapter_id: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">Chọn tài liệu bài học</option>
-                    {listChapter?.map((item, index) => (
-                      <option value={item.chapter_id} key={index}>
-                        {item?.title}
-                      </option>
-                    ))}
-                  </select>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center w-full justify-center mt-6">
-                <button
-                  style={{
-                    backgroundColor: "#388E3C",
-                    color: "#fff",
-                    padding: "8px 16px",
-                    borderRadius: "4px",
-                  }}
-                  type="submit"
-                >
-                  Thêm bài kiểm tra
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        {/* <nav
-          className="flex gap-1.5 items-start self-end mt-9 mr-5 text-sm font-semibold whitespace-nowrap text-zinc-800 max-md:mr-2.5"
-          aria-label="Pagination"
+            )}
+          </>
+        ))}
+
+        <div
+          className="flex items-center justify-end gap-5 mt-8"
+          style={{ marginBottom: 16 }}
         >
-          <button
-            className="px-1 py-2 bg-white rounded-lg min-h-[32px] text-stone-300"
-            disabled
-          >
-            Prev
-          </button>
-          <button
-            className="px-2.5 w-8 h-8 text-white rounded-lg bg-stone-400 min-h-[32px]"
-            aria-current="page"
-          >
-            1
-          </button>
-          <button className="px-2.5 w-8 h-8 bg-white rounded-lg border border-solid border-zinc-100 min-h-[32px]">
-            2
-          </button>
-          <button className="px-2.5 w-8 h-8 bg-white rounded-lg border border-solid border-zinc-100 min-h-[32px]">
-            3
-          </button>
-          <span className="px-2.5 w-8 h-8 bg-white rounded-lg min-h-[32px]">
-            ...
-          </span>
-          <button className="pr-2 pl-2.5 w-8 h-8 bg-white rounded-lg border border-solid border-zinc-100 min-h-[32px]">
-            10
-          </button>
-          <button className="px-1 py-2 bg-white rounded-lg min-h-[32px]">
-            Next
-          </button>
-        </nav> */}
-      </div>
+          <div>
+            <span
+              className="px-4 py-2 rounded-lg flex cursor-pointer"
+              style={{ fontWeight: "500" }}
+              onClick={() => handleResetQuestion(currentQuestion)}
+            >
+              Clear answer
+            </span>
+          </div>
+          {listQuestion.length > 1 && (
+            <div>
+              <span
+                className="px-4 py-2 rounded-lg flex cursor-pointer"
+                style={{ fontWeight: "500" }}
+                onClick={() => handleDeleteQuestion(currentQuestion)}
+              >
+                Delete Question
+              </span>
+            </div>
+          )}
+          {currentQuestion < numQuiz && (
+            <div>
+              <span
+                className="px-4 py-2 rounded-lg flex cursor-pointer"
+                style={{
+                  fontWeight: "500",
+                  backgroundColor: "#BEB29F",
+                  color: "#fff",
+                }}
+                onClick={handleAddQuestion}
+              >
+                Next question
+              </span>
+            </div>
+          )}
+          {currentQuestion == numQuiz && (
+            <div>
+              <button
+                className="px-4 py-2 rounded-lg"
+                style={{
+                  fontWeight: "500",
+                  backgroundColor: "#BEB29F",
+                  color: "#fff",
+                }}
+              >
+                Create
+              </button>
+            </div>
+          )}
+          <div></div>
+        </div>
+      </form>
     </>
   );
 };

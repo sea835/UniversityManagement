@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
 const multer = require("multer");
 const path = require("path");
-
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -86,6 +86,13 @@ router.delete(
 );
 
 router.get(
+  "/students/class/:id",
+  authController.authToken,
+  studentController.getStudentsByClassId
+);
+
+//
+router.get(
   "/lecturers",
   authController.authToken,
   lecturerController.getLecturers
@@ -159,6 +166,7 @@ router.delete(
   departmentController.deleteDepartment
 );
 
+//
 router.get("/subjects", subjectController.getSubjects);
 router.get(
   "/subjects/:id",
@@ -180,19 +188,11 @@ router.delete(
   authController.authToken,
   subjectController.deleteSubject
 );
-
 router.get("/student/:id/subjects", subjectController.getSubjectByEnrollments);
-// Class
 router.get(
-  "/classes/lecturer/:id",
+  "/subjects/department/:id",
   authController.authToken,
-  classController.getClassForLecturer
-);
-
-router.get(
-  "/classes/student/:id",
-  authController.authToken,
-  classController.getClassForStudent
+  subjectController.getSubjectByDepartmentId
 );
 
 router.get("/classes", authController.authToken, classController.getClasses);
@@ -201,6 +201,7 @@ router.get(
   authController.authToken,
   classController.getClassById
 );
+
 router.get(
   "/classes/details/:id",
   authController.authToken,
@@ -226,14 +227,24 @@ router.get(
   "/student/:studentId/schedules",
   classController.getSchedulesByStudentId
 );
+router.get(
+  "/classes/subject/:subjectId",
+  authController.authToken,
+  classController.getClassesBySubjectId
+);
+router.get(
+  "/classes/lecturer/:lecturerId",
+  classController.getClassesByLecturerId
+);
 
-// Chpters
+// Chapter
 router.get(
   "/chapters",
   authController.authToken,
-  //   authController.authRole("teacher"),
+  authController.authRole("teacher"),
   chapterController.getChapters
 );
+
 router.get(
   "/chapters/list/:subject_id",
   authController.authToken,
@@ -246,13 +257,6 @@ router.get(
   authController.authRole("teacher"),
   chapterController.getChapterById
 );
-// router.post(
-//   "/chapters",
-//   authController.authToken,
-//   authController.authRole("teacher"),
-//   chapterController.createChapter
-// );
-
 router.post(
   "/chapters",
   authController.authToken, // Kiểm tra token trước khi tiếp tục
@@ -300,17 +304,16 @@ router.put(
 router.delete(
   "/chapters/:id",
   authController.authToken,
-  authController.authRole("teacher"),
+  // authController.authRole("teacher"),
   chapterController.deleteChapter
 );
-//
 
 router.get("/exams", authController.authToken, examController.getExams);
 router.get("/exams/:id", authController.authToken, examController.getExamById);
 router.post(
   "/exams",
   authController.authToken,
-  //   authController.authRole("teacher"),
+  // authController.authRole("teacher"),
   examController.createExam
 );
 router.put(
@@ -361,22 +364,21 @@ router.get(
   authController.authToken,
   questionController.getQuestions
 );
+
 router.get(
   "/questions/:id",
   authController.authToken,
   questionController.getQuestionById
 );
-
-router.get(
-  "/questions/exxam/:id",
-  authController.authToken,
-  questionController.getQuestionByExamId
-);
-
 router.post(
   "/questions",
   authController.authToken,
   questionController.createQuestion
+);
+router.delete(
+  "/groupQuestions/:id",
+  authController.authToken,
+  questionController.deleteGroupQuestion
 );
 router.put(
   "/questions/:id",
@@ -389,7 +391,18 @@ router.delete(
   questionController.deleteQuestion
 );
 
-//
+router.get(
+  "/questions/exxam/",
+  authController.authToken,
+  questionController.getAllQuestion
+);
+
+router.get(
+  "/questions/exxam/:id",
+  authController.authToken,
+  questionController.getQuestionByExamId
+);
+
 router.get(
   "/test_performances",
   authController.authToken,
@@ -405,6 +418,13 @@ router.post(
   authController.authToken,
   testPerformanceController.createTestPerformance
 );
+
+router.put(
+  "/test_performances/:studentId/:examId",
+  authController.authToken,
+  testPerformanceController.updateTestPerformance
+);
+
 router.put(
   "/test_performances/:id",
   authController.authToken,

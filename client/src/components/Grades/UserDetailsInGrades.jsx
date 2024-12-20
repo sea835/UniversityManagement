@@ -49,17 +49,22 @@ const UserDetailsInGrades = () => {
   };
 
   const handleUpdateCore = async (id, index) => {
-    try {
-      const result = await apiService.put(
-        `/test_performances/${userId}/${id}`,
-        { score: scoresCtrl[index] }
-      );
-      console.log(result);
+    console.log(scoresCtrl[index] >= 0 && scoresCtrl[index] <= 10);
 
-      alert("Cập nhật thành công !");
-    } catch (error) {
-      console.error(error);
-      alert("Cập nhật không thành công");
+    if (scoresCtrl[index] >= 0 && scoresCtrl[index] <= 10) {
+      try {
+        const result = await apiService.put(
+          `/test_performances/${userId}/${id}`,
+          { score: scoresCtrl[index] }
+        );
+
+        alert("Cập nhật thành công !");
+      } catch (error) {
+        console.error(error);
+        alert("Cập nhật không thành công");
+      }
+    } else {
+      alert("Cập nhật không thành công, vì điểm từ 0 ->10");
     }
   };
 

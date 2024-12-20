@@ -11,8 +11,8 @@ const studentSidebarItems = [
   // { icon: "Grades", text: "Grades", path: "/dashboard/Grades" },
   // { icon: "document", text: "Document", path: "/dashboard/document" },
 
-//   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
-//   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
+  //   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
+  //   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
@@ -26,32 +26,30 @@ const teacherSidebarItems = [
 ];
 
 const adminSidebarItems = [
+  //   {
+  //     icon: "account",
+  //     text: "Teacher's Accounts",
+  //     path: "/dashboard/listTeacher",
+  //   },
+  //   {
+  //     icon: "student",
+  //     text: "Student's Accounts",
+  //     path: "/dashboard/listStudent",
+  //   },
+  //   { icon: "courses", text: "Courses", path: "/dashboard/listCourse" },
+  //   {
+  //     icon: "courses",
+  //     text: "Classes Management",
+  //     path: "/dashboard/listClass",
+  //   },
+  //   { icon: "help", text: "Help Admin", path: "/dashboard/listTeacher" },
 
-
-//   {
-//     icon: "account",
-//     text: "Teacher's Accounts",
-//     path: "/dashboard/listTeacher",
-//   },
-//   {
-//     icon: "student",
-//     text: "Student's Accounts",
-//     path: "/dashboard/listStudent",
-//   },
-//   { icon: "courses", text: "Courses", path: "/dashboard/listCourse" },
-//   {
-//     icon: "courses",
-//     text: "Classes Management",
-//     path: "/dashboard/listClass",
-//   },
-//   { icon: "help", text: "Help Admin", path: "/dashboard/listTeacher" },
-
-//   { icon: "teacherAccounts", text: "Teacher's Accounts", path: "/dashboard/teacherAccounts" },
-//   { icon: "studentAccounts", text: "Student's Accounts", path: "/dashboard/studentAccounts" },
-//   { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
-//   { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
-//   { icon: "departmentManagement", text: "Departments Management", path: "/dashboard/departmentManagement" },
-//   { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
+  //   { icon: "teacherAccounts", text: "Teacher's Accounts", path: "/dashboard/teacherAccounts" },
+  //   { icon: "studentAccounts", text: "Student's Accounts", path: "/dashboard/studentAccounts" },
+  //   { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
+  //   { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
+  //   { icon: "departmentManagement", text: "Departments Management", path: "/dashboard/departmentManagement" },
+  //   { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
 
   {
     icon: "teacherAccounts",
@@ -94,8 +92,8 @@ function SideBar({ type }) {
   }
 
   // State to track the active item
+  // const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
-  // const auth = useAuth();
 
   const navigate = useNavigate();
   const auth = useAuth();
@@ -117,18 +115,16 @@ function SideBar({ type }) {
               text={item.text}
               path={item.path}
               active={item.text === activeItem}
-              onClick={() => setActiveItem(item.text)} // Set active item on click
+              onClick={() => setActiveItem(item.text)} //  Set active item on click
             />
           ))}
         </div>
       </div>
       <button
-
         onClick={handleLogOut}
-
-//         onClick={() => {
-//           auth.logOut();
-//         }}
+        //         onClick={() => {
+        //           auth.logOut();
+        //         }}
 
         className="self-center px-8 pb-2 mt-[250px] max-w-full text-red-600 bg-red-200 rounded border border-red-600 border-solid w-[130px] max-md:px-5 max-md:mt-10"
       >

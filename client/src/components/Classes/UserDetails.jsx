@@ -59,7 +59,7 @@ const UserDetails = () => {
       alert("Cập nhật thành công !");
     } catch (error) {
       console.error(error);
-      alert("Cập nhật không thành công");
+      alert("vì điểm từ 0 > 10, không được lớn hơn và nhỏ hơn");
     }
   };
 
