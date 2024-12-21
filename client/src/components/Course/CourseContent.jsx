@@ -25,6 +25,15 @@ function CourseContent() {
       video_content: "Video 2",
       image_content: "Hình ảnh 2",
     },
+    {
+      chapter_order: 3,
+      material_id: "TL003",
+      class_id: "L03",
+      title: "Chương 3",
+      text_content: "Văn bản 3",
+      video_content: "Video 3",
+      image_content: "Hình ảnh 3",
+    },
   ];
 
   return (

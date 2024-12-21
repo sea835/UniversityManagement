@@ -8,7 +8,9 @@ const studentSidebarItems = [
   { icon: "account", text: "Account Setting", path: "/dashboard/account" },
   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
+  { icon: "register", text: "Register Course", path: "/dashboard/register-course" },
   { icon: "help", text: "Help", path: "/help" },
+   
 ];
 
 const teacherSidebarItems = [

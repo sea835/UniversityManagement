@@ -159,6 +159,22 @@ CREATE TABLE exam (
     exam_name VARCHAR(255),
     PRIMARY KEY (exam_id)
 );
+-- Create the schedule table
+CREATE TABLE schedule (
+  hocKy VARCHAR(10),
+  maMH VARCHAR(10),
+  tenMonHoc VARCHAR(255),
+  tinChi INT,
+  tcHocPhi DECIMAL(10, 0),
+  nhomTo VARCHAR(10),
+  thu VARCHAR(10),
+  tiet INT,
+  gioHoc VARCHAR(20),
+  phong VARCHAR(10),
+  coSo VARCHAR(255),
+  tuanHoc VARCHAR(255)
+  PRIMARY KEY (hocKy, maMH, nhomTo)
+);
 
 -- Add indexes
 CREATE INDEX idx_lecturer_department_id ON lecturer(department_id);
@@ -474,3 +490,16 @@ INSERT INTO register (subject_id, student_id, result) VALUES
 ('MH008', 'SV008', 80),
 ('MH009', 'SV009', 60),
 ('MH010', 'SV010', 90);
+
+INSERT INTO schedule (hocKy, maMH, tenMonHoc, tinChi, tcHocPhi, nhomTo, thu, tiet, gioHoc, phong, coSo, tuanHoc)
+VALUES
+  ('HK241', 'MH001', 'Lập trình C', 3, 1500000, 'K01', 'Thứ 2', 1, '08:00 - 09:30', '101', 'Cơ sở 1', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK242', 'MH002', 'Lập trình Java', 4, 2000000, 'K02', 'Thứ 3', 2, '09:30 - 11:00', '102', 'Cơ sở 2', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK243', 'MH003', 'Lập trình Python', 3, 1800000, 'K03', 'Thứ 4', 3, '11:00 - 12:30', '103', 'Cơ sở 3', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK244', 'MH004', 'Cơ sở dữ liệu', 4, 2200000, 'K04', 'Thứ 5', 4, '13:00 - 14:30', '104', 'Cơ sở 4', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK245', 'MH005', 'Mạng máy tính', 3, 1600000, 'K05', 'Thứ 6', 5, '14:30 - 16:00', '105', 'Cơ sở 5', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK246', 'MH006', 'Hệ điều hành', 4, 2400000, 'K06', 'Thứ 7', 6, '16:00 - 17:30', '106', 'Cơ sở 6', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK247', 'MH007', 'Lập trình web', 3, 2000000, 'K07', 'Chủ nhật', 7, '17:30 - 19:00', '107', 'Cơ sở 7', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK248', 'MH008', 'Thiết kế đồ họa', 4, 2600000, 'K08', 'Thứ 2', 8, '19:00 - 20:30', '108', 'Cơ sở 8', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK249', 'MH009', 'Quản trị mạng', 3, 1800000, 'K09', 'Thứ 3', 9, '20:30 - 22:00', '109', 'Cơ sở 9', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15'),
+  ('HK250', 'MH010', 'Lập trình di động', 4, 2800000, 'K10', 'Thứ 4', 10, '22:00 - 23:30', '110', 'Cơ sở 10', '1-2-3-4-5-6-7-8-9-10-11-12-13-14-15');

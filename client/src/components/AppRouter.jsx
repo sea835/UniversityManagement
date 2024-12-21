@@ -30,6 +30,7 @@ import DepartmentManagement from "./admin/DepartmentManagement.jsx";
 import Help from "./admin/Help.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
+import RegisterCourse from "./RegisterCourse.jsx";
 
 const AppRouter = () => {
   return (
@@ -53,6 +54,7 @@ const AppRouter = () => {
             <Route path="dashboard" element={<AuthProtect />}>
               {/* student pages */}
               <Route index element={<AccountSettings />} />
+              <Route path="register-course" element={<RegisterCourse />} />
               <Route path="account" element={<AccountSettings />} />
               <Route path="courses" element={<CourseGrid />} />
               <Route path="courses/:id" element={<CourseContent />}></Route>
