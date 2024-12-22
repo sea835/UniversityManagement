@@ -9,9 +9,6 @@ import LoginPage from "../pages/LoginPage.jsx";
 import TestPage from "../pages/TestPage.jsx";
 //
 
-import StudentClasses from "../services/StudentClasses.jsx";
-import StudentSchedules from "../services/StudentSchedules.jsx";
-
 import AccountSettings from "./AccountSetting.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AuthProvider from "./Auth/AuthProvider.jsx";
@@ -49,8 +46,6 @@ import ListClassinStudent from "./Student/ListClassinStudent.jsx";
 import ListShceduleinStudent from "./Student/ListShceduleinStudent.jsx";
 
 //
-import StudentPage from "../pages/StudentPage.jsx";
-import AdminPage from "../pages/AdminPage.jsx";
 
 import AboutPage from "../pages/AboutPage.jsx";
 import ContactPage from "../pages/ContactPage.jsx";
