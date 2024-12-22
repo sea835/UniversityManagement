@@ -8,6 +8,10 @@ import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import TestPage from "../pages/TestPage.jsx";
 //
+
+import StudentClasses from "../services/StudentClasses.jsx";
+import StudentSchedules from "../services/StudentSchedules.jsx";
+
 import AccountSettings from "./AccountSetting.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AuthProvider from "./Auth/AuthProvider.jsx";
@@ -30,7 +34,10 @@ import ClassesDetailsInGrades from "./Grades/ClassesDetailsInGrades.jsx";
 import CreateExxamInGrades from "./Grades/CreateExxamInGrades.jsx";
 import ListClassesInGrades from "./Grades/ListClassesInGrades.jsx";
 import UserDetailsInGrades from "./Grades/UserDetailsInGrades.jsx";
+
 import ListClassesInSchedule from "./Schedule/ListClassesInSchedule.jsx";
+
+
 //import CreateChapter from "./Classes/CreateChapter.jsx";
 import CreateQuestion from "./Classes/CreateQuestion.jsx";
 import UserDetails from "./Classes/UserDetails.jsx";
@@ -41,7 +48,13 @@ import ListTeacherinAdmin from "./Lecturer/ListTeacherinAdmin.jsx";
 import ListUserinAdmin from "./Lecturer/ListUserinAdmin.jsx";
 import ListClassinStudent from "./Student/ListClassinStudent.jsx";
 import ListShceduleinStudent from "./Student/ListShceduleinStudent.jsx";
+
+import UserDetails from "./Classes/UserDetails.jsx";
+import CreateDocument from "./Document/CreateDocument.jsx";
 //
+import StudentPage from "../pages/StudentPage.jsx";
+import AdminPage from "../pages/AdminPage.jsx";
+
 import AboutPage from "../pages/AboutPage.jsx";
 import ContactPage from "../pages/ContactPage.jsx";
 

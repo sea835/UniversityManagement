@@ -83,9 +83,9 @@ function SideBar({ type }) {
   let sidebarItems = [];
   console.log("type :", type);
 
-  if (type === "student") {
+  if (type === "Student") {
     sidebarItems = studentSidebarItems;
-  } else if (type === "lecturer") {
+  } else if (type === "Lecturer") {
     sidebarItems = teacherSidebarItems;
   } else if (type === "Administrator") {
     sidebarItems = adminSidebarItems;
