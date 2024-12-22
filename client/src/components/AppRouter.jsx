@@ -37,7 +37,6 @@ import UserDetailsInGrades from "./Grades/UserDetailsInGrades.jsx";
 
 import ListClassesInSchedule from "./Schedule/ListClassesInSchedule.jsx";
 
-
 //import CreateChapter from "./Classes/CreateChapter.jsx";
 import CreateQuestion from "./Classes/CreateQuestion.jsx";
 import UserDetails from "./Classes/UserDetails.jsx";
@@ -49,8 +48,6 @@ import ListUserinAdmin from "./Lecturer/ListUserinAdmin.jsx";
 import ListClassinStudent from "./Student/ListClassinStudent.jsx";
 import ListShceduleinStudent from "./Student/ListShceduleinStudent.jsx";
 
-import UserDetails from "./Classes/UserDetails.jsx";
-import CreateDocument from "./Document/CreateDocument.jsx";
 //
 import StudentPage from "../pages/StudentPage.jsx";
 import AdminPage from "../pages/AdminPage.jsx";
