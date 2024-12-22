@@ -5,7 +5,7 @@ exports.getQuestionByExamId = (req, res, next) => {
   console.log(id);
 
   database
-    .query("SELECT * FROM question", [id])
+    .query("SELECT * FROM question where exam_id = ?", [id])
     .then((data) => {
       res.status(200).json(data[0]);
     })
@@ -148,12 +148,24 @@ exports.deleteGroupQuestion = (req, res, next) => {
 
 exports.updateQuestion = (req, res, next) => {
   const id = req.params.id;
-  const { exam_id, question_content, student_answer, correct_answer } =
-    req.body;
+  const dataBody = req.body.listQuestion;
+
+  const question_content = dataBody.answer; // Nội dung câu hỏi
+  const questionArr = dataBody.question; // Đáp án đúng
+  const qe = dataBody.correctAnswer; // Đáp án đúng
+  const questionA = questionArr[0].question;
+  const questionB = questionArr[1].question;
+  const questionC = questionArr[2].question;
+  const questionD = questionArr[3].question;
+  console.log(qe);
+
+  // UPDATE question SET exam_id = ?, question_content = ?, answer_a = ?, answer_b = ?, answer_c = ?, answer_d = ?, correct_answer = ?, group_id = ? WHERE question_id = ?;
+  // const { exam_id, question_content, student_answer, correct_answer } =
+  //   req.body;
   database
     .query(
-      "UPDATE question SET exam_id = ?, question_content = ?, student_answer = ?, correct_answer = ? WHERE question_id = ?",
-      [exam_id, question_content, student_answer, correct_answer, id]
+      "UPDATE question SET question_content = ?, answer_a = ?, answer_b = ?, answer_c = ?, answer_d = ?, correct_answer = ? WHERE question_id = ?",
+      [question_content, questionA, questionB, questionC, questionD, qe, id]
     )
     .then((data) => {
       res.status(200).json({

@@ -58,13 +58,13 @@ const UserDetailsInGrades = () => {
           { score: scoresCtrl[index] }
         );
 
-        alert("Cập nhật thành công !");
+        alert("Updated Successfully !");
       } catch (error) {
         console.error(error);
-        alert("Cập nhật không thành công");
+        alert("Updated False");
       }
     } else {
-      alert("Cập nhật không thành công, vì điểm từ 0 ->10");
+      alert("Updated False, Score in 0 ->10");
     }
   };
 

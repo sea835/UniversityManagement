@@ -203,6 +203,12 @@ router.get(
 );
 
 router.get(
+  "/classes/student/:id",
+  authController.authToken,
+  classController.getClassForStudent
+);
+
+router.get(
   "/classes/details/:id",
   authController.authToken,
   classController.getClassDetails
@@ -310,6 +316,11 @@ router.delete(
 
 router.get("/exams", authController.authToken, examController.getExams);
 router.get("/exams/:id", authController.authToken, examController.getExamById);
+router.get(
+  "/exams/subject/:id",
+  authController.authToken,
+  examController.getExamBySubjectId
+);
 router.post(
   "/exams",
   authController.authToken,
@@ -325,7 +336,7 @@ router.put(
 router.delete(
   "/exams/:id",
   authController.authToken,
-  authController.authRole("teacher"),
+  // authController.authRole("teacher"),
   examController.deleteExam
 );
 

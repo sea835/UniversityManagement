@@ -87,7 +87,7 @@ function SideBar({ type }) {
     sidebarItems = studentSidebarItems;
   } else if (type === "lecturer") {
     sidebarItems = teacherSidebarItems;
-  } else if (type === "administrator") {
+  } else if (type === "Administrator") {
     sidebarItems = adminSidebarItems;
   }
 

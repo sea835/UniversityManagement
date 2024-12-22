@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 
 const CreateQuestion = (props) => {
-  const {
-    setShowQuestion,
-    showQuestion,
-    dataUpdateQuestion,
-    handleGetAllQuestions,
-  } = props;
+  const { setShowQuestion, showQuestion, handleGetAllExam } = props;
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [numQuiz, setNumQuiz] = useState(1);
   const [listQuestion, setListQuestion] = useState([
@@ -36,8 +31,6 @@ const CreateQuestion = (props) => {
       ],
     },
   ]);
-
-  console.log("dataUpdateQuestion: ", dataUpdateQuestion);
 
   const handleUpdateAnswer = (newAnswer, id) => {
     setListQuestion((prevList) =>
@@ -186,7 +179,7 @@ const CreateQuestion = (props) => {
             },
           ]);
           setShowQuestion(false);
-          handleGetAllQuestions();
+          handleGetAllExam();
         }
         // setShowUploadFile(false);
         // handleGetListChapter(id);

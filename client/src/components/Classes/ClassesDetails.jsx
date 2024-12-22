@@ -3,19 +3,20 @@ import { Link, useParams } from "react-router-dom";
 import apiService from "../../services/apiService";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import CreateQuestion from "./CreateQuestion";
+import UpdateQuestion from "./UpdateQuestion";
 
 const ClassesDetails = () => {
   const { id } = useParams();
 
   const [listChapter, setListChapter] = useState([]);
-  const [listDataQuestion, setListDataQuestion] = useState([]);
-  const [listDataQuestion2, setListDataQuestion2] = useState([]);
   const [classes, setClasses] = useState({});
+  const [listExam, setListExam] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalCreateQ, setShowModalCreateQ] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
   const [showUploadFile, setShowUploadFile] = useState(false);
-  const [dataUpdateQuestion, setDataUpdateQuestion] = useState();
+  const [typeUpdateQ, setTypeUpdateQ] = useState(false);
+
   const [previewUrl, setPreviewUrl] = useState("");
   const [showViewFile, setShowViewFile] = useState({
     status: false,
@@ -122,30 +123,10 @@ const ClassesDetails = () => {
     try {
       const response = await apiService.get(`/questions/exxam/213`);
       console.log(response);
-
       setListDataQuestion(response.data);
-      if (response.data) {
-        handleGruopQuestion(response.data);
-      }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleGruopQuestion = (data) => {
-    const groupedData = Object.values(
-      data.reduce((acc, item) => {
-        // Nếu group_id chưa tồn tại, khởi tạo
-        if (!acc[item.group_id]) {
-          acc[item.group_id] = { group_id: item.group_id, data: [] };
-        }
-        // Thêm item vào mảng data của group_id tương ứng
-        acc[item.group_id].data.push(item);
-        return acc;
-      }, {})
-    );
-    console.log("groupedData: ", groupedData);
-    setListDataQuestion2(groupedData);
   };
 
   function generateRandomString() {
@@ -156,39 +137,22 @@ const ClassesDetails = () => {
 
   const handleSubmitCreateExam = async (e) => {
     e.preventDefault();
+
     const dataSend = { ...dataCreateExam };
     dataSend.exam_id = generateRandomString();
+    dataSend.subject_id = classes.subject_id;
     try {
       const result = await apiService.post("exams", dataSend);
-      console.log(result);
       setShowModalCreateQ(false);
       setShowQuestion(dataSend.exam_id);
     } catch (error) {
       console.error(error);
-      alert(
-        "Thêm bài kiểm tra không thành công, vui lòng kiểm tra lại dữ liệu !"
-      );
+      alert("Failed to create !");
     }
   };
 
-  const handleUpdateQuestion = (data) => {
-    setShowQuestion(true);
-    setDataUpdateQuestion(data);
-  };
-
-  const handleDeleteQuestion = async (id) => {
-    if (window.confirm("Are you sure you want to delete this item?")) {
-      console.log(id);
-
-      try {
-        await apiService.delete(`/groupQuestions/${id}`);
-        alert("Deleted successfully!");
-        handleGetAllQuestions("BKT001");
-      } catch (error) {
-        console.error(error);
-        alert("Failed to delete!");
-      }
-    }
+  const handleUpdateQuestion = (idExam) => {
+    setShowQuestion(idExam);
   };
 
   const handleDeleteChapter = async (idDelete) => {
@@ -204,8 +168,35 @@ const ClassesDetails = () => {
     }
   };
 
+  const handleDeleteExam = async (idDelete) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      try {
+        await apiService.delete(`/exams/${idDelete}`);
+        alert("Deleted successfully!");
+        handleGetAllExam();
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete!");
+      }
+    }
+  };
+
+  const handleGetAllExam = async () => {
+    try {
+      const response = await apiService.get(
+        `/exams/subject/${classes.subject_id}`
+      );
+      setListExam(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    handleGetAllQuestions();
+    handleGetAllExam();
+  }, [classes]);
+
+  useEffect(() => {
+    handleGetAllExam();
     handleGetListChapter(id);
   }, []);
 
@@ -473,7 +464,10 @@ const ClassesDetails = () => {
             {!showQuestion && (
               <div className="flex">
                 <span
-                  onClick={() => setShowModalCreateQ(true)}
+                  onClick={() => {
+                    setShowModalCreateQ(true);
+                    setTypeUpdateQ(false);
+                  }}
                   className="px-3 py-2 mb-4 flex text-white cursor-pointer"
                   style={{
                     backgroundColor: " #388E3C",
@@ -518,200 +512,22 @@ const ClassesDetails = () => {
         </div>
 
         {showQuestion ? (
-          // <form
-          //   onSubmit={(e) => handleCreateQuestion(e)}
-          //   className="px-6 py-2 rounded-xl"
-          //   style={{ backgroundColor: "#f5f5f5" }}
-          // >
-          //   <div
-          //     className=""
-          //     style={{ paddingTop: "20px", paddingBottom: "12px" }}
-          //   >
-          //     <h2 className="" style={{ fontSize: "20px", fontWeight: "500" }}>
-          //       Quiz 1
-          //     </h2>
-          //   </div>
-          //   <div
-          //     className="flex items-center justify-end"
-          //     style={{ marginBottom: "16px" }}
-          //   >
-          //     <select
-          //       className=" rounded"
-          //       style={{ backgroundColor: "#ccc", padding: "8px 12px" }}
-          //       onChange={(e) => setCurrentQuestion(e.target.value)}
-          //     >
-          //       {listQuestion?.map((item, index) => (
-          //         <option
-          //           key={index}
-          //           value={item.id}
-          //           selected={item.id === currentQuestion}
-          //         >
-          //           Question {item.id}
-          //         </option>
-          //       ))}
-          //     </select>
-          //     <input
-          //       type="number"
-          //       min={1}
-          //       max={10}
-          //       value={numQuiz}
-          //       placeholder="Số lượng quiz"
-          //       onChange={(e) => handleChangeNumQuiz(e.target.value)}
-          //       style={{
-          //         width: 200,
-          //         backgroundColor: "#ccc",
-          //         padding: "8px 12px",
-          //         borderRadius: 4,
-          //         outline: "none",
-          //         marginLeft: 16,
-          //       }}
-          //     />
-          //   </div>
-          //   {listQuestion?.map((item) => (
-          //     <>
-          //       {item.id == currentQuestion && (
-          //         <div
-          //           className=" rounded-xl px-10 py-10"
-          //           style={{ backgroundColor: "#E7E0D4" }}
-          //         >
-          //           <div
-          //             className="flex items-center justify-center gap-6"
-          //             style={{ paddingBottom: "12px" }}
-          //           >
-          //             <label
-          //               className=""
-          //               style={{ fontSize: "18px", fontWeight: "500" }}
-          //             >
-          //               Question {item.id}:
-          //             </label>
-          //             <input
-          //               type="text"
-          //               value={item.answer}
-          //               name="answerTitle"
-          //               required
-          //               className="py-2 px-4 rounded-xl"
-          //               style={{ flex: 1 }}
-          //               onChange={(e) =>
-          //                 handleUpdateAnswer(e.target.value, item.id)
-          //               }
-          //               placeholder="CLICK TO THE START TYPING YOUR QUESTION"
-          //             />
-          //           </div>
-          //           <div className="pt-8" style={{ paddingTop: 32 }}>
-          //             <div
-          //               className="flex items-center flex-wrap"
-          //               // style={{ gap: 40 }}
-          //             >
-          //               {item.question.map((itemQ, key) => (
-          //                 <div
-          //                   className={` px-6 relative ${key >= 2 && "mt-6"}`}
-          //                   style={{ width: "50%" }}
-          //                   key={key}
-          //                 >
-          //                   <input
-          //                     className="w-full px-3 py-2 rounded-xl"
-          //                     style={{
-          //                       width: "100%",
-          //                       backgroundColor: "transparent",
-          //                       border: "2px solid #BEB29F",
-          //                     }}
-          //                     placeholder={`Option ${itemQ.id}`}
-          //                     value={itemQ.question}
-          //                     required
-          //                     name="question"
-          //                     onChange={(e) =>
-          //                       handleUpdateQuestion(
-          //                         e.target.value,
-          //                         item.id,
-          //                         itemQ.id
-          //                       )
-          //                     }
-          //                   />
-          //                   <input
-          //                     type="checkbox"
-          //                     className=" absolute"
-          //                     style={{
-          //                       top: "50%",
-          //                       right: "50px",
-          //                       transform: "translateY(-50%)",
-          //                     }}
-          //                     checked={item.correctAnswer === itemQ.id}
-          //                     onChange={(e) =>
-          //                       handleUpdateCorrectAnswer(e, itemQ.id, item.id)
-          //                     }
-          //                   />
-          //                 </div>
-          //               ))}
-          //             </div>
-          //           </div>
-          //         </div>
-          //       )}
-          //     </>
-          //   ))}
-
-          //   <div
-          //     className="flex items-center justify-end gap-5 mt-8"
-          //     style={{ marginBottom: 16 }}
-          //   >
-          //     <div>
-          //       <span
-          //         className="px-4 py-2 rounded-lg flex cursor-pointer"
-          //         style={{ fontWeight: "500" }}
-          //         onClick={() => handleResetQuestion(currentQuestion)}
-          //       >
-          //         Clear answer
-          //       </span>
-          //     </div>
-          //     {listQuestion.length > 1 && (
-          //       <div>
-          //         <span
-          //           className="px-4 py-2 rounded-lg flex cursor-pointer"
-          //           style={{ fontWeight: "500" }}
-          //           onClick={() => handleDeleteQuestion(currentQuestion)}
-          //         >
-          //           Delete Question
-          //         </span>
-          //       </div>
-          //     )}
-          //     {currentQuestion < numQuiz && (
-          //       <div>
-          //         <span
-          //           className="px-4 py-2 rounded-lg flex cursor-pointer"
-          //           style={{
-          //             fontWeight: "500",
-          //             backgroundColor: "#BEB29F",
-          //             color: "#fff",
-          //           }}
-          //           onClick={handleAddQuestion}
-          //         >
-          //           Next question
-          //         </span>
-          //       </div>
-          //     )}
-          //     {currentQuestion == numQuiz && (
-          //       <div>
-          //         <button
-          //           className="px-4 py-2 rounded-lg"
-          //           style={{
-          //             fontWeight: "500",
-          //             backgroundColor: "#BEB29F",
-          //             color: "#fff",
-          //           }}
-          //         >
-          //           Create
-          //         </button>
-          //       </div>
-          //     )}
-          //     <div></div>
-          //   </div>
-          // </form>
           <>
-            <CreateQuestion
-              showQuestion={showQuestion}
-              setShowQuestion={setShowQuestion}
-              dataUpdateQuestion={dataUpdateQuestion}
-              handleGetAllQuestions={handleGetAllQuestions}
-            />
+            {typeUpdateQ ? (
+              <UpdateQuestion
+                showQuestion={showQuestion}
+                setShowQuestion={setShowQuestion}
+                handleGetAllExam={handleGetAllExam}
+              />
+            ) : (
+              <>
+                <CreateQuestion
+                  showQuestion={showQuestion}
+                  setShowQuestion={setShowQuestion}
+                  handleGetAllExam={handleGetAllExam}
+                />
+              </>
+            )}
           </>
         ) : (
           <>
@@ -898,113 +714,77 @@ const ClassesDetails = () => {
                       </div>
 
                       <div style={{ paddingTop: 20 }}>
-                        {listDataQuestion2?.map((data, index) => (
+                        {listExam.map((item, index) => (
                           <div
+                            className="rounded-xl overflow-hidden"
+                            style={{ margin: "24px 0" }}
                             key={index}
-                            style={{ paddingTop: `${index > 0 && "20px"}` }}
                           >
-                            <div className="flex items-center justify-between">
-                              <p style={{ fontWeight: "bold" }}>
-                                Question: {data.group_id}
-                              </p>
-                              <div className="flex items-center gap-6">
-                                {/* <div className="flex">
+                            <div className="shadow-sm flex">
+                              <div
+                                className="px-4 py-4 flex flex-col justify-between"
+                                style={{
+                                  width: "200px",
+                                  backgroundColor: "#ccc",
+                                }}
+                              >
+                                <div className="flex flex-col">
                                   <span
-                                    onClick={() => handleUpdateQuestion(data)}
-                                    className="px-3 py-2 mb-4 flex text-white cursor-pointer"
-                                    style={{
-                                      backgroundColor: " #388E3C",
-                                      marginBottom: "12px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    Update
-                                  </span>
-                                </div> */}
-                                <div className="flex">
+                                    style={{ color: "#999", fontSize: 14 }}
+                                  ></span>
                                   <span
-                                    onClick={() =>
-                                      handleDeleteQuestion(data.group_id)
-                                    }
-                                    className="px-3 py-2 mb-4 flex text-white cursor-pointer"
-                                    style={{
-                                      backgroundColor: " #DC364C",
-                                      marginBottom: "12px",
-                                      borderRadius: "4px",
-                                    }}
+                                    className=" font-bold"
+                                    style={{ fontSize: 16 }}
                                   >
-                                    Delete
+                                    Mã bài: {item.exam_id}
                                   </span>
                                 </div>
                               </div>
-                            </div>
-                            <div
-                              style={{
-                                padding: "0 20px",
-                                border: "1px solid #ccc",
-                                marginTop: 20,
-                                borderRadius: "5px",
-                              }}
-                            >
-                              {data?.data?.map((item, k) => (
-                                <div
-                                  className="rounded-xl overflow-hidden"
-                                  style={{ margin: "24px 0" }}
-                                  key={k}
-                                >
-                                  <div className="shadow-sm flex">
-                                    <div
-                                      className="px-4 py-4 flex flex-col justify-between"
+                              <div
+                                className="px-4 py-4"
+                                style={{ flex: 1, backgroundColor: "#fff" }}
+                              >
+                                <div>
+                                  <span
+                                    style={{
+                                      fontSize: "16px",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    {item.exam_name}
+                                  </span>
+                                </div>
+
+                                <div className="flex justify-end">
+                                  <div className="flex items-center gap-4">
+                                    <button
+                                      className="flex px-6 py-2 rounded-3xl"
+                                      onClick={() =>
+                                        handleDeleteExam(item.exam_id)
+                                      }
                                       style={{
-                                        width: "200px",
-                                        backgroundColor: "#ccc",
+                                        backgroundColor: "#DC364C",
+                                        color: "#fff",
                                       }}
                                     >
-                                      <div className="flex flex-col">
-                                        <span
-                                          style={{
-                                            color: "#999",
-                                            fontSize: 14,
-                                          }}
-                                        >
-                                          Question {++index}
-                                        </span>
-                                        <span
-                                          className=" font-bold"
-                                          style={{ fontSize: 16 }}
-                                        >
-                                          {item?.question_content}
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div
-                                      className="px-4 py-4"
+                                      Delete
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        handleUpdateQuestion(item.exam_id);
+                                        setTypeUpdateQ(true);
+                                      }}
+                                      className="flex px-6 py-2 rounded-3xl"
                                       style={{
-                                        flex: 1,
-                                        backgroundColor: "#fff",
+                                        backgroundColor: "#388E3C",
+                                        color: "#fff",
                                       }}
                                     >
-                                      <div className="py-1">
-                                        <span>Đáp án A: {item?.answer_a}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>Đáp án B: {item?.answer_b}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>Đáp án C: {item?.answer_c}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>Đáp án D: {item?.answer_d}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>
-                                          Đáp án đúng: {item?.correct_answer}
-                                        </span>
-                                      </div>
-                                    </div>
+                                      Edit
+                                    </button>
                                   </div>
                                 </div>
-                              ))}
+                              </div>
                             </div>
                           </div>
                         ))}
