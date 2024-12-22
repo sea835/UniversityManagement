@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 // import ApiLinksPage from "./ApiLinksPage";
 import App from "../App.jsx";
 import CourseContent from "../components/Course/CourseContent.jsx";
@@ -13,8 +8,10 @@ import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import TestPage from "../pages/TestPage.jsx";
 //
+
 import StudentClasses from "../services/StudentClasses.jsx";
 import StudentSchedules from "../services/StudentSchedules.jsx";
+
 import AccountSettings from "./AccountSetting.jsx";
 import { AuthProtect } from "./Auth/AuthProtect.jsx";
 import AuthProvider from "./Auth/AuthProvider.jsx";
@@ -31,26 +28,33 @@ import TeacherAccounts from "./admin/TeacherAccounts.jsx";
 import ListClasses from "./Classes/ListClasses.jsx";
 
 //
-import ListClassesInSchedule from "./Schedule/ListClassesInSchedule.jsx";
 import ClassesDetails from "./Classes/ClassesDetails.jsx";
 import ListDocument from "./Document/ListDocument.jsx";
 import ClassesDetailsInGrades from "./Grades/ClassesDetailsInGrades.jsx";
 import CreateExxamInGrades from "./Grades/CreateExxamInGrades.jsx";
 import ListClassesInGrades from "./Grades/ListClassesInGrades.jsx";
 import UserDetailsInGrades from "./Grades/UserDetailsInGrades.jsx";
+
+import ListClassesInSchedule from "./Schedule/ListClassesInSchedule.jsx";
+
+
 //import CreateChapter from "./Classes/CreateChapter.jsx";
 import CreateQuestion from "./Classes/CreateQuestion.jsx";
-import ListUserinAdmin from "./Lecturer/ListUserinAdmin.jsx";
-import ListTeacherinAdmin from "./Lecturer/ListTeacherinAdmin.jsx";
-import ListCourseinAdmin from "./Lecturer/ListCourseinAdmin.jsx";
+import UserDetails from "./Classes/UserDetails.jsx";
+import CreateDocument from "./Document/CreateDocument.jsx";
 import ListClassinAdmin from "./Lecturer/ListClassinAdmin.jsx";
+import ListCourseinAdmin from "./Lecturer/ListCourseinAdmin.jsx";
+import ListTeacherinAdmin from "./Lecturer/ListTeacherinAdmin.jsx";
+import ListUserinAdmin from "./Lecturer/ListUserinAdmin.jsx";
 import ListClassinStudent from "./Student/ListClassinStudent.jsx";
 import ListShceduleinStudent from "./Student/ListShceduleinStudent.jsx";
+
 import UserDetails from "./Classes/UserDetails.jsx";
 import CreateDocument from "./Document/CreateDocument.jsx";
 //
 import StudentPage from "../pages/StudentPage.jsx";
 import AdminPage from "../pages/AdminPage.jsx";
+
 import AboutPage from "../pages/AboutPage.jsx";
 import ContactPage from "../pages/ContactPage.jsx";
 

@@ -92,6 +92,7 @@ function SideBar({ type }) {
   }
 
   // State to track the active item
+  // const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
 
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ function SideBar({ type }) {
               text={item.text}
               path={item.path}
               active={item.text === activeItem}
-              onClick={() => setActiveItem(item.text)} // Set active item on click
+              onClick={() => setActiveItem(item.text)} //  Set active item on click
             />
           ))}
         </div>
