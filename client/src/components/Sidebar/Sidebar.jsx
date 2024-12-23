@@ -57,11 +57,11 @@ function SideBar({ type }) {
   let sidebarItems = [];
   console.log("type :", type);
 
-  if (type === "Student") {
+  if (type === "student") {
     sidebarItems = studentSidebarItems;
   } else if (type === "lecturer") {
     sidebarItems = teacherSidebarItems;
-  } else if (type === "Administrator") {
+  } else if (type === "administrator") {
     sidebarItems = adminSidebarItems;
   }
 
