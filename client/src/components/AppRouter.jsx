@@ -132,11 +132,7 @@ const AppRouter = () => {
                 path="grades/details/create/:id"
                 element={<CreateExxamInGrades />}
               />
-              {/* Admin Route */}
-              <Route path="listTeacher" element={<ListTeacherinAdmin />} />
-              <Route path="listStudent" element={<ListUserinAdmin />} />
-              <Route path="listCourse" element={<ListCourseinAdmin />} />
-              <Route path="listClass" element={<ListClassinAdmin />} />
+
               {/* Student Route */}
               <Route path="student/classes" element={<ListClassinStudent />} />
               <Route

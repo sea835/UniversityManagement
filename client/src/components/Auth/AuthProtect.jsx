@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import StudentPage from "../../pages/StudentPage";
 import AdminPage from "../../pages/AdminPage";
+import TeacherPage from "../../pages/TeacherPage";
 
 export const AuthProtect = () => {
   const { user } = useAuth();
@@ -23,9 +24,8 @@ export const AuthProtect = () => {
   }
 
   if (user.role === "lecturer") {
-    return <StudentPage />;
+    return <TeacherPage />;
   }
-
 
   // Optionally, handle other roles or default case
   return <></>;

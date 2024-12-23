@@ -1,11 +1,11 @@
-import { Outlet } from "react-router-dom";
+import React, { act } from "react";
 import { useAuth } from "../components/Auth/AuthProvider";
 import SideBar from "../components/Sidebar/Sidebar";
+import { Outlet } from "react-router-dom";
 
-const TestPage = () => {
+const TeacherPage = () => {
   const { user } = useAuth();
   console.log(user);
-
   return (
     <>
       <div className="flex bg-gradient-to-br from-[#E7E7E7] to-[#E6DAC4] items-start justify-center py-14 gap-4">
@@ -20,4 +20,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default TeacherPage;
