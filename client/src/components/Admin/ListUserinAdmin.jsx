@@ -124,7 +124,7 @@ const ListUserinAdmin = () => {
               <thead className="bg-gray-50 text-gray-600 font-medium border-b">
                 <tr>
                   <th className="py-3 px-6">Student ID</th>
-                  <th className="py-3 px-6">Customer name</th>
+                  <th className="py-3 px-6">Student name</th>
                   <th className="py-3 px-6">Phone Number</th>
                   <th className="py-3 px-6">Email</th>
                   <th className="py-3 px-6 text-center">Birthday</th>

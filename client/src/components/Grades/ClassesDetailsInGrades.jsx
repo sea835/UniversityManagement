@@ -111,7 +111,7 @@ const ClassesDetailsInGrades = () => {
             </div>
           </div>
         </div>
-        <div className="flex">
+        {/* <div className="flex">
           <Link
             to={`/dashboard/grades/details/create/${classes.subject_id}`}
             className="px-3 py-2 mb-4 flex text-white"
@@ -123,24 +123,47 @@ const ClassesDetailsInGrades = () => {
           >
             Tạo bài kiểm tra
           </Link>
-        </div>
+        </div> */}
         <div className="bg-[#F3F3F3] rounded-[20px]">
-          <div className="shadow-sm border rounded-lg overflow-x-auto">
+          <div className="shadow-sm rounded-lg overflow-x-auto">
             <table className="w-full table-auto text-sm text-left">
               <thead className="bg-gray-50 text-gray-600 font-medium border-b">
                 <tr>
-                  <th className="py-3 px-6">Student ID</th>
-                  <th className="py-3 px-6">Customer name</th>
-                  <th className="py-3 px-6">Phone Number</th>
-                  <th className="py-3 px-6">Email</th>
-                  <th className="py-3 px-6 text-center">Birthday</th>
-                  <th className="py-3 px-6 text-center">Gender</th>
-                  <th className="py-3 px-6 text-center">Address</th>
+                  <th style={{ color: "#ccc" }} className="py-3 px-6">
+                    Student ID
+                  </th>
+                  <th style={{ color: "#ccc" }} className="py-3 px-6">
+                    Student name
+                  </th>
+                  <th style={{ color: "#ccc" }} className="py-3 px-6">
+                    Phone Number
+                  </th>
+                  <th style={{ color: "#ccc" }} className="py-3 px-6">
+                    Email
+                  </th>
+                  <th
+                    style={{ color: "#ccc" }}
+                    className="py-3 px-6 text-center"
+                  >
+                    Birthday
+                  </th>
+                  <th
+                    style={{ color: "#ccc" }}
+                    className="py-3 px-6 text-center"
+                  >
+                    Gender
+                  </th>
+                  <th
+                    style={{ color: "#ccc" }}
+                    className="py-3 px-6 text-center"
+                  >
+                    Address
+                  </th>
                 </tr>
               </thead>
               <tbody className="text-gray-600 divide-y">
                 {fillter?.map((item, index) => (
-                  <tr key={index}>
+                  <tr key={index} style={{ backgroundColor: "#fff" }}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">
                       <Link
                         to={`/dashboard/grades/${classes.subject_id}/user/${item.student_id}`}

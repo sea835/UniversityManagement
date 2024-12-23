@@ -2,17 +2,21 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import apiService from "../../services/apiService";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import CreateQuestion from "./CreateQuestion";
+import UpdateQuestion from "./UpdateQuestion";
 
 const ClassesDetails = () => {
   const { id } = useParams();
 
   const [listChapter, setListChapter] = useState([]);
-  const [listDataQuestion, setListDataQuestion] = useState([]);
-  const [listDataQuestion2, setListDataQuestion2] = useState([]);
   const [classes, setClasses] = useState({});
+  const [listExam, setListExam] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showModalCreateQ, setShowModalCreateQ] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
   const [showUploadFile, setShowUploadFile] = useState(false);
+  const [typeUpdateQ, setTypeUpdateQ] = useState(false);
+
   const [previewUrl, setPreviewUrl] = useState("");
   const [showViewFile, setShowViewFile] = useState({
     status: false,
@@ -21,87 +25,17 @@ const ClassesDetails = () => {
   const [dataImage, setDataImage] = useState();
   const [dataShow, setDataShow] = useState(1);
   const [dataCreate, setDataCreate] = useState();
-  const [numQuiz, setNumQuiz] = useState(1);
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [listQuestion, setListQuestion] = useState([
-    {
-      id: 1,
-      title: "",
-      answer: "",
-      correctAnswer: "A",
-      question: [
-        {
-          id: "A",
-          question: "",
-        },
-        {
-          id: "B",
-          question: "",
-        },
-        {
-          id: "C",
-          question: "",
-        },
-        {
-          id: "D",
-          question: "",
-        },
-      ],
-    },
-  ]);
+  const [dataCreateExam, setDataCreateExam] = useState({
+    exam_id: "",
+    subject_id: "MH001",
+    class_id: "L01",
+    semester_id: "HK241",
+    material_id: "TL010",
+    chapter_id: "08",
+    exam_name: "",
+  });
 
-  const handleUpdateAnswer = (newAnswer, id) => {
-    setListQuestion((prevList) =>
-      prevList.map((item) =>
-        item.id === id ? { ...item, answer: newAnswer } : item
-      )
-    );
-  };
-
-  const handleUpdateCorrectAnswer = (e, newAnswer, id) => {
-    // console.log(e.target.checked);
-    setListQuestion((prevList) =>
-      prevList.map((item) =>
-        item.id === id ? { ...item, correctAnswer: newAnswer } : item
-      )
-    );
-  };
-
-  const handleUpdateQuestion = (updatedQuestion, id, idQuestion) => {
-    setListQuestion((prevList) =>
-      prevList.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              question: item.question.map((q) =>
-                q.id === idQuestion ? { ...q, question: updatedQuestion } : q
-              ),
-            }
-          : item
-      )
-    );
-  };
-
-  const handleResetQuestion = (id) => {
-    setListQuestion((prevList) =>
-      prevList.map((item) =>
-        item.id === id
-          ? {
-              id: item.id,
-              title: "",
-              answer: "",
-              correctAnswer: "A",
-              question: [
-                { id: "A", question: "" },
-                { id: "B", question: "" },
-                { id: "C", question: "" },
-                { id: "D", question: "" },
-              ],
-            }
-          : item
-      )
-    );
-  };
+  // const [currentQuestion, setCurrentQuestion] = useState(1);
 
   const handleGetListChapter = async (id) => {
     try {
@@ -178,113 +112,6 @@ const ClassesDetails = () => {
     });
   }, [classes]);
 
-  const handleAddQuestion = () => {
-    setListQuestion((prevList) => {
-      // Lấy id lớn nhất hiện tại (hoặc đặt id = 1 nếu mảng trống)
-      const newId =
-        prevList.length > 0 ? prevList[prevList.length - 1].id + 1 : 1;
-
-      // Tạo đối tượng câu hỏi mới
-      const newQuestion = {
-        id: newId,
-        title: "",
-        answer: "",
-        correctAnswer: "A",
-        question: [
-          {
-            id: "A",
-            question: "",
-          },
-          {
-            id: "B",
-            question: "",
-          },
-          {
-            id: "C",
-            question: "",
-          },
-          {
-            id: "D",
-            question: "",
-          },
-        ],
-      };
-
-      // Thêm đối tượng mới vào mảng và trả về mảng mới
-      return [...prevList, newQuestion];
-    });
-    setCurrentQuestion(listQuestion.length + 1);
-  };
-
-  const handleCreateQuestion = async (e) => {
-    e.preventDefault();
-    let flag = true;
-    listQuestion.forEach((item, index) => {
-      const duplicates = item.question.reduce((acc, item, index, array) => {
-        // Kiểm tra xem question đã tồn tại trong các phần tử trước đó chưa
-        const isDuplicate = array
-          .slice(0, index)
-          .some((el) => el.question === item.question);
-        if (isDuplicate && !acc.includes(item.question)) {
-          acc.push(item.question); // Lưu lại câu hỏi bị trùng
-        }
-        return acc;
-      }, []);
-      if (duplicates.length > 0) {
-        alert(`Có đáp án trùng lặp ở câu ${++index}`);
-        flag = false;
-        return;
-      }
-    });
-    if (flag) {
-      try {
-        const response = await apiService.post(`/questions`, listQuestion);
-        alert("Successfully created");
-        setShowUploadFile(false);
-        handleGetListChapter(id);
-        handleGetAllQuestions("BKT001");
-        setShowQuestion(false);
-        setPreviewUrl("");
-        setDataImage("");
-        setDataImage("");
-        setCurrentQuestion(1);
-        setNumQuiz(1);
-        setListQuestion([
-          {
-            id: 1,
-            title: "",
-            answer: "",
-            correctAnswer: "A",
-            question: [
-              {
-                id: "A",
-                question: "",
-              },
-              {
-                id: "B",
-                question: "",
-              },
-              {
-                id: "C",
-                question: "",
-              },
-              {
-                id: "D",
-                question: "",
-              },
-            ],
-          },
-        ]);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    console.log("listQuestion: ", listQuestion);
-  }, [listQuestion]);
-
   const handleShowViewChapter = (item) => {
     // setShowViewFile
     setShowQuestion(false);
@@ -292,67 +119,86 @@ const ClassesDetails = () => {
     setShowViewFile((prev) => ({ ...prev, status: true, items: item }));
   };
 
-  useEffect(() => {
-    console.log(currentQuestion);
-  }, [currentQuestion]);
-
-  const handleGetAllQuestions = async (id) => {
+  const handleGetAllQuestions = async () => {
     try {
-      const response = await apiService.get(`/questions/exxam/${id}`);
-      console.log("AllQuestions: ", response.data);
+      const response = await apiService.get(`/questions/exxam/213`);
+      console.log(response);
       setListDataQuestion(response.data);
-      if (response.data) {
-        handleGruopQuestion(response.data);
-      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleGruopQuestion = (data) => {
-    const groupedData = Object.values(
-      data.reduce((acc, item) => {
-        // Nếu group_id chưa tồn tại, khởi tạo
-        if (!acc[item.group_id]) {
-          acc[item.group_id] = { group_id: item.group_id, data: [] };
-        }
-        // Thêm item vào mảng data của group_id tương ứng
-        acc[item.group_id].data.push(item);
-        return acc;
-      }, {})
-    );
-    console.log("groupedData: ", groupedData);
-    setListDataQuestion2(groupedData);
-  };
+  function generateRandomString() {
+    const prefix = "BKT";
+    const randomNumbers = Math.floor(100 + Math.random() * 900); // Tạo số ngẫu nhiên trong khoảng 100-999
+    return `${prefix}${randomNumbers.toString().substring(0, 3)}`; // Lấy 2 chữ số đầu tiên
+  }
 
-  useEffect(() => {
-    if (currentQuestion > numQuiz) {
-      const cloneQuestion = [...currentQuestion];
-      const newArr = cloneQuestion.slice(0, numQuiz);
-      console.log("newArr: ", newArr);
-    }
-  }, [currentQuestion, numQuiz]);
+  const handleSubmitCreateExam = async (e) => {
+    e.preventDefault();
 
-  const handleChangeNumQuiz = (value) => {
-    if (value >= 1) {
-      setNumQuiz(value);
-      // if (value < currentQuestion) setCurrentQuestion(parseFloat(value));
-      // console.log(value, currentQuestion);
+    const dataSend = { ...dataCreateExam };
+    dataSend.exam_id = generateRandomString();
+    dataSend.subject_id = classes.subject_id;
+    try {
+      const result = await apiService.post("exams", dataSend);
+      setShowModalCreateQ(false);
+      setShowQuestion(dataSend.exam_id);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to create !");
     }
   };
 
-  const handleDeleteQuestion = (index) => {
-    const newArr = listQuestion.filter((_, i) => i !== index - 1); // Loại bỏ phần tử có chỉ mục `index`
-    setCurrentQuestion(currentQuestion - 1);
-    setListQuestion(newArr); // Cập nhật state nếu cần
+  const handleUpdateQuestion = (idExam) => {
+    setShowQuestion(idExam);
   };
 
+  const handleDeleteChapter = async (idDelete) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      try {
+        await apiService.delete(`/chapters/${idDelete}`);
+        alert("Deleted successfully!");
+        handleGetListChapter(id);
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete!");
+      }
+    }
+  };
+
+  const handleDeleteExam = async (idDelete) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      try {
+        await apiService.delete(`/exams/${idDelete}`);
+        alert("Deleted successfully!");
+        handleGetAllExam();
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete!");
+      }
+    }
+  };
+
+  const handleGetAllExam = async () => {
+    try {
+      const response = await apiService.get(
+        `/exams/subject/${classes.subject_id}`
+      );
+      setListExam(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    handleGetAllQuestions("BKT001");
+    handleGetAllExam();
+  }, [classes]);
+
+  useEffect(() => {
+    handleGetAllExam();
     handleGetListChapter(id);
   }, []);
-
-  console.log("showViewFile: ", showViewFile);
 
   return (
     <>
@@ -396,7 +242,7 @@ const ClassesDetails = () => {
                       download
                       style={{ color: "blue" }}
                     >
-                      Tải file tại đây
+                      Download file
                     </a>
                   )}
                 </div>
@@ -530,6 +376,83 @@ const ClassesDetails = () => {
         </div>
       )}
 
+      {showModalCreateQ && (
+        <div
+          className="flex items-center justify-center"
+          style={{
+            position: "fixed",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            zIndex: 999,
+          }}
+        >
+          <form
+            onSubmit={(e) => handleSubmitCreateExam(e)}
+            className=" rounded-xl px-6 py-8"
+            style={{ width: "500px", backgroundColor: "#fff" }}
+          >
+            <div className="py-6">
+              <h2 className="m-0 font-bold" style={{ fontSize: "20px" }}>
+                New Exam
+              </h2>
+            </div>
+            <div
+              className="mt-4"
+              // method="GET"
+              // action={`${classes.subject_id}/chapter/create`}
+            >
+              <div>
+                <div>
+                  <label style={{ fontSize: "14px", fontWeight: "500" }}>
+                    Exam Name
+                  </label>
+                </div>
+                <div className="mt-2">
+                  <input
+                    className="px-3 py-2 rounded"
+                    required
+                    onChange={(e) =>
+                      setDataCreateExam((prev) => ({
+                        ...prev,
+                        exam_name: e.target.value,
+                      }))
+                    }
+                    value={dataCreateExam.exam_name}
+                    name="chapterName"
+                    style={{ width: "100%", backgroundColor: "#f5f5f5" }}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end mt-8 gap-6">
+                <span
+                  onClick={() => setShowModalCreateQ(false)}
+                  className="px-4 py-1 rounded cursor-pointer"
+                  style={{
+                    border: "3px solid #BEB29F",
+                    backgroundColor: "#fff",
+                  }}
+                >
+                  Close
+                </span>
+                <button
+                  className="px-4 py-1 rounded"
+                  style={{
+                    backgroundColor: "#E7E0D4",
+                    border: "3px solid #E7E0D4",
+                    color: "#3F3B35",
+                  }}
+                >
+                  Add Exam
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
+
       <div className="flex flex-col px-5 py-12 w-full rounded-[30px] bg-white ">
         <div className="flex items-center justify-between">
           <div>
@@ -541,7 +464,10 @@ const ClassesDetails = () => {
             {!showQuestion && (
               <div className="flex">
                 <span
-                  onClick={() => setShowQuestion(true)}
+                  onClick={() => {
+                    setShowModalCreateQ(true);
+                    setTypeUpdateQ(false);
+                  }}
                   className="px-3 py-2 mb-4 flex text-white cursor-pointer"
                   style={{
                     backgroundColor: " #388E3C",
@@ -549,7 +475,7 @@ const ClassesDetails = () => {
                     borderRadius: "4px",
                   }}
                 >
-                  New Question
+                  New Exam
                 </span>
               </div>
             )}
@@ -586,195 +512,23 @@ const ClassesDetails = () => {
         </div>
 
         {showQuestion ? (
-          <form
-            onSubmit={(e) => handleCreateQuestion(e)}
-            className="px-6 py-2 rounded-xl"
-            style={{ backgroundColor: "#f5f5f5" }}
-          >
-            <div
-              className=""
-              style={{ paddingTop: "20px", paddingBottom: "12px" }}
-            >
-              <h2 className="" style={{ fontSize: "20px", fontWeight: "500" }}>
-                Quiz 1
-              </h2>
-            </div>
-            <div
-              className="flex items-center justify-end"
-              style={{ marginBottom: "16px" }}
-            >
-              <select
-                className=" rounded"
-                style={{ backgroundColor: "#ccc", padding: "8px 12px" }}
-                onChange={(e) => setCurrentQuestion(e.target.value)}
-              >
-                {listQuestion?.map((item, index) => (
-                  <option
-                    key={index}
-                    value={item.id}
-                    selected={item.id === currentQuestion}
-                  >
-                    Question {item.id}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="number"
-                min={1}
-                max={10}
-                value={numQuiz}
-                placeholder="Số lượng quiz"
-                onChange={(e) => handleChangeNumQuiz(e.target.value)}
-                style={{
-                  width: 200,
-                  backgroundColor: "#ccc",
-                  padding: "8px 12px",
-                  borderRadius: 4,
-                  outline: "none",
-                  marginLeft: 16,
-                }}
+          <>
+            {typeUpdateQ ? (
+              <UpdateQuestion
+                showQuestion={showQuestion}
+                setShowQuestion={setShowQuestion}
+                handleGetAllExam={handleGetAllExam}
               />
-            </div>
-            {listQuestion?.map((item) => (
+            ) : (
               <>
-                {item.id == currentQuestion && (
-                  <div
-                    className=" rounded-xl px-10 py-10"
-                    style={{ backgroundColor: "#E7E0D4" }}
-                  >
-                    <div
-                      className="flex items-center justify-center gap-6"
-                      style={{ paddingBottom: "12px" }}
-                    >
-                      <label
-                        className=""
-                        style={{ fontSize: "18px", fontWeight: "500" }}
-                      >
-                        Question {item.id}:
-                      </label>
-                      <input
-                        type="text"
-                        value={item.answer}
-                        name="answerTitle"
-                        required
-                        className="py-2 px-4 rounded-xl"
-                        style={{ flex: 1 }}
-                        onChange={(e) =>
-                          handleUpdateAnswer(e.target.value, item.id)
-                        }
-                        placeholder="CLICK TO THE START TYPING YOUR QUESTION"
-                      />
-                    </div>
-                    <div className="pt-8" style={{ paddingTop: 32 }}>
-                      <div
-                        className="flex items-center flex-wrap"
-                        // style={{ gap: 40 }}
-                      >
-                        {item.question.map((itemQ, key) => (
-                          <div
-                            className={`flex-1 px-6 relative ${
-                              key >= 2 && "mt-6"
-                            }`}
-                            style={{ width: "50%" }}
-                            key={key}
-                          >
-                            <input
-                              className="w-full px-3 py-2 rounded-xl"
-                              style={{
-                                width: "100%",
-                                backgroundColor: "transparent",
-                                border: "2px solid #BEB29F",
-                              }}
-                              placeholder={`Option ${itemQ.id}`}
-                              value={itemQ.question}
-                              required
-                              name="question"
-                              onChange={(e) =>
-                                handleUpdateQuestion(
-                                  e.target.value,
-                                  item.id,
-                                  itemQ.id
-                                )
-                              }
-                            />
-                            <input
-                              type="checkbox"
-                              className=" absolute"
-                              style={{
-                                top: "50%",
-                                right: "50px",
-                                transform: "translateY(-50%)",
-                              }}
-                              checked={item.correctAnswer === itemQ.id}
-                              onChange={(e) =>
-                                handleUpdateCorrectAnswer(e, itemQ.id, item.id)
-                              }
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <CreateQuestion
+                  showQuestion={showQuestion}
+                  setShowQuestion={setShowQuestion}
+                  handleGetAllExam={handleGetAllExam}
+                />
               </>
-            ))}
-
-            <div
-              className="flex items-center justify-end gap-5 mt-8"
-              style={{ marginBottom: 16 }}
-            >
-              <div>
-                <span
-                  className="px-4 py-2 rounded-lg flex cursor-pointer"
-                  style={{ fontWeight: "500" }}
-                  onClick={() => handleResetQuestion(currentQuestion)}
-                >
-                  Clear answer
-                </span>
-              </div>
-              {listQuestion.length > 1 && (
-                <div>
-                  <span
-                    className="px-4 py-2 rounded-lg flex cursor-pointer"
-                    style={{ fontWeight: "500" }}
-                    onClick={() => handleDeleteQuestion(currentQuestion)}
-                  >
-                    Delete Question
-                  </span>
-                </div>
-              )}
-              {currentQuestion < numQuiz && (
-                <div>
-                  <span
-                    className="px-4 py-2 rounded-lg flex cursor-pointer"
-                    style={{
-                      fontWeight: "500",
-                      backgroundColor: "#BEB29F",
-                      color: "#fff",
-                    }}
-                    onClick={handleAddQuestion}
-                  >
-                    Next question
-                  </span>
-                </div>
-              )}
-              {currentQuestion == numQuiz && (
-                <div>
-                  <button
-                    className="px-4 py-2 rounded-lg"
-                    style={{
-                      fontWeight: "500",
-                      backgroundColor: "#BEB29F",
-                      color: "#fff",
-                    }}
-                  >
-                    Create
-                  </button>
-                </div>
-              )}
-              <div></div>
-            </div>
-          </form>
+            )}
+          </>
         ) : (
           <>
             {showUploadFile ? (
@@ -944,7 +698,7 @@ const ClassesDetails = () => {
                             color: `${dataShow === 1 ? "#333" : "#ccc"}`,
                           }}
                         >
-                          Question
+                          Exam
                         </span>
                         <span
                           onClick={() => setDataShow(2)}
@@ -960,81 +714,77 @@ const ClassesDetails = () => {
                       </div>
 
                       <div style={{ paddingTop: 20 }}>
-                        {listDataQuestion2?.map((data, index) => (
+                        {listExam.map((item, index) => (
                           <div
+                            className="rounded-xl overflow-hidden"
+                            style={{ margin: "24px 0" }}
                             key={index}
-                            style={{ paddingTop: `${index > 0 && "20px"}` }}
                           >
-                            <p style={{ fontWeight: "bold" }}>
-                              Question: {data.group_id}
-                            </p>
-                            <div
-                              style={{
-                                padding: "0 20px",
-                                border: "1px solid #ccc",
-                                marginTop: 20,
-                                borderRadius: "5px",
-                              }}
-                            >
-                              {data?.data?.map((item, k) => (
-                                <div
-                                  className="rounded-xl overflow-hidden"
-                                  style={{ margin: "24px 0" }}
-                                  key={k}
-                                >
-                                  <div className="shadow-sm flex">
-                                    <div
-                                      className="px-4 py-4 flex flex-col justify-between"
+                            <div className="shadow-sm flex">
+                              <div
+                                className="px-4 py-4 flex flex-col justify-between"
+                                style={{
+                                  width: "200px",
+                                  backgroundColor: "#ccc",
+                                }}
+                              >
+                                <div className="flex flex-col">
+                                  <span
+                                    style={{ color: "#999", fontSize: 14 }}
+                                  ></span>
+                                  <span
+                                    className=" font-bold"
+                                    style={{ fontSize: 16 }}
+                                  >
+                                    Mã bài: {item.exam_id}
+                                  </span>
+                                </div>
+                              </div>
+                              <div
+                                className="px-4 py-4"
+                                style={{ flex: 1, backgroundColor: "#fff" }}
+                              >
+                                <div>
+                                  <span
+                                    style={{
+                                      fontSize: "16px",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    {item.exam_name}
+                                  </span>
+                                </div>
+
+                                <div className="flex justify-end">
+                                  <div className="flex items-center gap-4">
+                                    <button
+                                      className="flex px-6 py-2 rounded-3xl"
+                                      onClick={() =>
+                                        handleDeleteExam(item.exam_id)
+                                      }
                                       style={{
-                                        width: "200px",
-                                        backgroundColor: "#ccc",
+                                        backgroundColor: "#DC364C",
+                                        color: "#fff",
                                       }}
                                     >
-                                      <div className="flex flex-col">
-                                        <span
-                                          style={{
-                                            color: "#999",
-                                            fontSize: 14,
-                                          }}
-                                        >
-                                          Question {++index}
-                                        </span>
-                                        <span
-                                          className=" font-bold"
-                                          style={{ fontSize: 16 }}
-                                        >
-                                          {item?.question_content}
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div
-                                      className="px-4 py-4"
+                                      Delete
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        handleUpdateQuestion(item.exam_id);
+                                        setTypeUpdateQ(true);
+                                      }}
+                                      className="flex px-6 py-2 rounded-3xl"
                                       style={{
-                                        flex: 1,
-                                        backgroundColor: "#fff",
+                                        backgroundColor: "#388E3C",
+                                        color: "#fff",
                                       }}
                                     >
-                                      <div className="py-1">
-                                        <span>Đáp án A: {item?.answer_a}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>Đáp án B: {item?.answer_b}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>Đáp án C: {item?.answer_c}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>Đáp án D: {item?.answer_d}</span>
-                                      </div>
-                                      <div className="py-1">
-                                        <span>
-                                          Đáp án đúng: {item?.correct_answer}
-                                        </span>
-                                      </div>
-                                    </div>
+                                      Edit
+                                    </button>
                                   </div>
                                 </div>
-                              ))}
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -1052,7 +802,7 @@ const ClassesDetails = () => {
                             color: `${dataShow === 1 ? "#333" : "#ccc"}`,
                           }}
                         >
-                          Question
+                          Exam
                         </span>
                         <span
                           onClick={() => setDataShow(2)}
@@ -1124,16 +874,30 @@ const ClassesDetails = () => {
                                 <span>{item.text_content}</span>
                               </div>
                               <div className="flex justify-end">
-                                <button
-                                  onClick={() => handleShowViewChapter(item)}
-                                  className="flex px-6 py-2 rounded-3xl"
-                                  style={{
-                                    backgroundColor: "#000",
-                                    color: "#fff",
-                                  }}
-                                >
-                                  View
-                                </button>
+                                <div className="flex items-center gap-6">
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteChapter(item.chapter_id)
+                                    }
+                                    className="flex px-6 py-2 rounded-3xl"
+                                    style={{
+                                      backgroundColor: "#DC364C",
+                                      color: "#fff",
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                  <button
+                                    onClick={() => handleShowViewChapter(item)}
+                                    className="flex px-6 py-2 rounded-3xl"
+                                    style={{
+                                      backgroundColor: "#000",
+                                      color: "#fff",
+                                    }}
+                                  >
+                                    View
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>

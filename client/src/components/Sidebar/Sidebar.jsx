@@ -59,13 +59,14 @@ function SideBar({ type }) {
 
   if (type === "Student") {
     sidebarItems = studentSidebarItems;
-  } else if (type === "Lecturer") {
+  } else if (type === "lecturer") {
     sidebarItems = teacherSidebarItems;
   } else if (type === "Administrator") {
     sidebarItems = adminSidebarItems;
   }
 
   // State to track the active item
+  // const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
 
   const auth = useAuth();
@@ -84,7 +85,7 @@ function SideBar({ type }) {
               text={item.text}
               path={item.path}
               active={item.text === activeItem}
-              onClick={() => setActiveItem(item.text)} // Set active item on click
+              onClick={() => setActiveItem(item.text)} //  Set active item on click
             />
           ))}
         </div>

@@ -203,12 +203,9 @@ exports.updateChapter = (req, res, next) => {
 };
 
 exports.deleteChapter = (req, res, next) => {
-  const { chapter_order, material_id, class_id } = req.params;
+  const { id } = req.params;
   database
-    .query(
-      "DELETE FROM chapter WHERE chapter_order = ? AND material_id = ? AND class_id = ?",
-      [chapter_order, material_id, class_id]
-    )
+    .query("DELETE FROM chapter WHERE chapter_id = ?", [id])
     .then((data) => {
       res.status(200).json({
         message: "Chapter deleted successfully",
