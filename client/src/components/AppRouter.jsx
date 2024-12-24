@@ -13,7 +13,7 @@ import AuthProvider from "./Auth/AuthProvider.jsx";
 import AllCourses from "./Course/AllCourses.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
-import RegisterCourse from "./RegisterCourse.jsx"; // Giữ lại import từ nhánh HEAD
+import RegisterCourse from "./RegisterCourse"; // Giữ lại import từ nhánh HEAD
 
 // Imports từ nhánh khác
 import ClassesManagement from "./admin/ClassesManagement.jsx";
@@ -31,7 +31,6 @@ import ClassesDetailsInGrades from "./Grades/ClassesDetailsInGrades.jsx";
 import CreateExxamInGrades from "./Grades/CreateExxamInGrades.jsx";
 import ListClassesInGrades from "./Grades/ListClassesInGrades.jsx";
 import UserDetailsInGrades from "./Grades/UserDetailsInGrades.jsx";
-
 import ListClassesInSchedule from "./Schedule/ListClassesInSchedule.jsx";
 
 import CreateQuestion from "./Classes/CreateQuestion.jsx";
@@ -69,9 +68,9 @@ const AppRouter = () => {
             <Route path="dashboard" element={<AuthProtect />}>
               {/* student pages */}
               <Route index element={<AccountSettings />} />
-              <Route path="register-course" element={<RegisterCourse />} />
               <Route path="account" element={<AccountSettings />} />
               <Route path="courses" element={<CourseGrid />} />
+              <Route path="register" element={<RegisterCourse />} />
               <Route path="courses/:id" element={<CourseContent />}></Route>
               <Route
                 path="courses/:id/chapter/:chapter"
