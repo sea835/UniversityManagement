@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SidebarItem from "./SidebarItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/AuthProvider";
 
 const studentSidebarItems = [
@@ -8,39 +8,64 @@ const studentSidebarItems = [
   { icon: "account", text: "Account Setting", path: "/dashboard/account" },
   { icon: "classes", text: "Classes", path: "/dashboard/classes" },
   { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
-  { icon: "register", text: "Register Course", path: "/dashboard/register-course" },
   { icon: "help", text: "Help", path: "/help" },
    
 ];
 
 const teacherSidebarItems = [
-  { icon: "account", text: "Account Setting", path: "/account" },
-  { icon: "classes", text: "Classes", path: "/classes" },
-  { icon: "schedule", text: "Schedule", path: "/schedule" },
+  { icon: "account", text: "Account Setting", path: "/dashboard/account" },
+  { icon: "classes", text: "Classes", path: "/dashboard/classes" },
+  { icon: "schedule", text: "Schedule", path: "/dashboard/schedule" },
+  { icon: "Grades", text: "Grades", path: "/dashboard/grades" },
+  { icon: "document", text: "Document", path: "/dashboard/document" },
   { icon: "help", text: "Help", path: "/help" },
 ];
 
 const adminSidebarItems = [
-  { icon: "teacherAccounts", text: "Teacher's Accounts", path: "/dashboard/teacherAccounts" },
-  { icon: "studentAccounts", text: "Student's Accounts", path: "/dashboard/studentAccounts" },
-  { icon: "coursesManagement", text: "Courses Management", path: "/dashboard/coursesManagement" },
-  { icon: "classesManagement", text: "Classes Management", path: "/dashboard/classesManagement" },
-  { icon: "departmentManagement", text: "Departments Management", path: "/dashboard/departmentManagement" },
+  {
+    icon: "teacherAccounts",
+    text: "Teacher's Accounts",
+    path: "/dashboard/teacherAccounts",
+  },
+  {
+    icon: "studentAccounts",
+    text: "Student's Accounts",
+    path: "/dashboard/studentAccounts",
+  },
+  {
+    icon: "coursesManagement",
+    text: "Courses Management",
+    path: "/dashboard/coursesManagement",
+  },
+  {
+    icon: "classesManagement",
+    text: "Classes Management",
+    path: "/dashboard/classesManagement",
+  },
+  {
+    icon: "departmentManagement",
+    text: "Department Management",
+    path: "/dashboard/departmentManagement",
+  },
   { icon: "helpAdmin", text: "Help Admin", path: "/dashboard/helpAdmin" },
 ];
 
 function SideBar({ type }) {
   let sidebarItems = [];
-  if (type === "Student") {
+  console.log("type :", type);
+
+  if (type === "student") {
     sidebarItems = studentSidebarItems;
-  } else if (type === "Teacher") {
+  } else if (type === "lecturer") {
     sidebarItems = teacherSidebarItems;
-  } else if (type === "Administrator") {
+  } else if (type === "administrator") {
     sidebarItems = adminSidebarItems;
   }
 
   // State to track the active item
+  // const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
   const [activeItem, setActiveItem] = useState(sidebarItems[0].text);
+
   const auth = useAuth();
 
   return (
@@ -57,7 +82,7 @@ function SideBar({ type }) {
               text={item.text}
               path={item.path}
               active={item.text === activeItem}
-              onClick={() => setActiveItem(item.text)} // Set active item on click
+              onClick={() => setActiveItem(item.text)} //  Set active item on click
             />
           ))}
         </div>
