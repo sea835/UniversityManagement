@@ -1,0 +1,12 @@
+th svg {
+  margin-left: 5px;
+  max-width: 15px;
+}
+
+th svg.ASC {
+  transform: rotate(0deg);
+}
+
+th svg.DESC {
+  transform: rotate(180deg);
+}

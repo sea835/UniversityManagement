@@ -68,7 +68,7 @@ const AppRouter = () => {
 
             <Route path="dashboard" element={<AuthProtect />}>
               {/* student pages */}
-              <Route index element={<AccountSettings />} />
+              <Route index element={<CourseGrid />} />
               <Route path="register-course" element={<RegisterCourse />} />
               <Route path="account" element={<AccountSettings />} />
               <Route path="courses" element={<CourseGrid />} />
