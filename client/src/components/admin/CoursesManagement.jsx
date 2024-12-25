@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../Auth/AuthProvider";
 import SearchSort from "./SearchSort";
+import TableHeader from "../Table/TableHeader";
+import Caret from "../Table/Caret";
+
+import "./Caret.css";
 
 const CoursesManagement = () => {
   const { user } = useAuth();
@@ -16,6 +20,7 @@ const CoursesManagement = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [classesData, setClassesData] = useState([]);
   const [expandedCourseId, setExpandedCourseId] = useState(null);
+    const [sort, setSort] = useState({keyToSort: "course id", direction: "ASC"});
   const itemsPerPage = 10;
 
   const fetchData = () => {
@@ -179,6 +184,16 @@ const CoursesManagement = () => {
     })
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  const handleHeaderClick = (header) => {
+    setSort({
+      keyToSort: header,
+      direction: 
+        header === sort.keyToSort ? sort.direction === "ASC" ? "DESC" : "ASC" : "DESC",
+    });
+  };
+    
+  const headers = ["course id", "course name", "credits", "prerequisites", "learning outcomes"];
+
   return (
     <div className="bg-white rounded-[30px] h-fit p-6 shadow-lg relative">
       <div className="flex justify-between items-center mb-6">
@@ -198,30 +213,36 @@ const CoursesManagement = () => {
           handleSearch={handleSearch}
           sortField={sortField}
           handleSort={handleSort}
+          sortType="course"
         />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Course ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Course Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Credits
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Prerequisites
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Learning Outcomes
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              {headers.map((header, index) => (
+                <th
+                  key={index}
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex-row"
+                  onClick={() => handleHeaderClick(header)}
+                >
+                  <div 
+                    className="flex items-center space-x-1 cursor-pointer"
+                  >
+                    <span>
+                      {header.charAt(0).toUpperCase() +
+                      header.slice(1).replace(/([A-Z])/g, " $1")}
+                    </span>
+                    {header === sort.keyToSort && (
+                      <Caret direction={sort.keyToSort === header ? sort.direction : "ASC"} />
+                    )}
+                    </div>
+                </th>
+              ))}
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <span>Action</span>
+                </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">

@@ -3,6 +3,9 @@ import axios from "axios";
 import { useAuth } from "../Auth/AuthProvider";
 import { useEffect, useState } from "react";
 import SearchSort from "./SearchSort";
+import Caret from "../Table/Caret";
+
+import "./Caret.css";
 
 const DepartmentsManagement = () => {
   const { user } = useAuth();
@@ -16,6 +19,7 @@ const DepartmentsManagement = () => {
   const [departmentToEdit, setDepartmentToEdit] = useState(null);
   const [expandedDepartmentId, setExpandedDepartmentId] = useState(null);
   const [subjectsData, setSubjectsData] = useState([]);
+  const [sort, setSort] = useState({keyToSort: "department id", direction: "ASC"});
   const itemsPerPage = 10;
 
   const fetchData = () => {
@@ -176,12 +180,30 @@ const DepartmentsManagement = () => {
         .includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
-      if (!sortField) return 0;
-      if (a[sortField] < b[sortField]) return -1;
-      if (a[sortField] > b[sortField]) return 1;
-      return 0;
+      if (!sort.keyToSort) return 0;
+      if (sort.direction === "ASC") {
+        if (typeof a[sort.keyToSort] === 'string') {
+          return a[sort.keyToSort].localeCompare(b[sort.keyToSort]);
+        }
+        return a[sort.keyToSort] > b[sort.keyToSort] ? 1 : -1;
+      } else {
+        if (typeof a[sort.keyToSort] === 'string') {
+          return b[sort.keyToSort].localeCompare(a[sort.keyToSort]);
+        }
+        return a[sort.keyToSort] < b[sort.keyToSort] ? 1 : -1;
+      }
     })
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleHeaderClick = (header) => {
+    setSort({
+      keyToSort: header,
+      direction: 
+        header === sort.keyToSort ? sort.direction === "ASC" ? "DESC" : "ASC" : "DESC",
+    });
+  };
+  
+  const headers = ["department id", "department name"];
 
   return (
     <div className="bg-white rounded-[30px] h-fit p-6 shadow-lg relative">
@@ -202,21 +224,36 @@ const DepartmentsManagement = () => {
           handleSearch={handleSearch}
           sortField={sortField}
           handleSort={handleSort}
+          sortType="department"
         />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Department ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Department Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              {headers.map((header, index) => (
+                <th
+                  key={index}
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex-row"
+                  onClick={() => handleHeaderClick(header)}
+                >
+                  <div 
+                    className="flex items-center space-x-1 cursor-pointer"
+                  >
+                    <span>
+                      {header.charAt(0).toUpperCase() +
+                      header.slice(1).replace(/([A-Z])/g, " $1")}
+                    </span>
+                    {header === sort.keyToSort && (
+                      <Caret direction={sort.keyToSort === header ? sort.direction : "ASC"} />
+                    )}
+                    </div>
+                </th>
+              ))}
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <span>Action</span>
+                </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
