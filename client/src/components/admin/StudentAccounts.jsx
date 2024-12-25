@@ -3,10 +3,6 @@ import axios from "axios";
 import { useAuth } from "../Auth/AuthProvider";
 import { useEffect, useState } from "react";
 import SearchSort from "./SearchSort";
-import TableHeader from "../Table/TableHeader";
-import Caret from "../Table/Caret";
-
-import "./Caret.css";
 
 const StudentAccounts = () => {
   const { user } = useAuth();
@@ -170,14 +166,6 @@ const StudentAccounts = () => {
     })
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-    const headers = [
-      "Student id",
-      "Full Name",
-      "Email",
-      "Phone Number",
-      "Address",
-    ]
-
   return (
     <div className="bg-white rounded-[30px] h-fit p-6 shadow-lg relative">
       <div className="flex justify-between items-center mb-6">
@@ -195,12 +183,32 @@ const StudentAccounts = () => {
           handleSearch={handleSearch}
           sortField={sortField}
           handleSort={handleSort}
-          sortType="student"
         />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <TableHeader headers={headers} action={true}/>
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Student ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Full Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Phone Number
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Address
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((student) => (
               <tr

@@ -3,10 +3,6 @@ import axios from "axios";
 import { useAuth } from "../Auth/AuthProvider";
 import { useEffect, useState } from "react";
 import SearchSort from "./SearchSort";
-import TableHeader from "../Table/TableHeader";
-import Caret from "../Table/Caret";
-
-import "./Caret.css"
 
 const TeacherAccounts = () => {
   const { user } = useAuth();
@@ -20,7 +16,6 @@ const TeacherAccounts = () => {
   const [lecturerToEdit, setLecturerToEdit] = useState(null);
   const [expandedLecturerId, setExpandedLecturerId] = useState(null);
   const [classesData, setClassesData] = useState([]);
-  const [sort, setSort] = useState({ keyToSort: "lecturer id", direction: "ASC" });
   const itemsPerPage = 10;
 
   const fetchData = () => {
@@ -190,32 +185,15 @@ const TeacherAccounts = () => {
       if (sortField === "full_name") {
         const lastNameA = getLastName(a.full_name);
         const lastNameB = getLastName(b.full_name);
-        if (lastNameA < lastNameB) 
-          return -1;
-        else if (lastNameA > lastNameB) 
-          return 1;
-        else if (a.lecturer_id < b.lecturer_id) 
-          return -1;
-        else if (a.lecturer_id > b.lecturer_id) 
-          return 1;
-        else 
-          return 0
+        if (lastNameA < lastNameB) return -1;
+        if (lastNameA > lastNameB) return 1;
+        return 0;
       }
       if (a[sortField] < b[sortField]) return -1;
       if (a[sortField] > b[sortField]) return 1;
       return 0;
     })
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-    const handleHeaderClick = (header) => {
-      setSort({
-        keyToSort: header,
-        direction: 
-          header === sort.keyToSort ? sort.direction === "ASC" ? "DESC" : "ASC" : "DESC",
-      });
-    };
-
-    const headers = ["lecturer id", "full name", "email", "phone number", "specialization"];
 
   return (
     <div className="bg-white rounded-[30px] h-fit p-6 shadow-lg relative">
@@ -236,36 +214,30 @@ const TeacherAccounts = () => {
           handleSearch={handleSearch}
           sortField={sortField}
           handleSort={handleSort}
-          sortType="lecturer"
         />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {headers.map((header, index) => (
-                <th
-                  key={index}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider flex-row"
-                  onClick={() => handleHeaderClick(header)}
-                >
-                  <div 
-                    className="flex items-center space-x-1 cursor-pointer"
-                  >
-                    <span>
-                      {header.charAt(0).toUpperCase() +
-                      header.slice(1).replace(/([A-Z])/g, " $1")}
-                    </span>
-                    {header === sort.keyToSort && (
-                      <Caret direction={sort.keyToSort === header ? sort.direction : "ASC"} />
-                    )}
-                    </div>
-                </th>
-              ))}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <span>Action</span>
-                </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Lecturer ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Full Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Phone Number
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Specialization
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
